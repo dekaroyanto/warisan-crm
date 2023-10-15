@@ -67,6 +67,16 @@ const columns = [
   },
 ];
 
+const statusList = [
+  { label: "FOR APPROVAL", value: "FOR APPROVAL" },
+  { label: "REJECTED", value: "REJECTED" },
+  { label: "APPROVED", value: "APPROVED" },
+  { label: "IN TRANSIT", value: "IN TRANSIT" },
+  { label: "TRANSFERRED OUT", value: "TRANSFERRED OUT" },
+  { label: "FOR TRANSFER OUT", value: "FOR TRANSFER OUT" },
+  { label: "INCOMPLETE", value: "INCOMPLETE" },
+];
+
 export default function StockRequest() {
   // Search Feature
   const [request, setRequest] = useState([]);
@@ -75,16 +85,6 @@ export default function StockRequest() {
 
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
-
-  const statusList = [
-    { label: "FOR APPROVAL", value: "FOR APPROVAL" },
-    { label: "REJECTED", value: "REJECTED" },
-    { label: "APPROVED", value: "APPROVED" },
-    { label: "IN TRANSIT", value: "IN TRANSIT" },
-    { label: "TRANSFERRED OUT", value: "TRANSFERRED OUT" },
-    { label: "FOR TRANSFER OUT", value: "FOR TRANSFER OUT" },
-    { label: "INCOMPLETE", value: "INCOMPLETE" },
-  ];
 
   // clear search form
   const clearInput = () => {
@@ -264,11 +264,6 @@ export default function StockRequest() {
           onOpenChange={onOpenChange}
           size="4xl"
         />
-        {/* <ModalCreateStock
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          size="4xl"
-        /> */}
       </div>
 
       {/* Data Table */}

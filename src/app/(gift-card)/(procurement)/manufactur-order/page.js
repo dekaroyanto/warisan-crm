@@ -20,10 +20,7 @@ import {
   useDisclosure,
   Checkbox,
   Input,
-  Link,
-  image,
   Select,
-  SelectSection,
   SelectItem,
 } from "@nextui-org/react";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
@@ -118,83 +115,6 @@ export default function ManufacturOrder() {
 
   // get data
   const [data, setData] = useState([]);
-
-  //   const cellValue = user[columnKey];
-
-  //   switch (columnKey) {
-  //     case "name":
-  //       return (
-  //         <User
-  //           avatarProps={{ radius: "lg", src: user.avatar }}
-  //           description={user.email}
-  //           name={cellValue}
-  //         >
-  //           {user.email}
-  //         </User>
-  //       );
-  //     case "role":
-  //       return (
-  //         <div className="flex flex-col">
-  //           <p className="text-sm capitalize text-bold">{cellValue}</p>
-  //           <p className="text-sm capitalize text-bold text-default-400">
-  //             {user.team}
-  //           </p>
-  //         </div>
-  //       );
-  //     case "status":
-  //       return (
-  //         <Chip
-  //           className="capitalize"
-  //           color={statusColorMap[user.status]}
-  //           size="sm"
-  //           variant="flat"
-  //         >
-  //           {cellValue}
-  //         </Chip>
-  //       );
-  //     case "actions":
-  //       return (
-  //         <div className="relative flex items-center gap-2">
-  //           <Tooltip content="Details">
-  //             <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
-  //               <div className="flex flex-wrap gap-3">
-  //                 {sizes.map((size) => (
-  //                   <button
-  //                     isIconOnly
-  //                     key={size}
-  //                     onClick={() => handleOpen(size)}
-  //                   >
-  //                     <Image src={DetailIcon} alt="icon" />
-  //                   </button>
-  //                 ))}
-  //               </div>
-  //             </span>
-  //           </Tooltip>
-  //           <Tooltip content="Edit user">
-  //             <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
-  //               <Image src={EditIcon} alt="icon" />
-  //             </span>
-  //           </Tooltip>
-  //           <Tooltip color="danger" content="Delete user">
-  //             <span className="text-lg cursor-pointer text-danger active:opacity-50">
-  //               <Image src={DeleteIcon} alt="icon" />
-  //             </span>
-  //           </Tooltip>
-  //         </div>
-  //       );
-  //     default:
-  //       return cellValue;
-  //   }
-  // }, []);
-
-  const [size, setSize] = React.useState("md");
-
-  const sizes = ["4xl"];
-
-  const handleOpen = (size) => {
-    setSize(size);
-    onOpen();
-  };
 
   useEffect(() => {
     const respons = users?.map((e) => {
@@ -394,7 +314,6 @@ export default function ManufacturOrder() {
             radius="sm"
             className="mb-5 font-semibold"
             onPress={onOpen}
-            // onClick={() => handleOpen(sizes)}
           >
             Create Gift Card Order
           </Button>

@@ -1,3 +1,4 @@
+import React from "react";
 import { Formik, Form, FieldArray } from "formik";
 
 import * as Yup from "yup";
@@ -15,17 +16,20 @@ import {
   ModalBody,
   ModalFooter,
   Input,
+  Select,
+  SelectItem,
   Checkbox,
+  card,
 } from "@nextui-org/react";
 
 const initialValues = {
-  requestNo: "202309210001",
-  reqDate: new Date(),
-  srcLocation: "",
+  request_no: "202309210001",
+  req_date: new Date(),
+  src_location: "",
   cards: [
     {
-      cardType: "",
-      qty: 0,
+      card_type: "",
+      qty: "",
       allocate: "",
       isPromo: false,
     },
@@ -68,9 +72,9 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
               <Formik
                 initialValues={initialValues}
                 validationSchema={Yup.object({
-                  requestNo: Yup.string(),
-                  reqDate: Yup.string(),
-                  srcLocation: Yup.string(),
+                  request_no: Yup.string(),
+                  req_date: Yup.string(),
+                  src_location: Yup.string(),
                 })}
                 onSubmit={async (values) => {
                   await new Promise((r) => setTimeout(r, 500));
@@ -78,7 +82,7 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                   // toastSuccess({ title: "Stock Request Success Created" });
                 }}
               >
-                {(props) => (
+                {(formik) => (
                   <Form>
                     <ModalBody>
                       <div className="w-full grid grid-cols-12 gap-4">
@@ -86,15 +90,16 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                           isDisabled
                           size="sm"
                           label="Request No"
-                          name="requestNo"
+                          name="request_no"
                           variant="bordered"
                           className="col-span-4 cursor-not-allowed"
-                          onChange={props.handleChange}
-                          value={props.values.requestNo}
+                          onChange={formik.handleChange}
+                          value={formik.values.request_no}
                         />
-                        {props.touched.requestNo && props.errors.requestNo ? (
+                        {formik.touched.request_no &&
+                        formik.errors.request_no ? (
                           <div className="text-md text-primary font-semibold">
-                            {props.errors.requestNo}
+                            {formik.errors.request_no}
                           </div>
                         ) : null}
 
@@ -102,31 +107,31 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                           isDisabled
                           size="sm"
                           label="Request Date"
-                          name="reqDate"
+                          name="req_date"
                           variant="bordered"
                           className="col-span-4"
-                          onChange={props.handleChange}
-                          value={props.values.reqDate}
+                          onChange={formik.handleChange}
+                          value={formik.values.req_date}
                         />
-                        {props.touched.reqDate && props.errors.reqDate ? (
+                        {formik.touched.req_date && formik.errors.req_date ? (
                           <div className="text-md text-primary font-semibold">
-                            {props.errors.reqDate}
+                            {formik.errors.req_date}
                           </div>
                         ) : null}
 
                         <Input
                           size="sm"
                           label="Source Location"
-                          name="srcLocation"
+                          name="src_location"
                           variant="bordered"
                           className="col-span-4"
-                          onChange={props.handleChange}
-                          value={props.values.srcLocation}
+                          onChange={formik.handleChange}
+                          value={formik.values.src_location}
                         />
-                        {props.touched.srcLocation &&
-                        props.errors.srcLocation ? (
+                        {formik.touched.src_location &&
+                        formik.errors.src_location ? (
                           <div className="text-md text-primary font-semibold">
-                            {props.errors.srcLocation}
+                            {formik.errors.src_location}
                           </div>
                         ) : null}
                       </div>
@@ -154,8 +159,8 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                                 className="secondary"
                                 onClick={() =>
                                   push({
-                                    cardType: "",
-                                    qty: 0,
+                                    card_type: "",
+                                    qty: "",
                                     allocate: "",
                                     isPromo: false,
                                   })
@@ -165,67 +170,72 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                               </button>
                             </div>
 
-                            {props.values.cards.length > 0 &&
-                              props.values.cards.map((card, index) => (
+                            {formik.values.cards.length > 0 &&
+                              formik.values.cards.map((card, index) => (
                                 <div key={index} className="grid grid-cols-12">
                                   <div className="grid grid-cols-8 gap-2 col-span-11">
-                                    <div className="col-span-3">
-                                      <select
-                                        aria-label="Card Type"
-                                        name={`cards.${index}.cardType`}
-                                        required
-                                        className="border-slate-300 hover:border-slate-500 border-solid border-2 w-full p-3 rounded-lg "
-                                        {...props.getFieldProps(
-                                          `cards.${index}.cardType`
-                                        )}
-                                      >
-                                        {cardType?.map((e) => (
-                                          <option key={e.value} value={e.value}>
-                                            {e.label}
-                                          </option>
-                                        ))}
-                                      </select>
-                                    </div>
+                                    <Select
+                                      className="col-span-3"
+                                      size="sm"
+                                      radius="sm"
+                                      label="Card Type"
+                                      variant="bordered"
+                                      name={`cards.${index}.card_type`}
+                                      // onChange={formik.handleChange}
+                                      {...formik.getFieldProps(
+                                        `cards.${index}.card_type`
+                                      )}
+                                    >
+                                      {cardType.map((e) => (
+                                        <SelectItem
+                                          key={e.value}
+                                          value={e.value}
+                                        >
+                                          {e.label}
+                                        </SelectItem>
+                                      ))}
+                                    </Select>
 
                                     <Input
                                       className="col-span-1"
                                       size="sm"
                                       type="number"
                                       label="Quantity"
-                                      name={`cards.${index}.qty`}
+                                      name={`card.${index}.qty`}
                                       variant="bordered"
                                       placeholder="0"
-                                      required
-                                      {...props.getFieldProps(
-                                        `cards.${index}.qty`
+                                      {...formik.getFieldProps(
+                                        `card.${index}.qty`
                                       )}
                                     />
 
-                                    <div className="col-span-3">
-                                      <select
-                                        aria-label="Card Type"
-                                        name={`cards.${index}.allocate`}
-                                        required
-                                        className="border-slate-300 hover:border-slate-500 border-solid border-2 w-full p-3 rounded-lg "
-                                        {...props.getFieldProps(
-                                          `cards.${index}.allocate`
-                                        )}
-                                      >
-                                        {allocateTo?.map((e) => (
-                                          <option key={e.value} value={e.value}>
-                                            {e.label}
-                                          </option>
-                                        ))}
-                                      </select>
-                                    </div>
+                                    <Select
+                                      className="col-span-3"
+                                      size="sm"
+                                      radius="sm"
+                                      label="Card Type"
+                                      variant="bordered"
+                                      name={`card.${index}.allocate`}
+                                      // selectedKeys={formik.values.card}
+                                      {...formik.getFieldProps(
+                                        `card.${index}.allocate`
+                                      )}
+                                    >
+                                      {allocateTo.map((e) => (
+                                        <SelectItem
+                                          key={e.value}
+                                          value={e.value}
+                                        >
+                                          {e.label}
+                                        </SelectItem>
+                                      ))}
+                                    </Select>
 
                                     <Checkbox
-                                      name={`cards.${index}.isPromo`}
+                                      name={`card.${index}.isPromo`}
+                                      defaultSelected={false}
                                       radius="sm"
-                                      isSelected={card.isPromo}
-                                      {...props.getFieldProps(
-                                        `cards.${index}.isPromo`
-                                      )}
+                                      defaultValue={false}
                                     ></Checkbox>
                                   </div>
 

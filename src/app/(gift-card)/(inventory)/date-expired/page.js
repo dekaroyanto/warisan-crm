@@ -1,34 +1,28 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import { Select, SelectItem } from "@nextui-org/react";
 
-const initialValues = {
-  friends: [
-    {
-      value: "ID020 - Transmart",
-    },
-  ],
-};
-
 const businessUnit = [
+  { id: "", value: "Select Office" },
   { id: "ID030", value: "ID030 - Carefour" },
   { id: "ID020", value: "ID020 - Transmart" },
   { id: "ID010", value: "ID010 - Trans Snow" },
 ];
 
 export default function InviteFriends() {
+  const initialValues = {
+    friends: [
+      {
+        value: "",
+      },
+    ],
+  };
   return (
     <div>
       <h1>Invite friends</h1>
       <Formik
-        initialValues={{
-          friends: [
-            {
-              value: "",
-            },
-          ],
-        }}
+        initialValues={initialValues}
         onSubmit={async (values) => {
           await new Promise((r) => setTimeout(r, 500));
           alert(JSON.stringify(values, null, 2));
@@ -42,7 +36,7 @@ export default function InviteFriends() {
                   {props.values.friends.length > 0 &&
                     props.values.friends.map((friend, index) => (
                       <div className="row" key={index}>
-                        <div className="col">
+                        {/* <div className="col">
                           <Select
                             size="sm"
                             radius="sm"
@@ -50,8 +44,6 @@ export default function InviteFriends() {
                             variant="bordered"
                             name={`friends.${index}.value`}
                             onChange={props.handleChange}
-                            // selectedKeys={friend?.value}
-                            value={friend?.value}
                           >
                             {businessUnit?.map((e) => (
                               <SelectItem key={e.value} value={e.value}>
@@ -59,12 +51,16 @@ export default function InviteFriends() {
                               </SelectItem>
                             ))}
                           </Select>
-                        </div>
-                        {/* <div className="col">
+                          <p className="text-small text-default-500">
+                            Selected: {friend.value}
+                          </p>
+                        </div> */}
+                        <div className="col">
                           <select
                             name={`friends.${index}.value`}
                             onChange={props.handleChange}
                             value={friend.value}
+                            placeholder="select"
                           >
                             {businessUnit?.map((e) => (
                               <option key={e.value} value={e.value}>
@@ -72,7 +68,7 @@ export default function InviteFriends() {
                               </option>
                             ))}
                           </select>
-                        </div> */}
+                        </div>
                         <div className="col">
                           <button
                             type="button"
