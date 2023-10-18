@@ -103,7 +103,7 @@ export const listItem = [
   },
   {
     title: "Member Management",
-    icon: "faHeadphonesSimple",
+    icon: "faUserGroup",
     submenu: [
       {
         category: "Member Management",
@@ -252,7 +252,7 @@ export const listItem = [
               // },
               {
                 title: "Burn Gift card",
-                href: "",
+                href: "/burn-card",
               },
               {
                 title: "C4 Claim To/Redemption For Affiliates Schedule",

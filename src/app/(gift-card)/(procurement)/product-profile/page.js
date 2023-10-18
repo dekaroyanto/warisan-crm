@@ -21,6 +21,85 @@ import DeleteIcon from "@/assets/icons/trash-icon.svg";
 
 import ModalCreate from "./ModalCreateProduct";
 
+// const users = [
+//   {
+//     key: "1",
+//     product_code: "2482005777473",
+//     product_desc: "E-Voucher Transmart Rp 10.000",
+//     face_value: "10,000",
+//     card_fee: "0",
+//     status: (
+//       <>
+//         <Chip
+//           className="capitalize"
+//           color={statusColorMap["draft"]}
+//           size="sm"
+//           variant="flat"
+//         >
+//           draft
+//         </Chip>
+//       </>
+//     ),
+//   },
+//   {
+//     key: "2",
+//     product_code: "2482005394403",
+//     product_desc: "E-Voucher CT Corp Rp 250.000",
+//     face_value: "250,000",
+//     card_fee: "0",
+//     status: (
+//       <>
+//         <Chip
+//           className="capitalize"
+//           color={statusColorMap["approved"]}
+//           size="sm"
+//           variant="flat"
+//         >
+//           approved
+//         </Chip>
+//       </>
+//     ),
+//   },
+//   {
+//     key: "3",
+//     product_code: "2482005363386",
+//     product_desc: "E-Voucher Transmart Rp 1.000.000",
+//     face_value: "1,000,000",
+//     card_fee: "0",
+//     status: (
+//       <>
+//         <Chip
+//           className="capitalize"
+//           color={statusColorMap["rejected"]}
+//           size="sm"
+//           variant="flat"
+//         >
+//           rejected
+//         </Chip>
+//       </>
+//     ),
+//   },
+//   {
+//     key: "4",
+//     product_code: "2482005363386",
+//     product_desc: "E-Voucher Transmart Rp 1.000.000",
+//     face_value: "1,000,000",
+//     card_fee: "0",
+//     status: (
+//       <>
+//         <Chip
+//           className="capitalize"
+//           color={statusColorMap["deactived"]}
+//           size="sm"
+//           variant="flat"
+//         >
+//           deactived
+//         </Chip>
+//       </>
+//     ),
+//   },
+// ];
+
 const statusColorMap = {
   approved: "success",
   submitted: "warning",
@@ -28,85 +107,6 @@ const statusColorMap = {
   rejected: "danger",
   deactived: "danger",
 };
-
-const users = [
-  {
-    key: "1",
-    product_code: "2482005777473",
-    product_desc: "E-Voucher Transmart Rp 10.000",
-    face_value: "10,000",
-    card_fee: "0",
-    status: (
-      <>
-        <Chip
-          className="capitalize"
-          color={statusColorMap["draft"]}
-          size="sm"
-          variant="flat"
-        >
-          draft
-        </Chip>
-      </>
-    ),
-  },
-  {
-    key: "2",
-    product_code: "2482005394403",
-    product_desc: "E-Voucher CT Corp Rp 250.000",
-    face_value: "250,000",
-    card_fee: "0",
-    status: (
-      <>
-        <Chip
-          className="capitalize"
-          color={statusColorMap["approved"]}
-          size="sm"
-          variant="flat"
-        >
-          approved
-        </Chip>
-      </>
-    ),
-  },
-  {
-    key: "3",
-    product_code: "2482005363386",
-    product_desc: "E-Voucher Transmart Rp 1.000.000",
-    face_value: "1,000,000",
-    card_fee: "0",
-    status: (
-      <>
-        <Chip
-          className="capitalize"
-          color={statusColorMap["rejected"]}
-          size="sm"
-          variant="flat"
-        >
-          rejected
-        </Chip>
-      </>
-    ),
-  },
-  {
-    key: "4",
-    product_code: "2482005363386",
-    product_desc: "E-Voucher Transmart Rp 1.000.000",
-    face_value: "1,000,000",
-    card_fee: "0",
-    status: (
-      <>
-        <Chip
-          className="capitalize"
-          color={statusColorMap["deactived"]}
-          size="sm"
-          variant="flat"
-        >
-          deactived
-        </Chip>
-      </>
-    ),
-  },
-];
 
 const columns = [
   {
@@ -154,6 +154,7 @@ export default function ProductProfile() {
     try {
       const res = await API.get("/pp/list");
       const respons = await res.data?.result?.items?.map((e) => {
+        // console.log("e ", e.face_value);
         return {
           ...e,
           action: (
@@ -319,7 +320,7 @@ export default function ProductProfile() {
       </div>
 
       {/* Data Table */}
-      <DataTable columns={columns} rows={data} keys={users.key} />
+      <DataTable columns={columns} rows={data} keys={data.id} />
     </div>
   );
 }

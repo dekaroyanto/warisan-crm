@@ -27,7 +27,6 @@ const initialValues = {
       cardType: "",
       qty: 0,
       allocate: "",
-      isPromo: false,
     },
   ],
 };
@@ -136,7 +135,7 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                           <>
                             <div className="grid grid-cols-12 mt-3">
                               <div className="grid grid-cols-8 gap-3 col-span-11 rounded-md bg-primary py-2 px-4 text-white font-semibold">
-                                <p className="col-span-3 capitalize font-medium">
+                                <p className="col-span-4 capitalize font-medium">
                                   Card Type
                                 </p>
                                 <p className="col-span-1 capitalize font-medium">
@@ -144,9 +143,6 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                                 </p>
                                 <p className="col-span-3 capitalize font-medium">
                                   Allocate To
-                                </p>
-                                <p className="col-span-1 capitalize font-medium">
-                                  Is Promo
                                 </p>
                               </div>
                               <button
@@ -157,7 +153,6 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                                     cardType: "",
                                     qty: 0,
                                     allocate: "",
-                                    isPromo: false,
                                   })
                                 }
                               >
@@ -169,7 +164,7 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                               props.values.cards.map((card, index) => (
                                 <div key={index} className="grid grid-cols-12">
                                   <div className="grid grid-cols-8 gap-2 col-span-11">
-                                    <div className="col-span-3">
+                                    <div className="col-span-4">
                                       <select
                                         aria-label="Card Type"
                                         name={`cards.${index}.cardType`}
@@ -219,14 +214,14 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                                       </select>
                                     </div>
 
-                                    <Checkbox
+                                    {/* <Checkbox
                                       name={`cards.${index}.isPromo`}
                                       radius="sm"
                                       isSelected={card.isPromo}
                                       {...props.getFieldProps(
                                         `cards.${index}.isPromo`
                                       )}
-                                    ></Checkbox>
+                                    ></Checkbox> */}
                                   </div>
 
                                   <div className="flex justify-center items-center">

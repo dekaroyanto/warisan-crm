@@ -7,7 +7,7 @@ import { listItem } from "./listItemMenu.js";
 // import icon
 import faScrewdriverWrench from "../../assets/icons/screwdriver-wrench-solid.svg";
 import faBullhorn from "../../assets/icons/bullhorn-solid.svg";
-import faHeadphonesSimple from "../../assets/icons/headphones-simple-solid.svg";
+import faUserGroup from "../../assets/icons/user-group.svg";
 import faUserTie from "../../assets/icons/user-tie-solid.svg";
 import faHandshake from "../../assets/icons/handshake-solid.svg";
 import faGift from "../../assets/icons/gift-solid.svg";
@@ -33,8 +33,7 @@ export default function DropdownComponent() {
                       (item.icon == "faScrewdriverWrench" &&
                         faScrewdriverWrench) ||
                       (item.icon == "faBullhorn" && faBullhorn) ||
-                      (item.icon == "faHeadphonesSimple" &&
-                        faHeadphonesSimple) ||
+                      (item.icon == "faUserGroup" && faUserGroup) ||
                       (item.icon == "faUserTie" && faUserTie) ||
                       (item.icon == "faHandshake" && faHandshake) ||
                       (item.icon == "faGift" && faGift) ||

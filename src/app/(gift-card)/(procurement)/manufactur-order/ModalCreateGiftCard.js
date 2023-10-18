@@ -254,6 +254,7 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                                       />
 
                                       <Input
+                                        isRequired
                                         size="sm"
                                         label="Exp Date"
                                         variant="bordered"
