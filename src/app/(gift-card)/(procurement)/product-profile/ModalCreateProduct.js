@@ -36,13 +36,13 @@ export default function ModalCreateProduct({ isOpen, onOpenChange, size }) {
   ];
 
   const initialValues = {
-    product_code: "1231",
-    product_decs: "asdasd",
+    product_code: "",
+    product_decs: "",
     face_value: "",
     card_fee: 0,
     max_amount: 0,
     effective_month: 0,
-    unit_cost: "123123",
+    unit_cost: "",
     business_unit: [
       {
         value: "",
@@ -100,136 +100,149 @@ export default function ModalCreateProduct({ isOpen, onOpenChange, size }) {
                   <Form>
                     <ModalBody>
                       <div className="w-full grid grid-cols-12 gap-4">
-                        <Input
-                          isRequired
-                          size="sm"
-                          type="number"
-                          label="Product Code"
-                          name="product_code"
-                          variant="bordered"
-                          className="col-span-6"
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          value={props.values.product_code}
-                        />
-                        {props.touched.product_code &&
-                        props.errors.product_code ? (
-                          <div className="text-md text-primary font-semibold">
-                            {props.errors.product_code}
-                          </div>
-                        ) : null}
+                        <div className="col-span-6">
+                          <Input
+                            isRequired
+                            size="sm"
+                            type="number"
+                            label="Product Code"
+                            name="product_code"
+                            variant="bordered"
+                            className=""
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            value={props.values.product_code}
+                          />
+                          {props.touched.product_code &&
+                          props.errors.product_code ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.product_code}
+                            </div>
+                          ) : null}
+                        </div>
 
-                        <Input
-                          isRequired
-                          size="sm"
-                          label="Product Description"
-                          name="product_decs"
-                          variant="bordered"
-                          className="col-span-6"
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          value={props.values.product_decs}
-                        />
-                        {props.touched.product_decs &&
-                        props.errors.product_decs ? (
-                          <div className="text-md text-primary font-semibold">
-                            {props.errors.product_decs}
-                          </div>
-                        ) : null}
+                        <div className="col-span-6">
+                          <Input
+                            isRequired
+                            size="sm"
+                            label="Product Description"
+                            name="product_decs"
+                            variant="bordered"
+                            className=""
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            value={props.values.product_decs}
+                          />
+                          {props.touched.product_decs &&
+                          props.errors.product_decs ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.product_decs}
+                            </div>
+                          ) : null}
+                        </div>
 
-                        <Select
-                          size="sm"
-                          label="Face Value"
-                          variant="bordered"
-                          className="col-span-6"
-                          name="face_value"
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                        >
-                          {faceValue.map((e) => (
-                            <SelectItem key={e.value} value={e.value}>
-                              {e.label}
-                            </SelectItem>
-                          ))}
-                        </Select>
-                        {props.touched.face_value && props.errors.face_value ? (
-                          <div className="text-md text-primary font-semibold">
-                            {props.errors.face_value}
-                          </div>
-                        ) : null}
+                        <div className="col-span-6">
+                          <Select
+                            size="sm"
+                            label="Face Value"
+                            variant="bordered"
+                            className=""
+                            name="face_value"
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                          >
+                            {faceValue.map((e) => (
+                              <SelectItem key={e.value} value={e.value}>
+                                {e.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                          {props.touched.face_value &&
+                          props.errors.face_value ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.face_value}
+                            </div>
+                          ) : null}
+                        </div>
 
-                        <Input
-                          isRequired
-                          size="sm"
-                          type="number"
-                          label="Unit Cost"
-                          name="unit_cost"
-                          variant="bordered"
-                          className="col-span-6"
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          value={props.values.unit_cost}
-                        />
-                        {props.touched.unit_cost && props.errors.unit_cost ? (
-                          <div className="text-sm text-primary font-semibold">
-                            {props.errors.unit_cost}
-                          </div>
-                        ) : null}
+                        <div className="col-span-6">
+                          <Input
+                            isRequired
+                            size="sm"
+                            type="number"
+                            label="Unit Cost"
+                            name="unit_cost"
+                            variant="bordered"
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            value={props.values.unit_cost}
+                          />
+                          {props.touched.unit_cost && props.errors.unit_cost ? (
+                            <div className="text-sm text-primary font-semibold">
+                              {props.errors.unit_cost}
+                            </div>
+                          ) : null}
+                        </div>
 
-                        <Input
-                          size="sm"
-                          type="number"
-                          label="Card Fee"
-                          name="card_fee"
-                          variant="bordered"
-                          placeholder="0"
-                          className="col-span-4"
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          value={props.values.card_fee}
-                        />
-                        {props.touched.card_fee && props.errors.card_fee ? (
-                          <div className="text-md text-primary font-semibold">
-                            {props.errors.card_fee}
-                          </div>
-                        ) : null}
+                        <div className="col-span-4">
+                          <Input
+                            size="sm"
+                            type="number"
+                            label="Card Fee"
+                            name="card_fee"
+                            variant="bordered"
+                            placeholder="0"
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            value={props.values.card_fee}
+                          />
+                          {props.touched.card_fee && props.errors.card_fee ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.card_fee}
+                            </div>
+                          ) : null}
+                        </div>
 
-                        <Input
-                          size="sm"
-                          type="number"
-                          label="Max Amount"
-                          name="max_amount"
-                          variant="bordered"
-                          placeholder="0"
-                          className="col-span-4"
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          value={props.values.max_amount}
-                        />
-                        {props.touched.max_amount && props.errors.max_amount ? (
-                          <div className="text-md text-primary font-semibold">
-                            {props.errors.max_amount}
-                          </div>
-                        ) : null}
+                        <div className="col-span-4">
+                          <Input
+                            size="sm"
+                            type="number"
+                            label="Max Amount"
+                            name="max_amount"
+                            variant="bordered"
+                            placeholder="0"
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            value={props.values.max_amount}
+                          />
+                          {props.touched.max_amount &&
+                          props.errors.max_amount ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.max_amount}
+                            </div>
+                          ) : null}
+                        </div>
 
-                        <Input
-                          size="sm"
-                          type="number"
-                          label="Effective Month"
-                          name="effective_month"
-                          variant="bordered"
-                          placeholder="0"
-                          className="col-span-4"
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          value={props.values.effective_month}
-                        />
-                        {props.touched.effective_month &&
-                        props.errors.effective_month ? (
-                          <div className="text-md text-primary font-semibold">
-                            {props.errors.effective_month}
-                          </div>
-                        ) : null}
+                        <div className="col-span-4">
+                          <Input
+                            size="sm"
+                            type="number"
+                            label="Effective Month"
+                            name="effective_month"
+                            variant="bordered"
+                            placeholder="0"
+                            className="col-span-4"
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            value={props.values.effective_month}
+                          />
+                          {props.touched.effective_month &&
+                          props.errors.effective_month ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.effective_month}
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
 
                       <FieldArray name="business_unit">
@@ -299,7 +312,7 @@ export default function ModalCreateProduct({ isOpen, onOpenChange, size }) {
                         Draft
                       </Button>
                       <Button color="primary" type="submit">
-                        Save
+                        Submit For Approval
                       </Button>
                     </ModalFooter>
                   </Form>

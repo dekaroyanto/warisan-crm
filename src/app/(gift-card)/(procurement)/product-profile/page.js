@@ -1,6 +1,7 @@
 "use client";
-import { useState, useMemo, useEffect, useCallback } from "react";
-import { API } from "@/API/api";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
+import { API, URL } from "@/API/api";
+import { SetColorStatus } from "@/utils";
 
 import Image from "next/image";
 import {
@@ -15,98 +16,22 @@ import {
 
 import DataTable from "@/components/dataTable";
 
-import DetailIcon from "@/assets/icons/detail-icon.svg";
-import EditIcon from "@/assets/icons/edit-icon.svg";
-import DeleteIcon from "@/assets/icons/trash-icon.svg";
+import DetailIcon from "@/assets/icons/ac_view.svg";
+import DetailIconDisable from "@/assets/icons/ac_view_disable.svg";
+import EditIcon from "@/assets/icons/ac_edit.svg";
+import EditIconDisable from "@/assets/icons/ac_edit_disable.svg";
+import SafetyStockIcon from "@/assets/icons/ac_stock.svg";
+import SafetyStockIconDisable from "@/assets/icons/ac_stock_disable.svg";
+import ProcessIcon from "@/assets/icons/ac_process.svg";
+import ProcessIconDisable from "@/assets/icons/ac_process_disable.svg";
+import DeleteIcon from "@/assets/icons/ac_delete.svg";
+import DeleteIconDisable from "@/assets/icons/ac_delete_disable.svg";
+import DeactiveIcon from "@/assets/icons/ac_deactive.svg";
+import DeactiveIconDisable from "@/assets/icons/ac_deactive_disable.svg";
+import ActiveIcon from "@/assets/icons/ac_active.svg";
+import ActiveIconDisable from "@/assets/icons/ac_active_disable.svg";
 
 import ModalCreate from "./ModalCreateProduct";
-
-// const users = [
-//   {
-//     key: "1",
-//     product_code: "2482005777473",
-//     product_desc: "E-Voucher Transmart Rp 10.000",
-//     face_value: "10,000",
-//     card_fee: "0",
-//     status: (
-//       <>
-//         <Chip
-//           className="capitalize"
-//           color={statusColorMap["draft"]}
-//           size="sm"
-//           variant="flat"
-//         >
-//           draft
-//         </Chip>
-//       </>
-//     ),
-//   },
-//   {
-//     key: "2",
-//     product_code: "2482005394403",
-//     product_desc: "E-Voucher CT Corp Rp 250.000",
-//     face_value: "250,000",
-//     card_fee: "0",
-//     status: (
-//       <>
-//         <Chip
-//           className="capitalize"
-//           color={statusColorMap["approved"]}
-//           size="sm"
-//           variant="flat"
-//         >
-//           approved
-//         </Chip>
-//       </>
-//     ),
-//   },
-//   {
-//     key: "3",
-//     product_code: "2482005363386",
-//     product_desc: "E-Voucher Transmart Rp 1.000.000",
-//     face_value: "1,000,000",
-//     card_fee: "0",
-//     status: (
-//       <>
-//         <Chip
-//           className="capitalize"
-//           color={statusColorMap["rejected"]}
-//           size="sm"
-//           variant="flat"
-//         >
-//           rejected
-//         </Chip>
-//       </>
-//     ),
-//   },
-//   {
-//     key: "4",
-//     product_code: "2482005363386",
-//     product_desc: "E-Voucher Transmart Rp 1.000.000",
-//     face_value: "1,000,000",
-//     card_fee: "0",
-//     status: (
-//       <>
-//         <Chip
-//           className="capitalize"
-//           color={statusColorMap["deactived"]}
-//           size="sm"
-//           variant="flat"
-//         >
-//           deactived
-//         </Chip>
-//       </>
-//     ),
-//   },
-// ];
-
-const statusColorMap = {
-  approved: "success",
-  submitted: "warning",
-  draft: "default",
-  rejected: "danger",
-  deactived: "danger",
-};
 
 const columns = [
   {
@@ -135,52 +60,183 @@ const columns = [
   },
 ];
 
+const statusList = [
+  { label: "APPROVED", value: "APPROVED" },
+  { label: "REJECTED", value: "REJECTED" },
+  { label: "DRAFT", value: "DRAFT" },
+  { label: "SUBMITTED", value: "SUBMITTED" },
+  { label: "DEACTIVED", value: "DEACTIVED" },
+];
+
+const criteriaList = [
+  { label: "Product Code", value: "product_code" },
+  { label: "Product Description", value: "product_dec" },
+  { label: "Face Value", value: "face_value" },
+  { label: "Card Fee", value: "card_fee" },
+];
+
 export default function ProductProfile() {
+  // open modal create
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   // Search Feature
-  const [criteria, setCriteria] = useState([]);
+  // const [criteria, setCriteria] = React.useState(new Set([]));
+  const [criteria, setCriteria] = useState(new Set([]));
   const [status, setStatus] = useState([]);
   const [searchForm, setSearchForm] = useState("");
+
+  const handleCriteriaChange = (e) => {
+    setCriteria([e.target.value]);
+  };
+
+  const handleStatusChange = (e) => {
+    setStatus([e.target.value]);
+  };
 
   const clearInput = useCallback(() => {
     setCriteria([]);
     setStatus([]);
     setSearchForm("");
+    loadData();
   }, []);
 
-  // get data
+  const setActionButton = (e) => {
+    const isDeactive = e == "DEACTIVATED" && true;
+    const isDraft = e == "DRAFT" && true;
+    const isApproved = e == "APPROVED" && true;
+    const isSubmitted = e == "SUBMITTED" && true;
+    const isRejected = e == "REJECTED" && true;
+
+    return (
+      <div className="relative flex items-center gap-2">
+        {isApproved ? (
+          <Tooltip content="View" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={DetailIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={DetailIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isDraft ? (
+          <Tooltip content="Update" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={EditIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={EditIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isSubmitted ? (
+          <Tooltip content="Process" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ProcessIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={ProcessIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isApproved ? (
+          <Tooltip content="View Safety Stock" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={SafetyStockIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={SafetyStockIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isDraft || isRejected || isSubmitted ? (
+          <Tooltip color="primary" content="Delete" closeDelay={0}>
+            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+              <Image src={DeleteIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-danger cursor-not-allowed  active:opacity-50">
+            <Image src={DeleteIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isDraft || isApproved ? (
+          <Tooltip color="primary" content="Deactive" closeDelay={0}>
+            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+              <Image src={DeactiveIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-danger cursor-not-allowed active:opacity-50">
+            <Image src={DeactiveIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isDeactive ? (
+          <Tooltip content="Active" closeDelay={0}>
+            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+              <Image src={ActiveIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-danger cursor-not-allowed active:opacity-50">
+            <Image src={ActiveIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  const filterSearch = () => {
+    status != "" &&
+      criteria != "" &&
+      alert(
+        JSON.stringify(
+          `${URL.PP_LIST}?${criteria}=${searchForm}&status=${status}`,
+          null,
+          2
+        )
+      );
+
+    criteria != "" &&
+      status == "" &&
+      alert(
+        JSON.stringify(`${URL.PP_LIST}?${criteria}=${searchForm}`, null, 2)
+      );
+
+    status != "" &&
+      criteria == "" &&
+      alert(JSON.stringify(`${URL.PP_LIST}?status=${status}`, null, 2));
+
+    console.log(
+      "search => ",
+      `${URL.PP_LIST}?${criteria}=${searchForm}&status=${status}`
+    );
+  };
+
+  // get data pp
   const [data, setData] = useState([]);
 
   const loadData = async () => {
     try {
-      const res = await API.get("/pp/list");
+      const res = await API.get(`${URL.PP_LIST}`);
       const respons = await res.data?.result?.items?.map((e) => {
-        // console.log("e ", e.face_value);
         return {
           ...e,
-          action: (
-            <>
-              <div className="relative flex items-center gap-2">
-                <Tooltip content="Details" closeDelay={0}>
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <Image src={DetailIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-                <Tooltip content="Edit" closeDelay={0}>
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <Image src={EditIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-                <Tooltip color="primary" content="Delete" closeDelay={0}>
-                  <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                    <Image src={DeleteIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-              </div>
-            </>
-          ),
+          status: SetColorStatus(e.status),
+          action: setActionButton(e.status),
         };
       });
-      await setData(respons);
+      setData(respons);
       console.log("res ", respons);
     } catch (error) {
       console.log(error);
@@ -190,9 +246,6 @@ export default function ProductProfile() {
   useEffect(() => {
     loadData();
   }, []);
-
-  // open modal create
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <div className="container mx-auto py-2 pb-10">
@@ -210,6 +263,7 @@ export default function ProductProfile() {
           <div className="w-full grid grid-cols-8 gap-4">
             <Select
               // label="Criteria"
+              aria-label="Criteria"
               placeholder="Search Criteria"
               labelPlacement="outside"
               className="col-span-2"
@@ -219,32 +273,26 @@ export default function ProductProfile() {
                 innerWrapper: "max-w-max",
                 listboxWrapper: "",
               }}
-              onSelectionChange={setCriteria}
               selectedKeys={criteria}
+              // onSelectionChange={setCriteria}
+              onChange={handleCriteriaChange}
             >
-              <SelectItem key="product" value="product">
-                Product Code
-              </SelectItem>
-              <SelectItem key="dec" value="desc">
-                Product Description
-              </SelectItem>
-              <SelectItem key="face" value="face">
-                Face Value
-              </SelectItem>
-              <SelectItem key="card" value="card">
-                Card Fee
-              </SelectItem>
+              {criteriaList.map((e) => (
+                <SelectItem key={e.value} value={e.value}>
+                  {e.label}
+                </SelectItem>
+              ))}
             </Select>
 
             <Input
               // label="Search"
+              aria-label="Search"
               placeholder="Search"
               // labelPlacement="outside"
               className="col-span-3"
               isClearable
               size="sm"
               value={searchForm}
-              // onClear={() => onClear()}
               onValueChange={setSearchForm}
             />
 
@@ -252,6 +300,8 @@ export default function ProductProfile() {
               color="primary"
               className="col-auto self-end hover:bg-secondary font-semibold"
               size="sm"
+              type="button"
+              onClick={filterSearch}
             >
               Search
             </Button>
@@ -274,6 +324,7 @@ export default function ProductProfile() {
           <div className="w-full grid grid-cols-8 gap-4">
             <Select
               // label="Status"
+              aria-label="Status"
               placeholder="Status"
               labelPlacement="outside"
               className="col-span-2"
@@ -283,24 +334,15 @@ export default function ProductProfile() {
                 innerWrapper: "max-w-max",
                 listboxWrapper: "",
               }}
-              onSelectionChange={setStatus}
               selectedKeys={status}
+              // onSelectionChange={setStatus}
+              onChange={handleStatusChange}
             >
-              <SelectItem key="approved" value="approved">
-                APPROVED
-              </SelectItem>
-              <SelectItem key="rejected" value="rejected">
-                REJECTED
-              </SelectItem>
-              <SelectItem key="submitted" value="submitted">
-                SUBMITTED
-              </SelectItem>
-              <SelectItem key="draft" value="draft">
-                DRAFT
-              </SelectItem>
-              <SelectItem key="deactived" value="deactived">
-                DEACTIVED
-              </SelectItem>
+              {statusList.map((e) => (
+                <SelectItem key={e.value} value={e.value}>
+                  {e.label}
+                </SelectItem>
+              ))}
             </Select>
           </div>
         </div>

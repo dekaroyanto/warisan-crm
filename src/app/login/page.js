@@ -40,7 +40,10 @@ export default function Page() {
         });
         console.log("success", response);
 
-        toastPending({ pending: "Waiting..", success: "Success Login" });
+        toastPending({
+          textPending: "Waiting..",
+          textSuccess: "Success Login",
+        });
         setTimeout(() => {
           router.push("dashboard");
         }, 1000);

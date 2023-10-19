@@ -10,3 +10,7 @@ export const API = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+export const URL = {
+  PP_LIST: "/pp/list",
+};
