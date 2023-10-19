@@ -66,6 +66,9 @@ export default function DataTable({ columns, rows, keys, selectMode }) {
         }
         classNames={{
           wrapper: "min-h-[222px]",
+          table: "w-max",
+          th: "llast:w-full",
+          td: "min-w-max",
         }}
       >
         <TableHeader columns={columns}>

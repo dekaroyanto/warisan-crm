@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { SetColorStatus } from "@/utils";
+import { SetColorStatus, ICONS } from "@/utils";
 
 import {
   Tooltip,
@@ -14,31 +14,6 @@ import Image from "next/image";
 
 import DataTable from "@/components/dataTable";
 import ModalCreateGiftCard from "./ModalCreateGiftCard";
-
-import DetailIcon from "@/assets/icons/ac_view.svg";
-import DetailIconDisable from "@/assets/icons/ac_view_disable.svg";
-import EditIcon from "@/assets/icons/ac_edit.svg";
-import EditIconDisable from "@/assets/icons/ac_edit_disable.svg";
-import DeleteIcon from "@/assets/icons/ac_delete.svg";
-import DeleteIconDisable from "@/assets/icons/ac_delete_disable.svg";
-import GenerateCardIcon from "@/assets/icons/ac_gear.svg";
-import GenerateCardIconDisable from "@/assets/icons/ac_gear_disable.svg";
-import PrintIcon from "@/assets/icons/ac_print.svg";
-import PrintIconDisable from "@/assets/icons/ac_print_disable.svg";
-import PrintEncryptIcon from "@/assets/icons/ac_print_lock.svg";
-import PrintEncryptIconDisable from "@/assets/icons/ac_print_lock_disable.svg";
-import ReceiveIcon from "@/assets/icons/ac_receive.svg";
-import ReceiveIconDisable from "@/assets/icons/ac_receive_disable.svg";
-
-const columns = [
-  { label: "MO NUMBER", key: "mo_number" },
-  { label: "MO DATE", key: "mo_date" },
-  { label: "PO NUMBER", key: "po_number" },
-  { label: "PO DATE", key: "po_date" },
-  { label: "SUPPLIER", key: "supplier" },
-  { label: "STATUS", key: "status" },
-  { label: "ACTIONS", key: "action" },
-];
 
 const users = [
   {
@@ -106,6 +81,16 @@ const users = [
   },
 ];
 
+const columns = [
+  { label: "MO NUMBER", key: "mo_number" },
+  { label: "MO DATE", key: "mo_date" },
+  { label: "PO NUMBER", key: "po_number" },
+  { label: "PO DATE", key: "po_date" },
+  { label: "SUPPLIER", key: "supplier" },
+  { label: "STATUS", key: "status" },
+  { label: "ACTIONS", key: "action" },
+];
+
 const statusList = [
   { label: "APPROVED", value: "APPROVED" },
   { label: "BARCODING", value: "BARCODING" },
@@ -118,9 +103,9 @@ const statusList = [
 
 export default function ManufacturOrder() {
   // Search Feature
-  const [criteria, setCriteria] = useState([]);
-  const [status, setStatus] = useState([]);
-  const [supplier, setSupplier] = useState([]);
+  const [criteria, setCriteria] = useState("");
+  const [status, setStatus] = useState("");
+  const [supplier, setSupplier] = useState("");
   const [poDate, setPODate] = useState("");
   const [searchForm, setSearchForm] = useState("");
 
@@ -132,56 +117,57 @@ export default function ManufacturOrder() {
     setSearchForm("");
   }, []);
 
+  const setActionButton = () => {
+    return (
+      <div className="relative flex items-center gap-2">
+        <Tooltip content="View" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.ViewIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip content="Update" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.EditIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip content="Generated Gift Card" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.GenerateCardIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip content="Print" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip content="Print Encrypt File" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.PrintEncryptIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip content="Receive" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.ReceiveIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip color="primary" content="Delete" closeDelay={0}>
+          <span className="text-lg text-danger cursor-pointer active:opacity-50">
+            <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+      </div>
+    );
+  };
+
   // get data
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const respons = users?.map((e) => {
-      console.log("status ", e.status);
       return {
         ...e,
         status: SetColorStatus(e.status),
-        action: (
-          <>
-            <div className="relative flex items-center gap-2">
-              <Tooltip content="View" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                  <Image src={DetailIcon} alt="icon" width={28} />
-                </span>
-              </Tooltip>
-              <Tooltip content="Update" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                  <Image src={EditIcon} alt="icon" width={28} />
-                </span>
-              </Tooltip>
-              <Tooltip content="Generated Gift Card" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                  <Image src={GenerateCardIcon} alt="icon" width={28} />
-                </span>
-              </Tooltip>
-              <Tooltip content="Print" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                  <Image src={PrintIcon} alt="icon" width={28} />
-                </span>
-              </Tooltip>
-              <Tooltip content="Print Encrypt File" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                  <Image src={PrintEncryptIcon} alt="icon" width={28} />
-                </span>
-              </Tooltip>
-              <Tooltip content="Receive" closeDelay={0}>
-                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                  <Image src={ReceiveIcon} alt="icon" width={28} />
-                </span>
-              </Tooltip>
-              <Tooltip color="primary" content="Delete" closeDelay={0}>
-                <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                  <Image src={DeleteIcon} alt="icon" width={28} />
-                </span>
-              </Tooltip>
-            </div>
-          </>
-        ),
+        action: setActionButton(),
       };
     });
     setData(respons);
@@ -191,7 +177,7 @@ export default function ManufacturOrder() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <div className="container py-2 mx-auto">
+    <div className="md:container py-2 mx-auto">
       <h1 className="mt-4 mb-6 text-5xl font-thin text-title">
         Manufactur Order
       </h1>

@@ -83,59 +83,45 @@ export default function ProductProfile() {
   // get data
   const [data, setData] = useState([]);
 
-  // const hasSearchFilter = Boolean(filter);
-
-  // const filteredItems = useMemo(() => {
-  //   let filteredData = [...data];
-
-  //   if (hasSearchFilter) {
-  //     filteredData = filteredData.filter((data) =>
-  //       data.title.toLowerCase().includes(filter.toLowerCase())
-  //     );
+  // const loadData = async () => {
+  //   try {
+  //     const res = await API.get("/post");
+  //     const respons = await res.data?.map((e) => {
+  //       return {
+  //         ...e,
+  //         action: (
+  //           <>
+  //             <div className="relative flex items-center gap-2">
+  //               <Tooltip content="Details" closeDelay={0}>
+  //                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+  //                   <Image src={DetailIcon} alt="icon" />
+  //                 </span>
+  //               </Tooltip>
+  //               <Tooltip content="Edit" closeDelay={0}>
+  //                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+  //                   <Image src={EditIcon} alt="icon" />
+  //                 </span>
+  //               </Tooltip>
+  //               <Tooltip color="primary" content="Delete" closeDelay={0}>
+  //                 <span className="text-lg text-danger cursor-pointer active:opacity-50">
+  //                   <Image src={DeleteIcon} alt="icon" />
+  //                 </span>
+  //               </Tooltip>
+  //             </div>
+  //           </>
+  //         ),
+  //       };
+  //     });
+  //     await setData(respons);
+  //     console.log("res ", respons);
+  //   } catch (error) {
+  //     console.log(error);
   //   }
+  // };
 
-  //   return filteredData;
-  // }, [data, filter]);
-
-  const loadData = async () => {
-    try {
-      const res = await API.get("/post");
-      const respons = await res.data?.map((e) => {
-        return {
-          ...e,
-          action: (
-            <>
-              <div className="relative flex items-center gap-2">
-                <Tooltip content="Details" closeDelay={0}>
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <Image src={DetailIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-                <Tooltip content="Edit" closeDelay={0}>
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <Image src={EditIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-                <Tooltip color="primary" content="Delete" closeDelay={0}>
-                  <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                    <Image src={DeleteIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-              </div>
-            </>
-          ),
-        };
-      });
-      await setData(respons);
-      console.log("res ", respons);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    loadData();
-  }, []);
+  // useEffect(() => {
+  //   loadData();
+  // }, []);
 
   return (
     <div className="container mx-auto py-2 pb-10">
@@ -153,6 +139,7 @@ export default function ProductProfile() {
         <div className="w-full grid grid-cols-8 gap-4">
           <Select
             // label="Card Vendor"
+            aria-label="Card Vendor"
             placeholder="Card Vendor"
             labelPlacement="outside"
             className="col-span-2"
@@ -179,6 +166,7 @@ export default function ProductProfile() {
 
           <Select
             // label="Voucher"
+            aria-label="Voucher"
             placeholder="Voucher"
             labelPlacement="outside"
             className="col-span-2"
@@ -201,6 +189,7 @@ export default function ProductProfile() {
 
           <Select
             // label="Lokasi"
+            aria-label="Lokasi"
             placeholder="Lokasi"
             labelPlacement="outside"
             className="col-span-2"
@@ -239,6 +228,7 @@ export default function ProductProfile() {
 
           <Input
             // label="From"
+            aria-label="From"
             type="date"
             labelPlacement="outside"
             placeholder="From"
@@ -249,6 +239,7 @@ export default function ProductProfile() {
           />
           <Input
             // label="To"
+            aria-label="To"
             type="date"
             labelPlacement="outside"
             placeholder="To"

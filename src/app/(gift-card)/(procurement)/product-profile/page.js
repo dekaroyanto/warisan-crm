@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { API, URL } from "@/API/api";
-import { SetColorStatus } from "@/utils";
+import { SetColorStatus, ICONS } from "@/utils";
 
 import Image from "next/image";
 import {
@@ -9,28 +9,11 @@ import {
   Select,
   SelectItem,
   Button,
-  Chip,
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
 
 import DataTable from "@/components/dataTable";
-
-import DetailIcon from "@/assets/icons/ac_view.svg";
-import DetailIconDisable from "@/assets/icons/ac_view_disable.svg";
-import EditIcon from "@/assets/icons/ac_edit.svg";
-import EditIconDisable from "@/assets/icons/ac_edit_disable.svg";
-import SafetyStockIcon from "@/assets/icons/ac_stock.svg";
-import SafetyStockIconDisable from "@/assets/icons/ac_stock_disable.svg";
-import ProcessIcon from "@/assets/icons/ac_process.svg";
-import ProcessIconDisable from "@/assets/icons/ac_process_disable.svg";
-import DeleteIcon from "@/assets/icons/ac_delete.svg";
-import DeleteIconDisable from "@/assets/icons/ac_delete_disable.svg";
-import DeactiveIcon from "@/assets/icons/ac_deactive.svg";
-import DeactiveIconDisable from "@/assets/icons/ac_deactive_disable.svg";
-import ActiveIcon from "@/assets/icons/ac_active.svg";
-import ActiveIconDisable from "@/assets/icons/ac_active_disable.svg";
-
 import ModalCreate from "./ModalCreateProduct";
 
 const columns = [
@@ -80,9 +63,8 @@ export default function ProductProfile() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // Search Feature
-  // const [criteria, setCriteria] = React.useState(new Set([]));
-  const [criteria, setCriteria] = useState(new Set([]));
-  const [status, setStatus] = useState([]);
+  const [criteria, setCriteria] = useState("");
+  const [status, setStatus] = useState("");
   const [searchForm, setSearchForm] = useState("");
 
   const handleCriteriaChange = (e) => {
@@ -97,7 +79,6 @@ export default function ProductProfile() {
     setCriteria([]);
     setStatus([]);
     setSearchForm("");
-    loadData();
   }, []);
 
   const setActionButton = (e) => {
@@ -112,84 +93,84 @@ export default function ProductProfile() {
         {isApproved ? (
           <Tooltip content="View" closeDelay={0}>
             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <Image src={DetailIcon} alt="icon" width={28} />
+              <Image src={ICONS.ViewIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
         ) : (
           <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
-            <Image src={DetailIconDisable} alt="icon" width={28} />
+            <Image src={ICONS.ViewIconDisable} alt="icon" width={28} />
           </span>
         )}
 
         {isDraft ? (
           <Tooltip content="Update" closeDelay={0}>
             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <Image src={EditIcon} alt="icon" width={28} />
+              <Image src={ICONS.EditIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
         ) : (
           <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
-            <Image src={EditIconDisable} alt="icon" width={28} />
+            <Image src={ICONS.EditIconDisable} alt="icon" width={28} />
           </span>
         )}
 
         {isSubmitted ? (
           <Tooltip content="Process" closeDelay={0}>
             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <Image src={ProcessIcon} alt="icon" width={28} />
+              <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
         ) : (
           <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
-            <Image src={ProcessIconDisable} alt="icon" width={28} />
+            <Image src={ICONS.ProcessIconDisable} alt="icon" width={28} />
           </span>
         )}
 
         {isApproved ? (
           <Tooltip content="View Safety Stock" closeDelay={0}>
             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <Image src={SafetyStockIcon} alt="icon" width={28} />
+              <Image src={ICONS.SafetyStockIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
         ) : (
           <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
-            <Image src={SafetyStockIconDisable} alt="icon" width={28} />
+            <Image src={ICONS.SafetyStockIconDisable} alt="icon" width={28} />
           </span>
         )}
 
         {isDraft || isRejected || isSubmitted ? (
           <Tooltip color="primary" content="Delete" closeDelay={0}>
             <span className="text-lg text-danger cursor-pointer active:opacity-50">
-              <Image src={DeleteIcon} alt="icon" width={28} />
+              <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
         ) : (
           <span className="text-lg text-danger cursor-not-allowed  active:opacity-50">
-            <Image src={DeleteIconDisable} alt="icon" width={28} />
+            <Image src={ICONS.DeleteIconDisable} alt="icon" width={28} />
           </span>
         )}
 
         {isDraft || isApproved ? (
           <Tooltip color="primary" content="Deactive" closeDelay={0}>
             <span className="text-lg text-danger cursor-pointer active:opacity-50">
-              <Image src={DeactiveIcon} alt="icon" width={28} />
+              <Image src={ICONS.DeactiveIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
         ) : (
           <span className="text-lg text-danger cursor-not-allowed active:opacity-50">
-            <Image src={DeactiveIconDisable} alt="icon" width={28} />
+            <Image src={ICONS.DeactiveIconDisable} alt="icon" width={28} />
           </span>
         )}
 
         {isDeactive ? (
           <Tooltip content="Active" closeDelay={0}>
             <span className="text-lg text-danger cursor-pointer active:opacity-50">
-              <Image src={ActiveIcon} alt="icon" width={28} />
+              <Image src={ICONS.ActiveIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
         ) : (
           <span className="text-lg text-danger cursor-not-allowed active:opacity-50">
-            <Image src={ActiveIconDisable} alt="icon" width={28} />
+            <Image src={ICONS.ActiveIconDisable} alt="icon" width={28} />
           </span>
         )}
       </div>
@@ -197,29 +178,12 @@ export default function ProductProfile() {
   };
 
   const filterSearch = () => {
-    status != "" &&
-      criteria != "" &&
-      alert(
-        JSON.stringify(
-          `${URL.PP_LIST}?${criteria}=${searchForm}&status=${status}`,
-          null,
-          2
-        )
-      );
-
-    criteria != "" &&
-      status == "" &&
-      alert(
-        JSON.stringify(`${URL.PP_LIST}?${criteria}=${searchForm}`, null, 2)
-      );
-
-    status != "" &&
-      criteria == "" &&
-      alert(JSON.stringify(`${URL.PP_LIST}?status=${status}`, null, 2));
-
-    console.log(
-      "search => ",
-      `${URL.PP_LIST}?${criteria}=${searchForm}&status=${status}`
+    alert(
+      JSON.stringify(
+        `${URL.PP_LIST}?${criteria}=${searchForm}&status=${status}`,
+        null,
+        2
+      )
     );
   };
 
@@ -248,7 +212,7 @@ export default function ProductProfile() {
   }, []);
 
   return (
-    <div className="container mx-auto py-2 pb-10">
+    <div className="md:container mx-auto py-2 pb-10">
       <h1 className="text-5xl font-thin text-title mb-6 mt-4">
         Product Profile
       </h1>

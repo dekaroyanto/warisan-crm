@@ -4,17 +4,22 @@ export default function setColorStatus(e) {
   // e = status data
   let color = "";
 
-  if (e == "APPROVED" || e == "FULL") {
+  if (e == "APPROVED" || e == "FULL" || e == "TRANSFERRED OUT") {
     color = "bg-[#007A61]";
-  } else if (e == "SUBMITTED" || e == "FOR APPROVAL" || e == "PARTIAL") {
+  } else if (
+    e == "SUBMITTED" ||
+    e == "FOR APPROVAL" ||
+    e == "PARTIAL" ||
+    e == "FOR TRANSFER OUT"
+  ) {
     color = "bg-[#F78022]";
-  } else if (e == "DRAFT") {
+  } else if (e == "DRAFT" || e == "INCOMPLETE") {
     color = "bg-[#5B7282]";
   } else if (e == "REJECTED") {
     color = "bg-[#CF1E30]";
   } else if (e == "DEACTIVATED") {
     color = "bg-[#CF1E30]";
-  } else if (e == "BARCODING" || e == "GENERATED") {
+  } else if (e == "BARCODING" || e == "GENERATED" || e == "IN TRANSIT") {
     color = "bg-[#1D4ED8]";
   }
 
@@ -25,7 +30,7 @@ export default function setColorStatus(e) {
       variant="light"
       classNames={{
         base: color,
-        content: "text-white font-medium text-xs",
+        content: "text-white font-medium text-xs w-max",
       }}
     >
       {e}

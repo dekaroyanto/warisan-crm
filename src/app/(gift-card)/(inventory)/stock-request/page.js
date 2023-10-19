@@ -1,6 +1,8 @@
 "use client";
 import { useState, useMemo, useEffect } from "react";
+import { SetColorStatus, ICONS } from "@/utils";
 import { API } from "@/API/api";
+
 import Image from "next/image";
 import {
   Input,
@@ -14,11 +16,45 @@ import {
 
 import DataTable from "@/components/dataTable";
 
-import DetailIcon from "@/assets/icons/detail-icon.svg";
-import EditIcon from "@/assets/icons/edit-icon.svg";
-import DeleteIcon from "@/assets/icons/trash-icon.svg";
-
 import ModalCreateStock from "./ModalCreateStock";
+
+const dummyData = [
+  {
+    id: 1,
+    title: "97182368127",
+    status: "FOR APPROVAL",
+  },
+  {
+    id: 2,
+    title: "97182368127",
+    status: "REJECTED",
+  },
+  {
+    id: 3,
+    title: "97182368127",
+    status: "APPROVED",
+  },
+  {
+    id: 4,
+    title: "97182368127",
+    status: "IN TRANSIT",
+  },
+  {
+    id: 5,
+    title: "97182368127",
+    status: "TRANSFERRED OUT",
+  },
+  {
+    id: 6,
+    title: "97182368127",
+    status: "FOR TRANSFER OUT",
+  },
+  {
+    id: 7,
+    title: "97182368127",
+    status: "INCOMPLETE",
+  },
+];
 
 const columns = [
   {
@@ -46,7 +82,7 @@ const columns = [
     label: "ALLOCATE TO",
   },
   {
-    key: "title",
+    key: "status",
     label: "STATUS",
   },
   {
@@ -79,8 +115,8 @@ const statusList = [
 
 export default function StockRequest() {
   // Search Feature
-  const [request, setRequest] = useState([]);
-  const [status, setStatus] = useState([]);
+  const [request, setRequest] = useState("");
+  const [status, setStatus] = useState("");
   const [searchForm, setSearchForm] = useState("");
 
   const [dateFrom, setDateFrom] = useState("");
@@ -88,7 +124,6 @@ export default function StockRequest() {
 
   // clear search form
   const clearInput = () => {
-    console.log("clear");
     setSearchForm("");
     setStatus([]);
     setRequest([]);
@@ -96,48 +131,95 @@ export default function StockRequest() {
     setDateTo("");
   };
 
-  // get data
-  const [data, setData] = useState([]);
-  console.log(data);
-
-  const loadData = async () => {
-    try {
-      const res = await API.get("/post");
-      const respons = await res.data?.map((e) => {
-        return {
-          ...e,
-          action: (
-            <>
-              <div className="relative flex items-center gap-2">
-                <Tooltip content="Details" closeDelay={0}>
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <Image src={DetailIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-                <Tooltip content="Edit" closeDelay={0}>
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <Image src={EditIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-                <Tooltip color="primary" content="Delete" closeDelay={0}>
-                  <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                    <Image src={DeleteIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-              </div>
-            </>
-          ),
-        };
-      });
-      await setData(respons);
-    } catch (error) {
-      console.log(error);
-    }
+  const setActionButton = () => {
+    return (
+      <div className="relative flex items-center gap-2">
+        <Tooltip content="View" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.ViewIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip content="Edit" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.EditIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip content="Transfer Out" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.TrasnferIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip content="Receive" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.ReceiveIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip content="Print Transfer Document" closeDelay={0}>
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+        <Tooltip color="primary" content="Delete" closeDelay={0}>
+          <span className="text-lg text-danger cursor-pointer active:opacity-50">
+            <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
+          </span>
+        </Tooltip>
+      </div>
+    );
   };
 
+  // get data
+  const [data, setData] = useState([]);
+
   useEffect(() => {
-    loadData();
+    const respons = dummyData?.map((e) => {
+      return {
+        ...e,
+        status: SetColorStatus(e.status),
+        action: setActionButton(),
+      };
+    });
+    setData(respons);
   }, []);
+
+  // const loadData = async () => {
+  //   try {
+  //     const res = await API.get("/post");
+  //     const respons = await res.data?.map((e) => {
+  //       return {
+  //         ...e,
+  //         action: (
+  //           <>
+  // <div className="relative flex items-center gap-2">
+  //   <Tooltip content="Details" closeDelay={0}>
+  //     <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+  //       <Image src={DetailIcon} alt="icon" />
+  //     </span>
+  //   </Tooltip>
+  //   <Tooltip content="Edit" closeDelay={0}>
+  //     <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+  //       <Image src={EditIcon} alt="icon" />
+  //     </span>
+  //   </Tooltip>
+  //   <Tooltip color="primary" content="Delete" closeDelay={0}>
+  //     <span className="text-lg text-danger cursor-pointer active:opacity-50">
+  //       <Image src={DeleteIcon} alt="icon" />
+  //     </span>
+  //   </Tooltip>
+  // </div>
+  //           </>
+  //         ),
+  //       };
+  //     });
+  //     await setData(respons);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   loadData();
+  // }, []);
 
   // open modal create
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
