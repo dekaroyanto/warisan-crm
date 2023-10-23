@@ -130,40 +130,82 @@ export default function StockRequest() {
     setDateFrom("");
     setDateTo("");
   };
+  const setActionButton = (e) => {
+    const isApproved = e == "APPROVED" && true;
+    const isForTransfer = e == "FOR TRANSFER OUT" && true;
+    const isTransit = e == "IN TRANSIT" && true;
+    const isSubmitted = e == "FOR APPROVAL" && true;
+    const isIncomplete = e == "INCOMPLETE" && true;
+    const isRejected = e == "REJECTED" && true;
+    const isTransferOut = e == "TRANSFERRED OUT" && true;
 
-  const setActionButton = () => {
     return (
       <div className="relative flex items-center gap-2">
-        <Tooltip content="View" closeDelay={0}>
+        {isSubmitted ||
+        isApproved ||
+        isTransit ||
+        isIncomplete ||
+        isRejected ||
+        isTransferOut ||
+        isForTransfer ? (
+          <Tooltip content="View Stock" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.ViewIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.ViewIcon} alt="icon" width={28} />
+            <Image src={ICONS.ViewIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip content="Edit" closeDelay={0}>
+        )}
+
+        {isSubmitted ? (
+          <Tooltip content="Process" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.EditIcon} alt="icon" width={28} />
+            <Image src={ICONS.ProcessIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip content="Transfer Out" closeDelay={0}>
+        )}
+
+        {isForTransfer ? (
+          <Tooltip content="Transfer Out" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.TrasnferIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.TrasnferIcon} alt="icon" width={28} />
+            <Image src={ICONS.TrasnferIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip content="Receive" closeDelay={0}>
+        )}
+
+        {isApproved || isIncomplete ? (
+          <Tooltip content="Reserve Gift Card" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.ReceiveIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.ReceiveIcon} alt="icon" width={28} />
+            <Image src={ICONS.ReceiveIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip content="Print Transfer Document" closeDelay={0}>
+        )}
+
+        {isTransit || isTransferOut ? (
+          <Tooltip content="Reprint Transfer Document" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+            <Image src={ICONS.PrintIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip color="primary" content="Delete" closeDelay={0}>
-          <span className="text-lg text-danger cursor-pointer active:opacity-50">
-            <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
-          </span>
-        </Tooltip>
+        )}
       </div>
     );
   };
@@ -176,7 +218,7 @@ export default function StockRequest() {
       return {
         ...e,
         status: SetColorStatus(e.status),
-        action: setActionButton(),
+        action: setActionButton(e.status),
       };
     });
     setData(respons);

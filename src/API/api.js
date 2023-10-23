@@ -13,4 +13,5 @@ export const API = axios.create({
 
 export const URL = {
   PP_LIST: "/pp/list",
+  INVENTORY_STOCK_LIST: "/invenstock/list",
 };

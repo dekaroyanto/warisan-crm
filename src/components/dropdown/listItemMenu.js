@@ -255,10 +255,6 @@ export const listItem = [
                 href: "/burn-card",
               },
               {
-                title: "C4 Claim To/Redemption For Affiliates Schedule",
-                href: "",
-              },
-              {
                 title: "Expiry Date Extention",
                 href: "/date-expired",
               },

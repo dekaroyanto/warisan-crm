@@ -60,6 +60,7 @@ export default function DataTable({ columns, rows, keys, selectMode }) {
                 page={page}
                 total={pages}
                 onChange={(page) => setPage(page)}
+                classNames={{}}
               />
             </div>
           )

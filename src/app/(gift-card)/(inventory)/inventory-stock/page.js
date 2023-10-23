@@ -1,62 +1,74 @@
 "use client";
 import { useState, useMemo, useEffect } from "react";
-import { API } from "@/API/api";
+import { API, URL } from "@/API/api";
+
+import { Input, Select, SelectItem, Button } from "@nextui-org/react";
 import Image from "next/image";
-import {
-  Input,
-  Select,
-  SelectItem,
-  Button,
-  Chip,
-  Tooltip,
-  useDisclosure,
-} from "@nextui-org/react";
 
 import DataTable from "@/components/dataTable";
 
-import DetailIcon from "@/assets/icons/detail-icon.svg";
-import EditIcon from "@/assets/icons/edit-icon.svg";
-import DeleteIcon from "@/assets/icons/trash-icon.svg";
-
-const statusColorMap = {
-  approved: "success",
-  submitted: "warning",
-  draft: "default",
-  rejected: "danger",
-  deactived: "danger",
-};
+const dummyData = [
+  {
+    id: 1,
+    card_type: "012389789 - Voucher F&B Rp50.000",
+    transaction_date: Date.now(),
+    begin_balance: 0,
+    transaction_type: "received",
+    qty: 1,
+    end_balance: 1,
+  },
+  {
+    id: 2,
+    card_type: "012389789 - Voucher F&B Rp50.000",
+    transaction_date: Date.now(),
+    begin_balance: 0,
+    transaction_type: "received",
+    qty: 1,
+    end_balance: 1,
+  },
+  {
+    id: 3,
+    card_type: "012389789 - Voucher F&B Rp50.000",
+    transaction_date: Date.now(),
+    begin_balance: 0,
+    transaction_type: "received",
+    qty: 1,
+    end_balance: 1,
+  },
+  {
+    id: 4,
+    card_type: "012389789 - Voucher F&B Rp50.000",
+    transaction_date: Date.now(),
+    begin_balance: 0,
+    transaction_type: "received",
+    qty: 1,
+    end_balance: 1,
+  },
+];
 
 const columnsData = [
   {
-    key: "id",
-    label: "PRODUCT PROFILE",
+    key: "car_type",
+    label: "CARD TYPE",
   },
   {
-    key: "title",
+    key: "transaction_date",
     label: "TRANSACTION DATE",
   },
   {
-    key: "title",
+    key: "begining_balance",
     label: "BEGINNING BALANCE",
   },
   {
-    key: "title",
+    key: "transaction_type",
     label: "TRANSACTION TYPE",
   },
   {
-    key: "title",
-    label: "SERIES FROM",
-  },
-  {
-    key: "title",
-    label: "SERIES TO",
-  },
-  {
-    key: "title",
+    key: "quantity",
     label: "QUANTITY",
   },
   {
-    key: "title",
+    key: "ending_balance",
     label: "ENDING BALANCE",
   },
 ];
@@ -83,36 +95,20 @@ export default function ProductProfile() {
   // get data
   const [data, setData] = useState([]);
 
-  // const loadData = async () => {
+  // useEffect(() => {
+  //   const respons = dummyData?.map((e) => e);
+  //   setData(respons);
+  // }, []);
+
+  // const [v, setV] = useState([]);
+
+  // const voucherLi = async () => {
   //   try {
-  //     const res = await API.get("/post");
-  //     const respons = await res.data?.map((e) => {
-  //       return {
-  //         ...e,
-  //         action: (
-  //           <>
-  //             <div className="relative flex items-center gap-2">
-  //               <Tooltip content="Details" closeDelay={0}>
-  //                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-  //                   <Image src={DetailIcon} alt="icon" />
-  //                 </span>
-  //               </Tooltip>
-  //               <Tooltip content="Edit" closeDelay={0}>
-  //                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-  //                   <Image src={EditIcon} alt="icon" />
-  //                 </span>
-  //               </Tooltip>
-  //               <Tooltip color="primary" content="Delete" closeDelay={0}>
-  //                 <span className="text-lg text-danger cursor-pointer active:opacity-50">
-  //                   <Image src={DeleteIcon} alt="icon" />
-  //                 </span>
-  //               </Tooltip>
-  //             </div>
-  //           </>
-  //         ),
-  //       };
+  //     const res = await API.get(`${URL.PP_LIST}`);
+  //     const respons = await res.data?.result?.items?.map((e) => {
+  //       return { label: e.product_desc, value: e.product_desc };
   //     });
-  //     await setData(respons);
+  //     setVoucher(respons);
   //     console.log("res ", respons);
   //   } catch (error) {
   //     console.log(error);
@@ -120,8 +116,27 @@ export default function ProductProfile() {
   // };
 
   // useEffect(() => {
-  //   loadData();
+  //   voucherLi();
   // }, []);
+
+  const loadData = async () => {
+    try {
+      const res = await API.get(`${URL.INVENTORY_STOCK_LIST}`);
+      const respons = await res.data?.result?.items?.map((e) => {
+        return {
+          ...e,
+        };
+      });
+      await setData(respons);
+      console.log("res ", respons);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   return (
     <div className="container mx-auto py-2 pb-10">
@@ -179,12 +194,11 @@ export default function ProductProfile() {
             onSelectionChange={setVoucher}
             selectedKeys={voucher}
           >
-            <SelectItem key="25.000" value="Voucher 25.000">
-              Voucher 25.000
-            </SelectItem>
-            <SelectItem key="50.000" value="Voucher 50.000" className="">
-              Voucher 50.000
-            </SelectItem>
+            {voucher.map((e) => (
+              <SelectItem key={e.value} value={e.value}>
+                {e.label}
+              </SelectItem>
+            ))}
           </Select>
 
           <Select
@@ -252,7 +266,7 @@ export default function ProductProfile() {
       </div>
 
       {/* Data Table */}
-      <DataTable columns={columnsData} rows={data} />
+      <DataTable columns={columnsData} rows={data} keys={data.id} />
     </div>
   );
 }

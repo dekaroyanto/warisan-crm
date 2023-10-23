@@ -117,44 +117,106 @@ export default function ManufacturOrder() {
     setSearchForm("");
   }, []);
 
-  const setActionButton = () => {
+  const setActionButton = (e) => {
+    const isApproved = e == "APPROVED" && true;
+    const isBarcoding = e == "BARCODING" && true;
+    const isDraft = e == "DRAFT" && true;
+    const isSubmitted = e == "FOR APPROVAL" && true;
+    const isFull = e == "FULL" && true;
+    const isGenerated = e == "GENERATED" && true;
+    const isPartial = e == "PARTIAL" && true;
+
     return (
       <div className="relative flex items-center gap-2">
-        <Tooltip content="View" closeDelay={0}>
+        {/* <Tooltip content="View" closeDelay={0}>
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
             <Image src={ICONS.ViewIcon} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip content="Update" closeDelay={0}>
+        </Tooltip> */}
+
+        {isDraft ? (
+          <Tooltip content="Update" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.EditIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.EditIcon} alt="icon" width={28} />
+            <Image src={ICONS.EditIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip content="Generated Gift Card" closeDelay={0}>
+        )}
+
+        {isApproved ? (
+          <Tooltip content="Generated Gift Card" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.GenerateCardIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.GenerateCardIcon} alt="icon" width={28} />
+            <Image src={ICONS.GenerateCardIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip content="Print" closeDelay={0}>
+        )}
+
+        {isSubmitted ? (
+          <Tooltip content="Process" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+            <Image src={ICONS.ProcessIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip content="Print Encrypt File" closeDelay={0}>
+        )}
+
+        {isFull || isPartial ? (
+          <Tooltip content="Print" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.PrintEncryptIcon} alt="icon" width={28} />
+            <Image src={ICONS.PrintIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip content="Receive" closeDelay={0}>
+        )}
+
+        {isGenerated ? (
+          <Tooltip content="Print Encrypt File" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.PrintEncryptIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.ReceiveIcon} alt="icon" width={28} />
+            <Image src={ICONS.PrintEncryptIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
-        <Tooltip color="primary" content="Delete" closeDelay={0}>
+        )}
+
+        {isPartial || isGenerated ? (
+          <Tooltip content="Receive" closeDelay={0}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.ReceiveIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Image src={ICONS.ReceiveIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isDraft || isSubmitted ? (
+          <Tooltip color="primary" content="Delete" closeDelay={0}>
+            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+              <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
           <span className="text-lg text-danger cursor-pointer active:opacity-50">
-            <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
+            <Image src={ICONS.DeleteIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
+        )}
       </div>
     );
   };
@@ -167,7 +229,7 @@ export default function ManufacturOrder() {
       return {
         ...e,
         status: SetColorStatus(e.status),
-        action: setActionButton(),
+        action: setActionButton(e.status),
       };
     });
     setData(respons);
