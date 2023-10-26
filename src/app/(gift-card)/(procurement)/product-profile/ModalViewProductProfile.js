@@ -23,67 +23,43 @@ import * as Yup from "yup";
 import { toastSuccess } from "@/components/ToastAlert";
 import DeleteIcon from "@/assets/icons/trash-icon.svg";
 
-const faceValue = [
-  { label: "100.000", value: "PPFV01" },
-  { label: "200.000", value: "PPFV02" },
-  { label: "500.000", value: "PPFV05" },
-  { label: "10.000", value: "PPFV06" },
-  { label: "25.000", value: "PPFV07" },
-  { label: "50.000", value: "PPFV09" },
-  { label: "250.000", value: "PPFV10" },
-  { label: "1.000.000", value: "PPFV11" },
-  { label: "275.000", value: "PPFV12" },
-  { label: "5.000", value: "PPFV13" },
-  { label: "15.000", value: "PPFV14" },
-  { label: "35.000", value: "PPFV15" },
-];
-
-const businessUnit = [
-  { id: "", value: "" },
-  { id: "ID030", value: "ID030 - Carefour" },
-  { id: "ID020", value: "ID020 - Transmart" },
-  { id: "ID010", value: "ID010 - Trans Snow" },
-];
-
-export default function ModalCreateProduct({
+export default function ModalViewProductProfile({
   isOpen,
-  onOpenChange,
   size,
   onClose,
+  data,
 }) {
-  const getGenerateId = () => {
-    const d = new Date();
-    const year = d.getFullYear();
-    let month = d.getMonth();
-    let date = d.getDate();
+  const faceValue = [
+    { label: "100.000", value: "PPFV01" },
+    { label: "200.000", value: "PPFV02" },
+    { label: "500.000", value: "PPFV05" },
+    { label: "10.000", value: "PPFV06" },
+    { label: "25.000", value: "PPFV07" },
+    { label: "50.000", value: "PPFV09" },
+    { label: "250.000", value: "PPFV10" },
+    { label: "1.000.000", value: "PPFV11" },
+    { label: "275.000", value: "PPFV12" },
+    { label: "5.000", value: "PPFV13" },
+    { label: "15.000", value: "PPFV14" },
+    { label: "35.000", value: "PPFV15" },
+  ];
 
-    if (month < 10) {
-      month = "0" + month;
-    }
-
-    if (date < 10) {
-      date = "0" + date;
-    }
-
-    let x = Math.floor(Math.random() * 100 + 1);
-
-    if (x < 10) {
-      x = "0" + x;
-    }
-
-    return `${year}${month}${date}${x}`;
-  };
+  const businessUnit = [
+    { id: "", value: "" },
+    { id: "ID030", value: "ID030 - Carefour" },
+    { id: "ID020", value: "ID020 - Transmart" },
+    { id: "ID010", value: "ID010 - Trans Snow" },
+  ];
 
   const initialValues = {
-    id: getGenerateId(),
-    product_code: "",
-    product_desc: "",
-    face_value: "",
-    card_fee: 0,
+    id: data?.id,
+    product_code: data?.product_code,
+    product_desc: data?.product_desc,
+    face_value: data?.face_value,
+    card_fee: data?.card_fee,
     max_amount: 0,
     effective_months: 0,
     unit_cost: 0,
-    status: 2,
     // business_unit: [
     //   {
     //     value: "",
@@ -91,11 +67,14 @@ export default function ModalCreateProduct({
     // ],
   };
 
+  // useEffect(() => {
+  //   set
+  // }, []);
+
   return (
     <div>
       <Modal
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
         size={size}
         onClose={onClose}
         backdrop="blur"
@@ -108,7 +87,7 @@ export default function ModalCreateProduct({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-center">
-                Create Product
+                View Product Profile
               </ModalHeader>
               <Formik
                 initialValues={initialValues}
@@ -141,8 +120,6 @@ export default function ModalCreateProduct({
                       `${URL.PP_CREATE}`,
                       JSON.stringify(values)
                     );
-                    toastSuccess({ title: `Create Product Profile Success` });
-
                     onClose();
 
                     console.log("res ", res);
@@ -155,15 +132,15 @@ export default function ModalCreateProduct({
                   <Form>
                     <ModalBody>
                       <div className="w-full grid grid-cols-12 gap-4">
-                        <div className="col-span-6">
+                        <div className="col-span-6 cursor-not-allowed">
                           <Input
-                            isRequired
+                            isReadOnly
                             size="sm"
                             type="number"
                             label="Product Code"
                             name="product_code"
                             variant="bordered"
-                            className=""
+                            className="cursor-not-allowed"
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             value={props.values.product_code}

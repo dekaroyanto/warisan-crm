@@ -10,8 +10,6 @@ export const metadata = {
 export default function GiftCardLayout({ children }) {
   return (
     <section>
-      <ToastContainer position="top-center" />
-
       <div className="sticky top-0 z-50">
         <Header />
         <Dropdown />

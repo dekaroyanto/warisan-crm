@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { API, URL } from "@/API/api";
-
 import Image from "next/image";
 
 import {
@@ -23,72 +21,33 @@ import * as Yup from "yup";
 import { toastSuccess } from "@/components/ToastAlert";
 import DeleteIcon from "@/assets/icons/trash-icon.svg";
 
-const faceValue = [
-  { label: "100.000", value: "PPFV01" },
-  { label: "200.000", value: "PPFV02" },
-  { label: "500.000", value: "PPFV05" },
-  { label: "10.000", value: "PPFV06" },
-  { label: "25.000", value: "PPFV07" },
-  { label: "50.000", value: "PPFV09" },
-  { label: "250.000", value: "PPFV10" },
-  { label: "1.000.000", value: "PPFV11" },
-  { label: "275.000", value: "PPFV12" },
-  { label: "5.000", value: "PPFV13" },
-  { label: "15.000", value: "PPFV14" },
-  { label: "35.000", value: "PPFV15" },
-];
+export default function ModalCreateCustomer({ isOpen, onOpenChange, size }) {
+  const faceValue = [
+    { label: "500.000", value: "500000" },
+    { label: "200.000", value: "200000" },
+    { label: "100.000", value: "100000" },
+  ];
 
-const businessUnit = [
-  { id: "", value: "" },
-  { id: "ID030", value: "ID030 - Carefour" },
-  { id: "ID020", value: "ID020 - Transmart" },
-  { id: "ID010", value: "ID010 - Trans Snow" },
-];
-
-export default function ModalCreateProduct({
-  isOpen,
-  onOpenChange,
-  size,
-  onClose,
-}) {
-  const getGenerateId = () => {
-    const d = new Date();
-    const year = d.getFullYear();
-    let month = d.getMonth();
-    let date = d.getDate();
-
-    if (month < 10) {
-      month = "0" + month;
-    }
-
-    if (date < 10) {
-      date = "0" + date;
-    }
-
-    let x = Math.floor(Math.random() * 100 + 1);
-
-    if (x < 10) {
-      x = "0" + x;
-    }
-
-    return `${year}${month}${date}${x}`;
-  };
+  const businessUnit = [
+    { id: "", value: "" },
+    { id: "ID030", value: "ID030 - Carefour" },
+    { id: "ID020", value: "ID020 - Transmart" },
+    { id: "ID010", value: "ID010 - Trans Snow" },
+  ];
 
   const initialValues = {
-    id: getGenerateId(),
     product_code: "",
-    product_desc: "",
+    product_decs: "",
     face_value: "",
     card_fee: 0,
     max_amount: 0,
-    effective_months: 0,
-    unit_cost: 0,
-    status: 2,
-    // business_unit: [
-    //   {
-    //     value: "",
-    //   },
-    // ],
+    effective_month: 0,
+    unit_cost: "",
+    business_unit: [
+      {
+        value: "",
+      },
+    ],
   };
 
   return (
@@ -97,7 +56,6 @@ export default function ModalCreateProduct({
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size={size}
-        onClose={onClose}
         backdrop="blur"
         classNames={{
           body: "py-6",
@@ -116,7 +74,7 @@ export default function ModalCreateProduct({
                   product_code: Yup.number().required(
                     "product code must be required"
                   ),
-                  product_desc: Yup.string().required(
+                  product_decs: Yup.string().required(
                     "product description must be required"
                   ),
                   face_value: Yup.string().nullable(),
@@ -126,7 +84,7 @@ export default function ModalCreateProduct({
                   max_amount: Yup.number()
                     .nullable()
                     .moreThan(-1, "max amount must be less than 0"),
-                  effective_months: Yup.number()
+                  effective_month: Yup.number()
                     .nullable()
                     .moreThan(-1, "effective month must be less than 0"),
                   unit_cost: Yup.number().required(
@@ -136,19 +94,6 @@ export default function ModalCreateProduct({
                 onSubmit={async (values) => {
                   await new Promise((r) => setTimeout(r, 500));
                   alert(JSON.stringify(values, null, 2));
-                  try {
-                    const res = await API.post(
-                      `${URL.PP_CREATE}`,
-                      JSON.stringify(values)
-                    );
-                    toastSuccess({ title: `Create Product Profile Success` });
-
-                    onClose();
-
-                    console.log("res ", res);
-                  } catch (error) {
-                    console.log(error);
-                  }
                 }}
               >
                 {(props) => (
@@ -181,17 +126,17 @@ export default function ModalCreateProduct({
                             isRequired
                             size="sm"
                             label="Product Description"
-                            name="product_desc"
+                            name="product_decs"
                             variant="bordered"
                             className=""
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
-                            value={props.values.product_desc}
+                            value={props.values.product_decs}
                           />
-                          {props.touched.product_desc &&
-                          props.errors.product_desc ? (
+                          {props.touched.product_decs &&
+                          props.errors.product_decs ? (
                             <div className="text-sm text-primary font-semibold">
-                              {props.errors.product_desc}
+                              {props.errors.product_decs}
                             </div>
                           ) : null}
                         </div>
@@ -228,7 +173,6 @@ export default function ModalCreateProduct({
                             label="Unit Cost"
                             name="unit_cost"
                             variant="bordered"
-                            placeholder="0"
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             value={props.values.unit_cost}
@@ -284,24 +228,24 @@ export default function ModalCreateProduct({
                             size="sm"
                             type="number"
                             label="Effective Month"
-                            name="effective_months"
+                            name="effective_month"
                             variant="bordered"
                             placeholder="0"
                             className="col-span-4"
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
-                            value={props.values.effective_months}
+                            value={props.values.effective_month}
                           />
-                          {props.touched.effective_months &&
-                          props.errors.effective_months ? (
+                          {props.touched.effective_month &&
+                          props.errors.effective_month ? (
                             <div className="text-md text-primary font-semibold">
-                              {props.errors.effective_months}
+                              {props.errors.effective_month}
                             </div>
                           ) : null}
                         </div>
                       </div>
 
-                      {/* <FieldArray name="business_unit">
+                      <FieldArray name="business_unit">
                         {({ insert, remove, push }) => (
                           <>
                             <div className="grid grid-cols-12 mt-3">
@@ -357,7 +301,7 @@ export default function ModalCreateProduct({
                             </div>
                           </>
                         )}
-                      </FieldArray> */}
+                      </FieldArray>
                     </ModalBody>
 
                     <ModalFooter>

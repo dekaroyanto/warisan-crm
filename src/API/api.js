@@ -13,5 +13,7 @@ export const API = axios.create({
 
 export const URL = {
   PP_LIST: "/pp/list",
+  PP_CREATE: "/addpp/create",
+
   INVENTORY_STOCK_LIST: "/invenstock/list",
 };

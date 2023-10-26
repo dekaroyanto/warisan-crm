@@ -130,6 +130,7 @@ export default function StockRequest() {
     setDateFrom("");
     setDateTo("");
   };
+
   const setActionButton = (e) => {
     const isApproved = e == "APPROVED" && true;
     const isForTransfer = e == "FOR TRANSFER OUT" && true;

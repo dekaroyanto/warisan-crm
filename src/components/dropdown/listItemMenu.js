@@ -274,7 +274,7 @@ export const listItem = [
             submenu: [
               {
                 title: "Customer Profile",
-                href: "",
+                href: "/customer-profile",
               },
               {
                 title: "Sales Order",

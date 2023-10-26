@@ -11,14 +11,24 @@ import {
   Button,
   Tooltip,
   useDisclosure,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@nextui-org/react";
 
+import { toastSuccess } from "@/components/ToastAlert";
+
 import DataTable from "@/components/dataTable";
+
 import ModalCreate from "./ModalCreateProduct";
+import ModalSafetyStock from "./ModalSafetyStock";
+import ModalViewProductProfile from "./ModalViewProductProfile";
 
 const columns = [
   {
-    key: "id",
+    key: "product_code",
     label: "PRODUCT CODE",
   },
   {
@@ -60,7 +70,7 @@ const criteriaList = [
 
 export default function ProductProfile() {
   // open modal create
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   // Search Feature
   const [criteria, setCriteria] = useState("");
@@ -81,18 +91,85 @@ export default function ProductProfile() {
     setSearchForm("");
   }, []);
 
+  // open Modal
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [openModalDeactive, setOpenModalDeactive] = useState(false);
+  const [openModalActive, setOpenModal2] = useState(false);
+  const [openModalSafetyStock, setOpenModalSafetyStock] = useState(false);
+  const [openModalView, setOpenModalView] = useState(false);
+
+  const [id, setId] = useState("");
+  const [view, setView] = useState([]);
+
+  const handleOpenModalDelete = () => {
+    setOpenModalDelete((value) => !value);
+  };
+
+  const handleOpenModalDeactive = () => {
+    setOpenModalDeactive((value) => !value);
+  };
+
+  const handleOpenModalActive = () => {
+    setOpenModal2((value) => !value);
+  };
+
+  const handleOpenModalSafetyStock = () => {
+    setOpenModalSafetyStock((value) => !value);
+  };
+
+  const handleOpenModalView = () => {
+    setOpenModalView((value) => !value);
+  };
+
+  // Handle Actions
+  const handleDelete = async (e) => {
+    try {
+      toastSuccess({ title: `Product Profile ID ${e} has Deleted` });
+      handleOpenModalDelete();
+      setId("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeactive = (e) => {
+    try {
+      toastSuccess({ title: `Product Profile ID ${e} has Deactived` });
+      setId("");
+      handleOpenModalDeactive();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleActive = (e) => {
+    try {
+      toastSuccess({ title: `Product Profile ID ${e} has Actived` });
+      setId("");
+      handleOpenModalActive();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const setActionButton = (e) => {
-    const isDeactive = e == "DEACTIVATED" && true;
-    const isDraft = e == "DRAFT" && true;
-    const isApproved = e == "APPROVED" && true;
-    const isSubmitted = e == "SUBMITTED" && true;
-    const isRejected = e == "REJECTED" && true;
+    const isDeactive = e.status == "DEACTIVATED" && true;
+    const isDraft = e.status == "DRAFT" && true;
+    const isApproved = e.status == "APPROVED" && true;
+    const isSubmitted = e.status == "SUBMITTED" && true;
+    const isRejected = e.status == "REJECTED" && true;
 
     return (
       <div className="relative flex items-center gap-2">
         {isApproved ? (
           <Tooltip content="View" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModalView(e);
+                setView(e);
+              }}
+            >
               <Image src={ICONS.ViewIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -128,7 +205,13 @@ export default function ProductProfile() {
 
         {isApproved ? (
           <Tooltip content="View Safety Stock" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModalSafetyStock();
+                setId(e.id);
+              }}
+            >
               <Image src={ICONS.SafetyStockIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -140,7 +223,13 @@ export default function ProductProfile() {
 
         {isDraft || isRejected || isSubmitted ? (
           <Tooltip color="primary" content="Delete" closeDelay={0}>
-            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-danger cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModalDelete();
+                setId(e.id);
+              }}
+            >
               <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -152,7 +241,13 @@ export default function ProductProfile() {
 
         {isDraft || isApproved ? (
           <Tooltip color="primary" content="Deactive" closeDelay={0}>
-            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-danger cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModalDeactive();
+                setId(e.id);
+              }}
+            >
               <Image src={ICONS.DeactiveIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -164,7 +259,13 @@ export default function ProductProfile() {
 
         {isDeactive ? (
           <Tooltip content="Active" closeDelay={0}>
-            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-danger cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModalActive();
+                setId(e.id);
+              }}
+            >
               <Image src={ICONS.ActiveIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -197,7 +298,7 @@ export default function ProductProfile() {
         return {
           ...e,
           status: SetColorStatus(e.status),
-          action: setActionButton(e.status),
+          action: setActionButton(e),
         };
       });
       setData(respons);
@@ -322,11 +423,98 @@ export default function ProductProfile() {
         >
           Create Product Profile
         </Button>
-        <ModalCreate isOpen={isOpen} onOpenChange={onOpenChange} size="4xl" />
       </div>
 
       {/* Data Table */}
       <DataTable columns={columns} rows={data} keys={data.id} />
+
+      {/* Modal Create  */}
+      <ModalCreate
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onClose={onClose}
+        size="4xl"
+      />
+
+      {/* Modal Safety Stock */}
+      <ModalSafetyStock
+        isOpen={openModalSafetyStock}
+        onClose={handleOpenModalSafetyStock}
+        size="4xl"
+        id={id}
+      />
+
+      {/* Modal View */}
+      <ModalViewProductProfile
+        isOpen={openModalView}
+        onClose={handleOpenModalView}
+        size="4xl"
+        data={view}
+      />
+
+      <Modal isOpen={openModalDelete} onClose={handleOpenModalDelete} size="sm">
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-1">
+            Delete Product Profile ?
+          </ModalHeader>
+          <ModalFooter>
+            <Button
+              color="danger"
+              variant="light"
+              onPress={handleOpenModalDelete}
+            >
+              Close
+            </Button>
+            <Button color="primary" onPress={() => handleDelete(id)}>
+              Sure
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={openModalDeactive}
+        onClose={handleOpenModalDeactive}
+        size="sm"
+      >
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-1">
+            Deactive Product Profile ?
+          </ModalHeader>
+          <ModalFooter>
+            <Button
+              color="danger"
+              variant="light"
+              onPress={handleOpenModalDeactive}
+            >
+              Close
+            </Button>
+            <Button color="primary" onPress={() => handleDeactive(id)}>
+              Sure
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={openModalActive} onClose={handleOpenModalActive} size="sm">
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-1">
+            Active Product Profile ?
+          </ModalHeader>
+          <ModalFooter>
+            <Button
+              color="danger"
+              variant="light"
+              onPress={handleOpenModalActive}
+            >
+              Close
+            </Button>
+            <Button color="primary" onPress={() => handleActive(id)}>
+              Sure
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }
