@@ -21,6 +21,7 @@ import {
 import { toastSuccess } from "@/components/ToastAlert";
 
 import DataTable from "@/components/dataTable";
+import ModalAction from "@/components/modalAction";
 
 import ModalCreate from "./ModalCreateProduct";
 import ModalSafetyStock from "./ModalSafetyStock";
@@ -97,6 +98,8 @@ export default function ProductProfile() {
   const [openModalActive, setOpenModal2] = useState(false);
   const [openModalSafetyStock, setOpenModalSafetyStock] = useState(false);
   const [openModalView, setOpenModalView] = useState(false);
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
+  const [openModalProcess, setOpenModalProcess] = useState(false);
 
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
@@ -121,7 +124,16 @@ export default function ProductProfile() {
     setOpenModalView((value) => !value);
   };
 
+  const handleOpenModalUpdate = () => {
+    setOpenModalUpdate((value) => !value);
+  };
+
+  const handleOpenModalProcess = () => {
+    setOpenModalProcess((value) => !value);
+  };
+
   // Handle Actions
+
   const handleDelete = async (e) => {
     try {
       toastSuccess({ title: `Product Profile ID ${e} has Deleted` });
@@ -181,7 +193,13 @@ export default function ProductProfile() {
 
         {isDraft ? (
           <Tooltip content="Update" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModalUpdate();
+                setView(e);
+              }}
+            >
               <Image src={ICONS.EditIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -193,7 +211,13 @@ export default function ProductProfile() {
 
         {isSubmitted ? (
           <Tooltip content="Process" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModalProcess();
+                setView(e);
+              }}
+            >
               <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -302,7 +326,6 @@ export default function ProductProfile() {
         };
       });
       setData(respons);
-      console.log("res ", respons);
     } catch (error) {
       console.log(error);
     }
@@ -450,71 +473,52 @@ export default function ProductProfile() {
         onClose={handleOpenModalView}
         size="4xl"
         data={view}
+        title="View Product Profile"
       />
 
-      <Modal isOpen={openModalDelete} onClose={handleOpenModalDelete} size="sm">
-        <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
-            Delete Product Profile ?
-          </ModalHeader>
-          <ModalFooter>
-            <Button
-              color="danger"
-              variant="light"
-              onPress={handleOpenModalDelete}
-            >
-              Close
-            </Button>
-            <Button color="primary" onPress={() => handleDelete(id)}>
-              Sure
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {/* Modal Update */}
+      <ModalViewProductProfile
+        isOpen={openModalUpdate}
+        onClose={setOpenModalUpdate}
+        size="4xl"
+        data={view}
+        title="Update Product Profile"
+        isUpdate={true}
+      />
 
-      <Modal
+      {/* Modal Process */}
+      <ModalViewProductProfile
+        isOpen={openModalProcess}
+        onClose={setOpenModalProcess}
+        size="4xl"
+        data={view}
+        title="Process Product Profile"
+        isApprove={true}
+      />
+
+      {/* Modal Delete */}
+      <ModalAction
+        isOpen={openModalDelete}
+        onClose={handleOpenModalDelete}
+        title="Delete This Product Profile ?"
+        handleAction={() => handleDelete(id)}
+      />
+
+      {/* Modal Deactive */}
+      <ModalAction
         isOpen={openModalDeactive}
         onClose={handleOpenModalDeactive}
-        size="sm"
-      >
-        <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
-            Deactive Product Profile ?
-          </ModalHeader>
-          <ModalFooter>
-            <Button
-              color="danger"
-              variant="light"
-              onPress={handleOpenModalDeactive}
-            >
-              Close
-            </Button>
-            <Button color="primary" onPress={() => handleDeactive(id)}>
-              Sure
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        title="Deactive This Product Profile ?"
+        handleAction={() => handleDeactive(id)}
+      />
 
-      <Modal isOpen={openModalActive} onClose={handleOpenModalActive} size="sm">
-        <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
-            Active Product Profile ?
-          </ModalHeader>
-          <ModalFooter>
-            <Button
-              color="danger"
-              variant="light"
-              onPress={handleOpenModalActive}
-            >
-              Close
-            </Button>
-            <Button color="primary" onPress={() => handleActive(id)}>
-              Sure
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {/* Modal Active */}
+      <ModalAction
+        isOpen={openModalActive}
+        onClose={handleOpenModalActive}
+        title="Active This Product Profile ?"
+        handleAction={() => handleActive(id)}
+      />
     </div>
   );
 }

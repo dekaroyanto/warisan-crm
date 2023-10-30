@@ -20,42 +20,45 @@ import { Formik, Form, FieldArray, useFormik, ErrorMessage } from "formik";
 
 import * as Yup from "yup";
 
-import { toastSuccess } from "@/components/ToastAlert";
+import { toastSuccess, toastFailed, toastInfo } from "@/components/ToastAlert";
 import DeleteIcon from "@/assets/icons/trash-icon.svg";
+
+const faceValue = [
+  { label: "100.000", value: "PPFV01" },
+  { label: "200.000", value: "PPFV02" },
+  { label: "500.000", value: "PPFV05" },
+  { label: "10.000", value: "PPFV06" },
+  { label: "25.000", value: "PPFV07" },
+  { label: "50.000", value: "PPFV09" },
+  { label: "250.000", value: "PPFV10" },
+  { label: "1.000.000", value: "PPFV11" },
+  { label: "275.000", value: "PPFV12" },
+  { label: "5.000", value: "PPFV13" },
+  { label: "15.000", value: "PPFV14" },
+  { label: "35.000", value: "PPFV15" },
+];
+
+const businessUnit = [
+  { id: "", value: "" },
+  { id: "ID030", value: "ID030 - Carefour" },
+  { id: "ID020", value: "ID020 - Transmart" },
+  { id: "ID010", value: "ID010 - Trans Snow" },
+];
 
 export default function ModalViewProductProfile({
   isOpen,
   size,
   onClose,
   data,
+  title,
+  isUpdate,
+  isApprove,
 }) {
-  const faceValue = [
-    { label: "100.000", value: "PPFV01" },
-    { label: "200.000", value: "PPFV02" },
-    { label: "500.000", value: "PPFV05" },
-    { label: "10.000", value: "PPFV06" },
-    { label: "25.000", value: "PPFV07" },
-    { label: "50.000", value: "PPFV09" },
-    { label: "250.000", value: "PPFV10" },
-    { label: "1.000.000", value: "PPFV11" },
-    { label: "275.000", value: "PPFV12" },
-    { label: "5.000", value: "PPFV13" },
-    { label: "15.000", value: "PPFV14" },
-    { label: "35.000", value: "PPFV15" },
-  ];
-
-  const businessUnit = [
-    { id: "", value: "" },
-    { id: "ID030", value: "ID030 - Carefour" },
-    { id: "ID020", value: "ID020 - Transmart" },
-    { id: "ID010", value: "ID010 - Trans Snow" },
-  ];
-
   const initialValues = {
     id: data?.id,
     product_code: data?.product_code,
     product_desc: data?.product_desc,
-    face_value: data?.face_value,
+    face_value: `${data?.face_value}`.trim(),
     card_fee: data?.card_fee,
     max_amount: 0,
     effective_months: 0,
@@ -67,9 +70,7 @@ export default function ModalViewProductProfile({
     // ],
   };
 
-  // useEffect(() => {
-  //   set
-  // }, []);
+  const [status, setStatus] = useState("");
 
   return (
     <div>
@@ -86,9 +87,6 @@ export default function ModalViewProductProfile({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-center">
-                View Product Profile
-              </ModalHeader>
               <Formik
                 initialValues={initialValues}
                 validationSchema={Yup.object({
@@ -114,15 +112,25 @@ export default function ModalViewProductProfile({
                 })}
                 onSubmit={async (values) => {
                   await new Promise((r) => setTimeout(r, 500));
-                  alert(JSON.stringify(values, null, 2));
+                  // alert(JSON.stringify(values, null, 2));
                   try {
-                    const res = await API.post(
-                      `${URL.PP_CREATE}`,
-                      JSON.stringify(values)
-                    );
-                    onClose();
+                    // const res = await API.post(
+                    //   `${URL.PP_CREATE}`,
+                    //   JSON.stringify(values)
+                    // );
+                    if (status == "draft") {
+                      toastInfo({ title: `Product Profile in Draft` });
+                    } else if (status == "submit") {
+                      toastSuccess({
+                        title: `Product Profile Created. Waiting For Approval`,
+                      });
+                    } else if (status == "approve") {
+                      toastSuccess({ title: `Product Profile Approved` });
+                    } else if (status == "reject") {
+                      toastFailed({ title: `Product Profile Rejected` });
+                    }
 
-                    console.log("res ", res);
+                    onClose();
                   } catch (error) {
                     console.log(error);
                   }
@@ -130,11 +138,14 @@ export default function ModalViewProductProfile({
               >
                 {(props) => (
                   <Form>
+                    <ModalHeader className="flex flex-col gap-1 text-center">
+                      {title}
+                    </ModalHeader>
                     <ModalBody>
                       <div className="w-full grid grid-cols-12 gap-4">
                         <div className="col-span-6 cursor-not-allowed">
                           <Input
-                            isReadOnly
+                            isReadOnly={isUpdate ? false : true}
                             size="sm"
                             type="number"
                             label="Product Code"
@@ -155,7 +166,7 @@ export default function ModalViewProductProfile({
 
                         <div className="col-span-6">
                           <Input
-                            isRequired
+                            isReadOnly={isUpdate ? false : true}
                             size="sm"
                             label="Product Description"
                             name="product_desc"
@@ -174,21 +185,34 @@ export default function ModalViewProductProfile({
                         </div>
 
                         <div className="col-span-6">
-                          <Select
-                            size="sm"
-                            label="Face Value"
-                            variant="bordered"
-                            className=""
-                            name="face_value"
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                          >
-                            {faceValue.map((e) => (
-                              <SelectItem key={e.value} value={e.value}>
-                                {e.label}
-                              </SelectItem>
-                            ))}
-                          </Select>
+                          {isUpdate ? (
+                            <Select
+                              size="sm"
+                              label="Face Value"
+                              variant="bordered"
+                              className=""
+                              name="face_value"
+                              onChange={props.handleChange}
+                              onBlur={props.handleBlur}
+                            >
+                              {faceValue.map((e) => (
+                                <SelectItem key={e.value} value={e.value}>
+                                  {e.label}
+                                </SelectItem>
+                              ))}
+                            </Select>
+                          ) : (
+                            <Input
+                              isReadOnly
+                              size="sm"
+                              label="Face Value"
+                              name="face_value"
+                              variant="bordered"
+                              onChange={props.handleChange}
+                              onBlur={props.handleBlur}
+                              value={props.values.face_value}
+                            />
+                          )}
                           {props.touched.face_value &&
                           props.errors.face_value ? (
                             <div className="text-sm text-primary font-semibold">
@@ -199,7 +223,7 @@ export default function ModalViewProductProfile({
 
                         <div className="col-span-6">
                           <Input
-                            isRequired
+                            isReadOnly={isUpdate ? false : true}
                             size="sm"
                             type="number"
                             label="Unit Cost"
@@ -219,6 +243,7 @@ export default function ModalViewProductProfile({
 
                         <div className="col-span-4">
                           <Input
+                            isReadOnly={isUpdate ? false : true}
                             size="sm"
                             type="number"
                             label="Card Fee"
@@ -238,6 +263,7 @@ export default function ModalViewProductProfile({
 
                         <div className="col-span-4">
                           <Input
+                            isReadOnly={isUpdate ? false : true}
                             size="sm"
                             type="number"
                             label="Max Amount"
@@ -258,6 +284,7 @@ export default function ModalViewProductProfile({
 
                         <div className="col-span-4">
                           <Input
+                            isReadOnly={isUpdate ? false : true}
                             size="sm"
                             type="number"
                             label="Effective Month"
@@ -337,17 +364,57 @@ export default function ModalViewProductProfile({
                       </FieldArray> */}
                     </ModalBody>
 
-                    <ModalFooter>
-                      <Button color="danger" variant="light" onPress={onClose}>
-                        Close
-                      </Button>
-                      <Button color="primary" onPress={onClose}>
-                        Draft
-                      </Button>
-                      <Button color="primary" type="submit">
-                        Submit For Approval
-                      </Button>
-                    </ModalFooter>
+                    {isUpdate && (
+                      <ModalFooter>
+                        <Button
+                          color="danger"
+                          variant="light"
+                          onPress={onClose}
+                        >
+                          Close
+                        </Button>
+                        <Button
+                          color="primary"
+                          type="submit"
+                          onClick={() => setStatus("draft")}
+                        >
+                          Draft
+                        </Button>
+                        <Button
+                          color="primary"
+                          type="submit"
+                          onClick={() => setStatus("submit")}
+                        >
+                          Sumbit For Approval
+                        </Button>
+                      </ModalFooter>
+                    )}
+
+                    {isApprove && (
+                      <ModalFooter>
+                        <Button
+                          color="danger"
+                          variant="light"
+                          onPress={onClose}
+                        >
+                          Close
+                        </Button>
+                        <Button
+                          color="primary"
+                          type="submit"
+                          onClick={() => setStatus("reject")}
+                        >
+                          Reject
+                        </Button>
+                        <Button
+                          color="primary"
+                          type="submit"
+                          onClick={() => setStatus("approve")}
+                        >
+                          Approve
+                        </Button>
+                      </ModalFooter>
+                    )}
                   </Form>
                 )}
               </Formik>

@@ -17,20 +17,15 @@ import * as Yup from "yup";
 import Image from "next/image";
 import DeleteIcon from "@/assets/icons/trash-icon.svg";
 
+import { toastSuccess } from "@/components/ToastAlert";
+
 const initialValues = {
-  moNumber: "",
+  moNumber: "123",
   moDate: "",
-  poNumber: "",
+  poNumber: "123",
   poDate: "",
   supplier: "",
-  cards: [
-    {
-      cardType: "",
-      qty: 0,
-      expDate: "",
-      expLatter: false,
-    },
-  ],
+  cards: [],
 };
 
 const supplierList = [
@@ -79,8 +74,9 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                 })}
                 onSubmit={async (values) => {
                   await new Promise((r) => setTimeout(r, 500));
-                  alert(JSON.stringify(values, null, 2));
-                  // toastSuccess({ title: "Gift Card Success Created" });
+                  // alert(JSON.stringify(values, null, 2));
+                  toastSuccess({ title: "Gift Card Success Created" });
+                  onClose();
                 }}
               >
                 {(props) => (
@@ -157,6 +153,7 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                         ) : null}
 
                         <Select
+                          isRequired
                           size="sm"
                           label="Supplier"
                           variant="bordered"

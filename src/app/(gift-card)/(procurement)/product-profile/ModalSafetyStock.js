@@ -15,8 +15,9 @@ import {
 } from "@nextui-org/react";
 
 import { Formik, Form } from "formik";
-
 import * as Yup from "yup";
+
+import { toastSuccess } from "@/components/ToastAlert";
 
 export default function ModalSafetyStock({ isOpen, size, onClose, id }) {
   const month = [
@@ -74,8 +75,10 @@ export default function ModalSafetyStock({ isOpen, size, onClose, id }) {
               })}
               onSubmit={async (values) => {
                 await new Promise((r) => setTimeout(r, 500));
-                alert(JSON.stringify(values, null, 2));
-                console.log(values);
+                // alert(JSON.stringify(values, null, 2));
+                toastSuccess({ title: `Stock of ID ${id} has saved` });
+                onClose();
+
                 // try {
                 //   const res = await API.post(
                 //     `${URL.PP_CREATE}`,

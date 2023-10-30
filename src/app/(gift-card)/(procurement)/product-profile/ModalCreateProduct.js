@@ -83,7 +83,6 @@ export default function ModalCreateProduct({
     max_amount: 0,
     effective_months: 0,
     unit_cost: 0,
-    status: 2,
     // business_unit: [
     //   {
     //     value: "",
@@ -107,9 +106,6 @@ export default function ModalCreateProduct({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-center">
-                Create Product
-              </ModalHeader>
               <Formik
                 initialValues={initialValues}
                 validationSchema={Yup.object({
@@ -136,13 +132,13 @@ export default function ModalCreateProduct({
                 onSubmit={async (values) => {
                   await new Promise((r) => setTimeout(r, 500));
                   alert(JSON.stringify(values, null, 2));
+                  console.log(JSON.stringify(values));
                   try {
                     const res = await API.post(
                       `${URL.PP_CREATE}`,
                       JSON.stringify(values)
                     );
                     toastSuccess({ title: `Create Product Profile Success` });
-
                     onClose();
 
                     console.log("res ", res);
@@ -153,6 +149,9 @@ export default function ModalCreateProduct({
               >
                 {(props) => (
                   <Form>
+                    <ModalHeader className="flex flex-col gap-1 text-center">
+                      Create Product
+                    </ModalHeader>
                     <ModalBody>
                       <div className="w-full grid grid-cols-12 gap-4">
                         <div className="col-span-6">
