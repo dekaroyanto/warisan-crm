@@ -9,11 +9,23 @@ import {
   Input,
   Select,
   SelectItem,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@nextui-org/react";
 import Image from "next/image";
 
+import { toastSuccess } from "@/components/ToastAlert";
+
 import DataTable from "@/components/dataTable";
+import ModalAction from "@/components/modal/modalAction";
+import ModalPrint from "@/components/modal/modalPrint";
+
 import ModalCreateGiftCard from "./ModalCreateGiftCard";
+import ModalViewGiftCard from "./ModalViewGiftCard";
+import ModalReceiveGiftCard from "./ModalReceiveGiftCard";
 
 const users = [
   {
@@ -117,6 +129,57 @@ export default function ManufacturOrder() {
     setSearchForm("");
   }, []);
 
+  // open Modal
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
+  const [openModalGenerateGC, setOpenModalGenerateGC] = useState(false);
+  const [openModalProcess, setOpenModalProcess] = useState(false);
+  const [openModalPrint, setOpenModalPrint] = useState(false);
+  const [openModalPrintEncrypt, setOpenModalPrintEncrypt] = useState(false);
+  const [openModalReceive, setOpenModalReceive] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+
+  const [id, setId] = useState("");
+  const [view, setView] = useState([]);
+
+  const handleOpenModal = (e) => {
+    switch (e) {
+      case "update":
+        setOpenModalUpdate((value) => !value);
+        break;
+      case "generate":
+        setOpenModalGenerateGC((value) => !value);
+        break;
+      case "process":
+        setOpenModalProcess((value) => !value);
+        break;
+      case "print":
+        setOpenModalPrint((value) => !value);
+        break;
+      case "print_enc":
+        setOpenModalPrintEncrypt((value) => !value);
+        break;
+      case "receive":
+        setOpenModalReceive((value) => !value);
+        break;
+      case "delete":
+        setOpenModalDelete((value) => !value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Handle Actions
+  const handleDelete = async (e) => {
+    try {
+      toastSuccess({ title: `Manufactur Order ID ${e} has Deleted` });
+      handleOpenModal("delete");
+      setId("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const setActionButton = (e) => {
     const isApproved = e == "APPROVED" && true;
     const isBarcoding = e == "BARCODING" && true;
@@ -136,7 +199,13 @@ export default function ManufacturOrder() {
 
         {isDraft ? (
           <Tooltip content="Update" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("update");
+                setView(e);
+              }}
+            >
               <Image src={ICONS.EditIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -148,7 +217,13 @@ export default function ManufacturOrder() {
 
         {isApproved ? (
           <Tooltip content="Generated Gift Card" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("generate");
+                setView(e);
+              }}
+            >
               <Image src={ICONS.GenerateCardIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -160,7 +235,13 @@ export default function ManufacturOrder() {
 
         {isSubmitted ? (
           <Tooltip content="Process" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("process");
+                setView(e);
+              }}
+            >
               <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -172,7 +253,12 @@ export default function ManufacturOrder() {
 
         {isFull || isPartial ? (
           <Tooltip content="Print" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("print");
+              }}
+            >
               <Image src={ICONS.PrintIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -196,7 +282,12 @@ export default function ManufacturOrder() {
 
         {isPartial || isGenerated ? (
           <Tooltip content="Receive" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("receive");
+              }}
+            >
               <Image src={ICONS.ReceiveIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -208,7 +299,13 @@ export default function ManufacturOrder() {
 
         {isDraft || isSubmitted ? (
           <Tooltip color="primary" content="Delete" closeDelay={0}>
-            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-danger cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("delete");
+                setId(e.id);
+              }}
+            >
               <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -385,15 +482,65 @@ export default function ManufacturOrder() {
         >
           Create Gift Card Order
         </Button>
-        <ModalCreateGiftCard
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          size="4xl"
-        />
       </div>
 
       {/* Data Table */}
       <DataTable columns={columns} rows={data} keys={users.id} />
+
+      {/* Modal Create */}
+      <ModalCreateGiftCard
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        size="4xl"
+      />
+
+      {/* Modal Update */}
+      <ModalViewGiftCard
+        isOpen={openModalUpdate}
+        size="4xl"
+        title="Update Gift card"
+        onClose={() => handleOpenModal("update")}
+        isUpdate={true}
+      />
+
+      {/* Modal Generate GC */}
+      <ModalViewGiftCard
+        isOpen={openModalGenerateGC}
+        size="4xl"
+        title="Generate Gift Card"
+        onClose={() => handleOpenModal("generate")}
+        isGenerated={true}
+      />
+
+      {/* Modal Process */}
+      <ModalViewGiftCard
+        isOpen={openModalProcess}
+        size="4xl"
+        title="Process Gift Card"
+        onClose={() => handleOpenModal("process")}
+        isApprove={true}
+      />
+
+      {/* Modal Print */}
+      <ModalPrint
+        isOpen={openModalPrint}
+        onClose={() => handleOpenModal("print")}
+      />
+
+      {/* Modal Print */}
+      <ModalReceiveGiftCard
+        isOpen={openModalReceive}
+        onClose={() => handleOpenModal("receive")}
+        size="4xl"
+      />
+
+      {/* Modal Delete */}
+      <ModalAction
+        isOpen={openModalDelete}
+        onClose={() => handleOpenModal("delete")}
+        title="Delete This Manufactur Order ?"
+        handleAction={() => handleDelete(id)}
+      />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+"use client";
 import { useState, useMemo, useEffect } from "react";
 import {
   Table,
@@ -36,7 +37,7 @@ export default function DataTable({ columns, rows, keys, selectMode }) {
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
-  }, []);
+  }, [rows]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -77,6 +78,7 @@ export default function DataTable({ columns, rows, keys, selectMode }) {
             <TableColumn key={column.key}>{column.label}</TableColumn>
           )}
         </TableHeader>
+
         {isLoading ? (
           <TableBody
             loadingContent={
