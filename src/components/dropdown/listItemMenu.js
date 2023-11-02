@@ -282,7 +282,7 @@ export const listItem = [
               },
               {
                 title: "Sales Order Payment",
-                href: "",
+                href: "/payment",
               },
               {
                 title: "TransRetail Discount Scheme",

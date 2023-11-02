@@ -4,11 +4,18 @@ export default function setColorStatus(e) {
   // e = status data
   let color = "";
 
-  if (e == "APPROVED" || e == "FULL" || e == "TRANSFERRED OUT") {
+  if (
+    e == "APPROVED" ||
+    e == "VERIFIED" ||
+    e == "FULL" ||
+    e == "TRANSFERRED OUT"
+  ) {
     color = "bg-[#007A61]";
   } else if (
     e == "SUBMITTED" ||
     e == "FOR APPROVAL" ||
+    e == "FIRST APPROVAL" ||
+    e == "SECOND APPROVAL" ||
     e == "PARTIAL" ||
     e == "FOR TRANSFER OUT"
   ) {
