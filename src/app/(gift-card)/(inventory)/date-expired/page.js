@@ -1,7 +1,8 @@
 "use client";
 import { useState, useMemo, useEffect } from "react";
+import { SetColorStatus, ICONS } from "@/utils";
 import { API } from "@/API/api";
-import Image from "next/image";
+
 import {
   Input,
   Select,
@@ -11,14 +12,38 @@ import {
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
+import Image from "next/image";
 
 import DataTable from "@/components/dataTable";
-
-import DetailIcon from "@/assets/icons/detail-icon.svg";
-import EditIcon from "@/assets/icons/edit-icon.svg";
-import DeleteIcon from "@/assets/icons/trash-icon.svg";
-
 import ModalCreateExpExtension from "./ModalCreateExpExtension";
+import ModalProcessExpExtension from "./ModalProcessExpExtension";
+
+const dummyData = [
+  {
+    id: 1,
+    extend_no: "201712220003",
+    create_date: "22-12-2017",
+    sales_order: "SO1712017 - Asuransi Jiwa Mega",
+    fill_by: "id_claswanda",
+    status: "CREATED",
+  },
+  {
+    id: 2,
+    extend_no: "201712220003",
+    create_date: "22-12-2017",
+    sales_order: "SO1712017 - Asuransi Jiwa Mega",
+    fill_by: "id_claswanda",
+    status: "APPROVED",
+  },
+  {
+    id: 3,
+    extend_no: "201712220003",
+    create_date: "22-12-2017",
+    sales_order: "SO1712017 - Asuransi Jiwa Mega",
+    fill_by: "id_claswanda",
+    status: "REJECTED",
+  },
+];
 
 const columns = [
   {
@@ -26,19 +51,19 @@ const columns = [
     label: "EXTEND NO",
   },
   {
-    key: "title",
+    key: "create_date",
     label: "CREATE DATE",
   },
   {
-    key: "title",
+    key: "sales_order",
     label: "SALES ORDER / SERIES",
   },
   {
-    key: "title",
+    key: "fill_by",
     label: "FILLED BY",
   },
   {
-    key: "title",
+    key: "status",
     label: "STATUS",
   },
   {
@@ -79,44 +104,117 @@ export default function DateExpired() {
     setDateTo("");
   };
 
-  // get data
-  const [data, setData] = useState([]);
-  console.log(data);
+  // open Modal
+  const [openModalProcess, setOpenModalProcess] = useState(false);
 
-  const loadData = async () => {
-    try {
-      const res = await API.get("");
-      const respons = await res.data?.map((e) => {
-        return {
-          ...e,
-          action: (
-            <>
-              <div className="relative flex items-center gap-2">
-                <Tooltip content="Details" closeDelay={0}>
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <Image src={DetailIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-                <Tooltip content="Edit" closeDelay={0}>
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <Image src={EditIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-                <Tooltip color="primary" content="Delete" closeDelay={0}>
-                  <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                    <Image src={DeleteIcon} alt="icon" />
-                  </span>
-                </Tooltip>
-              </div>
-            </>
-          ),
-        };
-      });
-      await setData(respons);
-    } catch (error) {
-      console.log(error);
+  const [id, setId] = useState("");
+  const [view, setView] = useState([]);
+
+  const handleOpenModal = (e) => {
+    switch (e) {
+      case "process":
+        setOpenModalProcess((value) => !value);
+        break;
+      default:
+        break;
     }
   };
+
+  const setActionButton = (e) => {
+    const isCreated = e == "CREATED" && true;
+    const isApproved = e == "APPROVED" && true;
+
+    return (
+      <div className="relative flex items-center gap-2">
+        {isCreated ? (
+          <>
+            <Tooltip content="Process" closeDelay={0}>
+              <span
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                onClick={() => {
+                  handleOpenModal("process");
+                  setView(e);
+                }}
+              >
+                <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
+              </span>
+            </Tooltip>
+          </>
+        ) : (
+          <>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.ProcessIconDisable} alt="icon" width={28} />
+            </span>
+          </>
+        )}
+
+        {isApproved ? (
+          <>
+            <Tooltip content="Print" closeDelay={0}>
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+              </span>
+            </Tooltip>
+          </>
+        ) : (
+          <>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.PrintIconDisable} alt="icon" width={28} />
+            </span>
+          </>
+        )}
+      </div>
+    );
+  };
+
+  // get data
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const respons = dummyData?.map((e) => {
+      return {
+        ...e,
+        status: SetColorStatus(e.status),
+        action: setActionButton(e.status),
+      };
+    });
+    setData(respons);
+  }, []);
+
+  // const loadData = async () => {
+  //   try {
+  //     const res = await API.get("");
+  //     const respons = await res.data?.map((e) => {
+  //       return {
+  //         ...e,
+  //         action: (
+  //           <>
+  //             <div className="relative flex items-center gap-2">
+  //               <Tooltip content="Details" closeDelay={0}>
+  //                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+  //                   <Image src={DetailIcon} alt="icon" />
+  //                 </span>
+  //               </Tooltip>
+  //               <Tooltip content="Edit" closeDelay={0}>
+  //                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+  //                   <Image src={EditIcon} alt="icon" />
+  //                 </span>
+  //               </Tooltip>
+  //               <Tooltip color="primary" content="Delete" closeDelay={0}>
+  //                 <span className="text-lg text-danger cursor-pointer active:opacity-50">
+  //                   <Image src={DeleteIcon} alt="icon" />
+  //                 </span>
+  //               </Tooltip>
+  //             </div>
+  //           </>
+  //         ),
+  //       };
+  //     });
+  //     await setData(respons);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // useEffect(() => {
   //   loadData();
@@ -252,18 +350,23 @@ export default function DateExpired() {
         >
           Create Expiry Date Extension
         </Button>
-        <ModalCreateExpExtension
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          size="4xl"
-        />
       </div>
 
       {/* Data Table */}
-      <DataTable
-        columns={columns}
-        rows={data}
-        selectMode={data == "" ? "single" : "multiple"}
+      <DataTable columns={columns} rows={data} keys={data.id} />
+
+      {/* Modal Create */}
+      <ModalCreateExpExtension
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        size="4xl"
+      />
+
+      {/* Modal Create */}
+      <ModalProcessExpExtension
+        isOpen={openModalProcess}
+        onClose={() => handleOpenModal("process")}
+        size="4xl"
       />
     </div>
   );

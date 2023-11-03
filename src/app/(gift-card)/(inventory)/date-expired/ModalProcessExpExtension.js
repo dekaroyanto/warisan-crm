@@ -12,7 +12,6 @@ import {
   ModalBody,
   ModalFooter,
   Input,
-  Checkbox,
   RadioGroup,
   Radio,
   Select,
@@ -21,12 +20,12 @@ import {
 
 const initialValues = {
   giftCard: "Sales Order",
-  salesOrder: "",
-  rangeFrom: "",
-  rangeTo: "",
-  expDate: "",
-  handleFee: "",
-  feeType: "",
+  salesOrder: "1712280010002001",
+  rangeFrom: "1712280010002001",
+  rangeTo: "1712280010002001",
+  expDate: "28-02-2019",
+  handleFee: "0",
+  feeType: "fixed",
 };
 
 const feeType = [
@@ -34,7 +33,7 @@ const feeType = [
   { label: "Per Card", value: "percard" },
 ];
 
-export default function ModalCreate({ isOpen, onOpenChange, size }) {
+export default function ModalProcess({ isOpen, onClose, size }) {
   const newDate = new Date();
   const date =
     newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
@@ -48,7 +47,7 @@ export default function ModalCreate({ isOpen, onOpenChange, size }) {
     <div>
       <Modal
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        onClose={onClose}
         size={size}
         backdrop="blur"
         classNames={{
@@ -98,6 +97,7 @@ export default function ModalCreate({ isOpen, onOpenChange, size }) {
 
                             <div className="col-span-12 w-full">
                               <Input
+                                isReadOnly
                                 size="md"
                                 name="salesOrder"
                                 variant="bordered"
@@ -117,6 +117,7 @@ export default function ModalCreate({ isOpen, onOpenChange, size }) {
                                 }`}
                               >
                                 <Input
+                                  isReadOnly
                                   size="md"
                                   name="rangeFrom"
                                   variant="bordered"
@@ -127,6 +128,7 @@ export default function ModalCreate({ isOpen, onOpenChange, size }) {
                                 />
                                 <strong className="">-</strong>
                                 <Input
+                                  isReadOnly
                                   size="md"
                                   name="rangeTo"
                                   variant="bordered"
@@ -140,58 +142,56 @@ export default function ModalCreate({ isOpen, onOpenChange, size }) {
                           </RadioGroup>
                         </div>
 
-                        <Input
-                          type="date"
-                          size="sm"
-                          label="Expired Date"
-                          name="expDate"
-                          variant="bordered"
-                          className="col-span-4"
-                          placeholder="dd/mm/yyyy"
-                          onChange={props.handleChange}
-                          value={props.values.expDate}
-                        />
-                        {props.touched.expDate && props.errors.expDate ? (
-                          <div className="text-md text-primary font-semibold">
-                            {props.errors.expDate}
-                          </div>
-                        ) : null}
+                        <div className="col-span-4">
+                          <Input
+                            isReadOnly
+                            size="sm"
+                            label="Expired Date"
+                            name="expDate"
+                            variant="bordered"
+                            onChange={props.handleChange}
+                            value={props.values.expDate}
+                          />
+                          {props.touched.expDate && props.errors.expDate ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.expDate}
+                            </div>
+                          ) : null}
+                        </div>
 
-                        <Input
-                          size="sm"
-                          label="Handling Fee"
-                          name="handleFee"
-                          variant="bordered"
-                          className="col-span-4"
-                          onChange={props.handleChange}
-                          value={props.values.handleFee}
-                        />
-                        {props.touched.handleFee && props.errors.handleFee ? (
-                          <div className="text-md text-primary font-semibold">
-                            {props.errors.handleFee}
-                          </div>
-                        ) : null}
+                        <div className="col-span-4">
+                          <Input
+                            isReadOnly
+                            size="sm"
+                            label="Handling Fee"
+                            name="handleFee"
+                            variant="bordered"
+                            onChange={props.handleChange}
+                            value={props.values.handleFee}
+                          />
+                          {props.touched.handleFee && props.errors.handleFee ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.handleFee}
+                            </div>
+                          ) : null}
+                        </div>
 
-                        <Select
-                          size="sm"
-                          label="Handling Fee Type"
-                          variant="bordered"
-                          className="col-span-4"
-                          name="feeType"
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                        >
-                          {feeType.map((e) => (
-                            <SelectItem key={e.value} value={e.value}>
-                              {e.label}
-                            </SelectItem>
-                          ))}
-                        </Select>
-                        {props.touched.feeType && props.errors.feeType ? (
-                          <div className="text-md text-primary font-semibold">
-                            {props.errors.feeType}
-                          </div>
-                        ) : null}
+                        <div className="col-span-4">
+                          <Input
+                            isReadOnly
+                            size="sm"
+                            label="Handling Fee Type"
+                            name="feeType"
+                            variant="bordered"
+                            onChange={props.handleChange}
+                            value={props.values.feeType}
+                          />
+                          {props.touched.feeType && props.errors.feeType ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.feeType}
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
                     </ModalBody>
                     <ModalFooter>

@@ -11,11 +11,6 @@ import {
   Button,
   Tooltip,
   useDisclosure,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
 } from "@nextui-org/react";
 
 import { toastSuccess } from "@/components/ToastAlert";
@@ -90,8 +85,6 @@ export default function ProductProfile() {
     setCriteria([]);
     setStatus([]);
     setSearchForm("");
-    setData([]);
-    loadData();
   }, []);
 
   // open Modal
