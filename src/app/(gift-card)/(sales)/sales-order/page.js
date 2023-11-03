@@ -2,6 +2,7 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { API, URL } from "@/API/api";
 import { SetColorStatus, ICONS } from "@/utils";
+import PrintIcon from "@/assets/icons/ac_print.svg";
 
 import Image from "next/image";
 import {
@@ -14,7 +15,8 @@ import {
 } from "@nextui-org/react";
 
 import DataTable from "@/components/dataTable";
-import ModalCreate from "./ModalCreateSalesOrder";
+import ModalCreateSalesOrder from "./ModalCreateSalesOrder";
+import ModalCreateInternalOrder from "./ModalCreateInternalOrder";
 
 const dummyData = [
   {
@@ -95,8 +97,47 @@ const columns = [
   },
 ];
 
+const fieldList = [
+  { label: "Company", value: "company" },
+  { label: "Contact Person", value: "contact_person" },
+  { label: "Sales Order No", value: "sales_order_no" },
+];
+
+const statusList = [
+  { label: "Approve", value: "approve" },
+  { label: "For Approval", value: "For Approval" },
+  { label: "Draft", value: "Draft" },
+  { label: "Allocated", value: "Allocated" },
+  { label: "Partially Alllocated", value: "Partially Allocated" },
+  { label: "For Pickup", value: "For Pickup" },
+  { label: "Payment Approval", value: "Payment Approval" },
+  { label: "For Activation", value: "For Activation" },
+  { label: "Sold", value: "Sold" },
+  { label: "Canceled", value: "canceled" },
+];
+
+const typeList = [
+  { label: "B2B Sales", value: "B2B Sales" },
+  { label: "B2B Advance Sales", value: "B2B Advance Sales" },
+  { label: "Yearly Discount", value: "Yearly Discount" },
+  { label: "Internal Order", value: "Internal Order" },
+  { label: "Replacement", value: "Replacement" },
+  { label: "Voucher", value: "Voucher" },
+];
+
 export default function SalesOrder() {
+  //Open Modal
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen2, onOpen2, onOpenChange2 } = useDisclosure();
+  const { isOpen3, onOpen3, onOpenChange3 } = useDisclosure();
+
+  const [field, setField] = useState("");
+  const [searchForm, setSearchForm] = useState("");
+
+  // clear search form
+  const clearInput = () => {
+    setSearchForm("");
+  };
 
   const setActionButton = () => {
     return (
@@ -152,7 +193,13 @@ export default function SalesOrder() {
                 innerWrapper: "max-w-max",
                 listboxWrapper: "",
               }}
-            ></Select>
+            >
+              {fieldList.map((e) => (
+                <SelectItem key={e.value} value={e.value}>
+                  {e.label}
+                </SelectItem>
+              ))}
+            </Select>
 
             <Input
               // label="Search"
@@ -162,6 +209,9 @@ export default function SalesOrder() {
               className="col-span-2"
               isClearable
               size="sm"
+              value={searchForm}
+              // onClear={() => onClear()}
+              onValueChange={setSearchForm}
             />
 
             <Button
@@ -175,6 +225,7 @@ export default function SalesOrder() {
             <Button
               className="col-auto self-end outline outline-1 outline-[#aaa] font-semibold"
               size="sm"
+              onClick={clearInput}
             >
               Clear
             </Button>
@@ -190,6 +241,7 @@ export default function SalesOrder() {
             <Input
               // label="Supplier"
               aria-label="Order Date From"
+              type="date"
               placeholder="Order Date From"
               labelPlacement="outside"
               className="col-span-2"
@@ -203,8 +255,9 @@ export default function SalesOrder() {
 
             <Input
               // label="Status"
-              aria-label="Order Date From"
-              placeholder="Order Date From"
+              aria-label="Order Date To"
+              placeholder="Order Date To"
+              type="date"
               labelPlacement="outside"
               className="col-span-2"
               size="sm"
@@ -226,8 +279,14 @@ export default function SalesOrder() {
                 innerWrapper: "max-w-max",
                 listboxWrapper: "",
               }}
-            ></Select>
-            <Input
+            >
+              {statusList.map((e) => (
+                <SelectItem key={e.value} value={e.value}>
+                  {e.label}
+                </SelectItem>
+              ))}
+            </Select>
+            <Select
               // label="Status"
               aria-label="Type"
               placeholder="Type"
@@ -239,28 +298,60 @@ export default function SalesOrder() {
                 innerWrapper: "max-w-max",
                 listboxWrapper: "",
               }}
-            ></Input>
+            >
+              {typeList.map((e) => (
+                <SelectItem key={e.value} value={e.value}>
+                  {e.label}
+                </SelectItem>
+              ))}
+            </Select>
           </div>
         </div>
       </div>
 
       {/* Button Create*/}
-      <div className="w-full flex justify-end gap-2">
-        <Button color="primary" radius="sm" className="mb-5 font-semibold">
-          Create Replacement
-        </Button>
-        <Button color="primary" radius="sm" className="mb-5 font-semibold">
-          Create Internal Order
+      <div className="px-auto grid grid-cols-8 gap-2">
+        <Button
+          color="primary"
+          radius="sm"
+          className=" mb-5 font-semibold col-span-2 "
+          endContent={PrintIcon}
+        >
+          Print
         </Button>
         <Button
           color="primary"
           radius="sm"
-          className="mb-5 font-semibold"
+          className="mb-5 font-semibold col-span-2"
+        >
+          Create Replacement
+        </Button>
+        <Button
+          color="primary"
+          radius="sm"
+          className="mb-5 font-semibold col-span-2"
+          onPress={onOpen2}
+        >
+          Create Internal Order
+        </Button>
+        <ModalCreateInternalOrder
+          isOpen={isOpen2}
+          onOpenChange={onOpenChange2}
+          size="5xl"
+        />
+        <Button
+          color="primary"
+          radius="sm"
+          className="mb-5 font-semibold col-span-2"
           onPress={onOpen}
         >
           Create Sales Order
         </Button>
-        <ModalCreate isOpen={isOpen} onOpenChange={onOpenChange} size="4xl" />
+        <ModalCreateSalesOrder
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          size="5xl"
+        />
       </div>
 
       <DataTable columns={columns} rows={data} keys={data.id} />

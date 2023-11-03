@@ -22,7 +22,6 @@ import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
 
 import { toastSuccess } from "@/components/ToastAlert";
-import ContentModalSalesOrder from "./ContentModalSalesOrder";
 
 const initialValues = {
   order_date: "",
@@ -59,19 +58,18 @@ const specList = [
 
 const statusList = [{ label: "APPROVE", value: "APPROVE" }];
 
-const ModalCreateSalesOrder = ({ isOpen, onOpenChange, size }) => {
+const ModalCreateInternalOrder = ({ isOpen2, onOpenChange2, size2 }) => {
   return (
     <Modal
-      isOpen={isOpen}
-      onOpenChange={onOpenChange}
-      size={size}
+      isOpen={isOpen2}
+      onOpenChange={onOpenChange2}
+      size={size2}
       backdrop="blur"
       classNames={{
         body: "py-6",
         header: "border-b-[4px] border-primary",
       }}
     >
-      <ContentModalSalesOrder />
       <ModalContent>
         {(onClose) => (
           <>
@@ -482,7 +480,7 @@ const ModalCreateSalesOrder = ({ isOpen, onOpenChange, size }) => {
                   </ModalBody>
 
                   <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose}>
+                    <Button color="danger" variant="light" onPress={onClose2}>
                       Close
                     </Button>
                     <Button color="primary" type="submit">
@@ -499,4 +497,4 @@ const ModalCreateSalesOrder = ({ isOpen, onOpenChange, size }) => {
   );
 };
 
-export default ModalCreateSalesOrder;
+export default ModalCreateInternalOrder;

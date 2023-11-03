@@ -278,7 +278,7 @@ export const listItem = [
               },
               {
                 title: "Sales Order",
-                href: "sales-order",
+                href: "/sales-order",
               },
               {
                 title: "Sales Order Payment",
