@@ -133,6 +133,8 @@ export default function SalesOrder() {
   const { isOpen3, onOpen3, onOpenChange3 } = useDisclosure();
 
   const [field, setField] = useState("");
+  const [modal, setModal] = useState("");
+
   const [searchForm, setSearchForm] = useState("");
 
   // clear search form
@@ -311,11 +313,11 @@ export default function SalesOrder() {
       </div>
 
       {/* Button Create*/}
-      <div className="px-auto grid grid-cols-8 gap-2">
+      <div className="w-full grid grid-cols-6 gap-4">
         <Button
           color="primary"
           radius="sm"
-          className=" mb-5 font-semibold col-span-2 "
+          className=" mb-5 font-semibold col-start-1 "
           endContent={PrintIcon}
         >
           Print
@@ -323,21 +325,7 @@ export default function SalesOrder() {
         <Button
           color="primary"
           radius="sm"
-          className="mb-5 font-semibold col-span-2"
-        >
-          Create Replacement
-        </Button>
-        <Button
-          color="primary"
-          radius="sm"
-          className="mb-5 font-semibold col-span-2"
-        >
-          Create Internal Order
-        </Button>
-        <Button
-          color="primary"
-          radius="sm"
-          className="mb-5 font-semibold col-span-2"
+          className="mb-5 font-semibold col-end-12"
           onPress={onOpen}
         >
           Create Sales Order
