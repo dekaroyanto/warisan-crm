@@ -54,7 +54,7 @@ const specList = [
 
 const statusList = [{ label: "APPROVE", value: "APPROVE" }];
 
-const ContentModalSalesOrder = ({ props }) => {
+const ContentCreateInternalOrder = ({ props }) => {
   return (
     <>
       <ModalBody>
@@ -62,7 +62,7 @@ const ContentModalSalesOrder = ({ props }) => {
           <div className="col-span-6">
             <Input
               size="sm"
-              label="Sales Order No"
+              label="INTERNAL"
               name="sales_order_no"
               variant="bordered"
               className="col-span-6"
@@ -407,4 +407,4 @@ const ContentModalSalesOrder = ({ props }) => {
   );
 };
 
-export default ContentModalSalesOrder;
+export default ContentCreateInternalOrder;

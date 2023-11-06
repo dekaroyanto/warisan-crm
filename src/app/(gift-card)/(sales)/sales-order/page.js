@@ -16,7 +16,8 @@ import {
 
 import DataTable from "@/components/dataTable";
 import ModalCreateSalesOrder from "./ModalCreateSalesOrder";
-import ModalCreateInternalOrder from "./ModalCreateInternalOrder";
+
+const content = [];
 
 const dummyData = [
   {
@@ -330,15 +331,9 @@ export default function SalesOrder() {
           color="primary"
           radius="sm"
           className="mb-5 font-semibold col-span-2"
-          onPress={onOpen2}
         >
           Create Internal Order
         </Button>
-        <ModalCreateInternalOrder
-          isOpen={isOpen2}
-          onOpenChange={onOpenChange2}
-          size="5xl"
-        />
         <Button
           color="primary"
           radius="sm"
