@@ -172,7 +172,6 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                // handleOpenModalView();
                 handleOpenModal("view");
                 setView(e);
               }}
@@ -191,7 +190,6 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                // handleOpenModalUpdate();
                 handleOpenModal("update");
                 setView(e);
               }}
@@ -210,7 +208,6 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                // handleOpenModalProcess();
                 handleOpenModal("process");
                 setView(e);
               }}
@@ -229,7 +226,6 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                // handleOpenModalSafetyStock();
                 handleOpenModal("stock");
                 setId(e.id);
               }}
@@ -248,7 +244,6 @@ export default function ProductProfile() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                // handleOpenModalDelete();
                 handleOpenModal("delete");
                 setId(e.id);
               }}
@@ -267,7 +262,6 @@ export default function ProductProfile() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                // handleOpenModalDeactive();
                 handleOpenModal("deactive");
                 setId(e.id);
               }}
@@ -286,7 +280,6 @@ export default function ProductProfile() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                // handleOpenModalActive();
                 handleOpenModal("active");
                 setId(e.id);
               }}

@@ -24,7 +24,7 @@ export default function DataTable({ columns, rows, keys, selectMode, length }) {
     const end = start + rowsPerPage;
 
     return rows.slice(start, end);
-  }, [page, rows]);
+  }, [page, rows, rowsPerPage]);
 
   // const pages = useMemo(() => {
   //   return rows?.length ? Math.ceil(rows.length / rowsPerPage) : 0;
