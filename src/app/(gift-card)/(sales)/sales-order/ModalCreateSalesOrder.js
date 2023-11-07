@@ -86,7 +86,6 @@ const ModalCreateSalesOrder = ({ isOpen, onOpenChange, size }) => {
                 contact_person: Yup.string(),
                 type: Yup.string(),
                 customer: Yup.string(),
-                order_date: Yup.string(),
                 contact_person: Yup.string(),
                 notes: Yup.string(),
                 contact_number: Yup.string(),

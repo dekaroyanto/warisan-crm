@@ -313,11 +313,47 @@ export default function SalesOrder() {
       </div>
 
       {/* Button Create*/}
-      <div className="w-full grid grid-cols-6 gap-4">
+      <div class="flex justify-between mb-5">
+        <div>
+          {/* <!-- Tombol di sebelah kiri --> */}
+          <Button
+            color="primary"
+            className=" font-semibold py-2 px-4 rounded"
+            radius="sm"
+          >
+            Print
+          </Button>
+        </div>
+        <div>
+          {/* <!-- Tombol di sebelah kanan --> */}
+          <Button
+            color="primary"
+            className=" font-semibold py-2 px-4 rounded"
+            radius="sm"
+          >
+            Create Replacement
+          </Button>
+          <Button
+            color="primary"
+            className=" font-semibold py-2 px-4 rounded ml-2"
+            radius="sm"
+            onPress={onOpen}
+          >
+            Create Sales Order
+          </Button>
+          <ModalCreateSalesOrder
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            size="5xl"
+          />
+        </div>
+      </div>
+
+      {/* <div className="px-auto grid grid-cols-8 gap-4">
         <Button
           color="primary"
           radius="sm"
-          className=" mb-5 font-semibold col-start-1 "
+          className=" mb-5 font-semibold col-span-1 col-start-1 "
           endContent={PrintIcon}
         >
           Print
@@ -325,7 +361,7 @@ export default function SalesOrder() {
         <Button
           color="primary"
           radius="sm"
-          className="mb-5 font-semibold col-end-12"
+          className="mb-5 font-semibold col-span-2 col-end-12"
           onPress={onOpen}
         >
           Create Sales Order
@@ -335,7 +371,7 @@ export default function SalesOrder() {
           onOpenChange={onOpenChange}
           size="5xl"
         />
-      </div>
+      </div> */}
 
       <DataTable columns={columns} rows={data} keys={data.id} />
     </div>
