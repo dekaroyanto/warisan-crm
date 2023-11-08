@@ -1,3 +1,4 @@
+"use client";
 import { useState, useMemo, useEffect } from "react";
 import {
   Table,
@@ -11,10 +12,10 @@ import {
   Spinner,
 } from "@nextui-org/react";
 
-export default function DataTable({ columns, rows, keys, selectMode }) {
+export default function DataTable({ columns, rows, keys, selectMode, length }) {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = length ? length : 10;
 
   const pages = Math.ceil(rows?.length / rowsPerPage);
 
@@ -23,7 +24,7 @@ export default function DataTable({ columns, rows, keys, selectMode }) {
     const end = start + rowsPerPage;
 
     return rows.slice(start, end);
-  }, [page, rows]);
+  }, [page, rows, rowsPerPage]);
 
   // const pages = useMemo(() => {
   //   return rows?.length ? Math.ceil(rows.length / rowsPerPage) : 0;
@@ -36,13 +37,14 @@ export default function DataTable({ columns, rows, keys, selectMode }) {
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
-  }, []);
+  }, [rows]);
 
   return (
     <div className="flex flex-col gap-2">
       {rows.length > 0 && (
         <p className="font-medium text-sm">
           Showing: 1 to {rows.length > 10 ? "10" : rows.length} ({rows.length})
+          {page}
         </p>
       )}
       <Table
@@ -52,16 +54,18 @@ export default function DataTable({ columns, rows, keys, selectMode }) {
           rows.length > 0 &&
           !isLoading && (
             <div className="flex w-full justify-center">
-              <Pagination
-                isCompact
-                // showControls
-                showShadow
-                color="secondary"
-                page={page}
-                total={pages}
-                onChange={(page) => setPage(page)}
-                classNames={{}}
-              />
+              {rows.length > 10 && (
+                <Pagination
+                  isCompact
+                  // showControls
+                  showShadow
+                  color="secondary"
+                  page={page}
+                  total={pages}
+                  onChange={(page) => setPage(page)}
+                  classNames={{}}
+                />
+              )}
             </div>
           )
         }
@@ -77,6 +81,7 @@ export default function DataTable({ columns, rows, keys, selectMode }) {
             <TableColumn key={column.key}>{column.label}</TableColumn>
           )}
         </TableHeader>
+
         {isLoading ? (
           <TableBody
             loadingContent={

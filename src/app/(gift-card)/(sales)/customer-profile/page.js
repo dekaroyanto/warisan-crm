@@ -14,7 +14,10 @@ import {
 } from "@nextui-org/react";
 
 import DataTable from "@/components/dataTable";
+
 import ModalCreate from "./ModalCreateCustomer";
+import ModalEditCustomer from "./ModalEditCustomer";
+import ModalNoteCustomer from "./ModalNoteCustomer";
 
 const dummyData = [
   {
@@ -101,24 +104,55 @@ export default function CustomerProfile() {
   const [dicount, setDiscount] = useState("");
 
   // clear search form
-  const clearInput = () => {
+  const clearInput = useCallback(() => {
     setField([]);
     setSearchForm("");
     setCustomer([]);
     setDiscount([]);
+  }, []);
+
+  // open Modal
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [openModalNote, setOpenModalNote] = useState(false);
+
+  const [id, setId] = useState("");
+  const [view, setView] = useState([]);
+
+  const handleOpenModal = (e) => {
+    switch (e) {
+      case "edit":
+        setOpenModalEdit((value) => !value);
+        break;
+      case "notes":
+        setOpenModalNote((value) => !value);
+        break;
+      default:
+        break;
+    }
   };
 
-  const setActionButton = () => {
+  const setActionButton = (e) => {
     return (
       <div className="relative flex items-center gap-2">
         <Tooltip content="Edit" closeDelay={0}>
-          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+          <span
+            className="text-lg text-default-400 cursor-pointer active:opacity-50"
+            onClick={() => {
+              handleOpenModal("edit");
+              setView(e);
+            }}
+          >
             <Image src={ICONS.EditIcon} alt="icon" width={28} />
           </span>
         </Tooltip>
 
         <Tooltip content="Customer Notes" closeDelay={0}>
-          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+          <span
+            className="text-lg text-default-400 cursor-pointer active:opacity-50"
+            onClick={() => {
+              handleOpenModal("notes");
+            }}
+          >
             <Image src={ICONS.EditIcon} alt="icon" width={28} />
           </span>
         </Tooltip>
@@ -143,7 +177,7 @@ export default function CustomerProfile() {
     const respons = dummyData?.map((e) => {
       return {
         ...e,
-        action: setActionButton(),
+        action: setActionButton(e),
       };
     });
     setData(respons);
@@ -290,11 +324,27 @@ export default function CustomerProfile() {
         >
           Add Customer
         </Button>
-        <ModalCreate isOpen={isOpen} onOpenChange={onOpenChange} size="4xl" />
       </div>
 
       {/* Data Table */}
       <DataTable columns={columns} rows={data} keys={data.id} />
+
+      {/* Modal Create */}
+      <ModalCreate isOpen={isOpen} onOpenChange={onOpenChange} size="4xl" />
+
+      {/* Modal Edit */}
+      <ModalEditCustomer
+        isOpen={openModalEdit}
+        onClose={() => handleOpenModal("edit")}
+        size="4xl"
+      />
+
+      {/* Modal Notes */}
+      <ModalNoteCustomer
+        isOpen={openModalNote}
+        onClose={() => handleOpenModal("notes")}
+        size="4xl"
+      />
     </div>
   );
 }

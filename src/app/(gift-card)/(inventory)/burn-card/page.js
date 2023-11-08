@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useCallback, useEffect, useRef } from "react";
+import { SetColorStatus, ICONS } from "@/utils";
+
 import {
   Tooltip,
   Button,
@@ -10,18 +12,51 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 
-import DetailIcon from "@/assets/icons/detail-icon.svg";
-import EditIcon from "@/assets/icons/edit-icon.svg";
-import DeleteIcon from "@/assets/icons/trash-icon.svg";
-
 import DataTable from "@/components/dataTable";
 import SubmitGiftCardModal from "./ModalBurnCard";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
+const dummyData = [
+  {
+    id: 1,
+    burn_no: "201710060001",
+    store: "10007 - HEAD OFFICE",
+    data_filled: "06-10-2017",
+    fill_by: "admin1",
+    burn_reason: "DAMAGED",
+    qty: "2068",
+    status: "BURNED",
+  },
+  {
+    id: 2,
+    burn_no: "201710060001",
+    store: "10007 - HEAD OFFICE",
+    data_filled: "06-10-2017",
+    fill_by: "admin1",
+    burn_reason: "DAMAGED",
+    qty: "2068",
+    status: "DRAFT",
+  },
+  {
+    id: 3,
+    burn_no: "201710060001",
+    store: "10007 - HEAD OFFICE",
+    data_filled: "06-10-2017",
+    fill_by: "admin1",
+    burn_reason: "DAMAGED",
+    qty: "2068",
+    status: "SUBMITTED",
+  },
+  {
+    id: 4,
+    burn_no: "201710060001",
+    store: "10007 - HEAD OFFICE",
+    data_filled: "06-10-2017",
+    fill_by: "admin1",
+    burn_reason: "DAMAGED",
+    qty: "2068",
+    status: "REJECTED",
+  },
+];
 
 const columns = [
   { label: "BURN NO", key: "burn_no" },
@@ -61,8 +96,53 @@ export default function BurnCard() {
     setStore([]);
   }, []);
 
+  const setActionButton = (e) => {
+    const isBurn = e == "BURNED" && true;
+
+    return (
+      <div className="relative flex items-center gap-2">
+        {isBurn ? (
+          <>
+            <Tooltip content="Print PDF" closeDelay={0}>
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+              </span>
+            </Tooltip>
+
+            <Tooltip content="Print Excel" closeDelay={0}>
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+              </span>
+            </Tooltip>
+          </>
+        ) : (
+          <>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.PrintIconDisable} alt="icon" width={28} />
+            </span>
+
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Image src={ICONS.PrintIconDisable} alt="icon" width={28} />
+            </span>
+          </>
+        )}
+      </div>
+    );
+  };
+
   // get data
   const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const respons = dummyData?.map((e) => {
+      return {
+        ...e,
+        status: SetColorStatus(e.status),
+        action: setActionButton(e.status),
+      };
+    });
+    setData(respons);
+  }, []);
 
   // useEffect(() => {
   //   const respons = users?.map((e) => {
@@ -217,15 +297,17 @@ export default function BurnCard() {
           >
             Submit GC For Burning
           </Button>
-          <SubmitGiftCardModal
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-            size="4xl"
-          />
         </div>
 
         {/* Data Table */}
         <DataTable columns={columns} rows={data} keys={data.id} />
+
+        {/* Modal Sumbit Gift Card */}
+        <SubmitGiftCardModal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          size="4xl"
+        />
       </div>
     </div>
   );

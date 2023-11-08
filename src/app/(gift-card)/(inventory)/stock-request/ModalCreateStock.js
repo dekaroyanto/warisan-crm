@@ -45,7 +45,7 @@ const allocateTo = [
   { label: "Lebak Bulus", value: "Lebak Bulus" },
 ];
 
-export default function ContohModal({ isOpen, onOpenChange, size }) {
+export default function ModalCreateStock({ isOpen, onOpenChange, size }) {
   return (
     <div>
       <Modal

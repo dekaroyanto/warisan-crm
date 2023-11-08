@@ -195,7 +195,7 @@ export const listItem = [
         menu: [
           {
             title: "Annual Fee Scheme",
-            href: "",
+            href: "/annual-fee",
           },
         ],
       },
@@ -282,11 +282,11 @@ export const listItem = [
               },
               {
                 title: "Sales Order Payment",
-                href: "",
+                href: "/payment",
               },
               {
                 title: "TransRetail Discount Scheme",
-                href: "",
+                href: "/discount-schema",
               },
             ],
           },

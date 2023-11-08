@@ -19,7 +19,7 @@ import * as Yup from "yup";
 
 import { toastSuccess } from "@/components/ToastAlert";
 
-export default function ModalCreateCustomer({ isOpen, onOpenChange, size }) {
+export default function ModalEditCustomer({ isOpen, onClose, size }) {
   const customerTypeList = [
     { label: "GENERAL", value: "GENERAL" },
     { label: "B2B", value: "B2B" },
@@ -52,7 +52,7 @@ export default function ModalCreateCustomer({ isOpen, onOpenChange, size }) {
     <div>
       <Modal
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        onClose={onClose}
         size={size}
         backdrop="blur"
         classNames={{
@@ -96,7 +96,7 @@ export default function ModalCreateCustomer({ isOpen, onOpenChange, size }) {
                 {(props) => (
                   <Form>
                     <ModalHeader className="flex flex-col gap-1 text-center">
-                      Add Customer
+                      Edit Customer
                     </ModalHeader>
                     <ModalBody>
                       <div className="w-full grid grid-cols-12 gap-4">

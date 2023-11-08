@@ -1,12 +1,5 @@
-import React from "react";
+import { useState } from "react";
 import { Formik, Form, FieldArray } from "formik";
-
-import * as Yup from "yup";
-
-import Image from "next/image";
-import { toastSuccess } from "@/components/ToastAlert";
-
-import DeleteIcon from "@/assets/icons/trash-icon.svg";
 
 import {
   Button,
@@ -22,40 +15,53 @@ import {
   card,
 } from "@nextui-org/react";
 
+import * as Yup from "yup";
+
+import Image from "next/image";
+import { toastSuccess, toastFailed, toastInfo } from "@/components/ToastAlert";
+
+import DeleteIcon from "@/assets/icons/trash-icon.svg";
+
 const initialValues = {
   request_no: "202309210001",
-  req_date: new Date(),
+  trfRef: "",
+  req_by: "",
+  card_type: "",
   src_location: "",
-  cards: [
-    {
-      card_type: "",
-      qty: "",
-      allocate: "",
-      isPromo: false,
-    },
-  ],
+  qty: "",
+  allocate: "",
+  isPromo: false,
 };
 
-const cardType = [
-  { label: "Choose Card..", value: "" },
-  { label: "Voucher 500.000", value: "500000" },
-  { label: "Voucher 200.000", value: "200000" },
-  { label: "Voucher 100.000", value: "100000" },
-];
+// const cardType = [
+//   { label: "Choose Card..", value: "" },
+//   { label: "Voucher 500.000", value: "500000" },
+//   { label: "Voucher 200.000", value: "200000" },
+//   { label: "Voucher 100.000", value: "100000" },
+// ];
 
-const allocateTo = [
-  { label: "Choose Location..", value: "" },
-  { label: "Head Office", value: "Head Office" },
-  { label: "Cempaka Putih", value: "Cempaka Putih" },
-  { label: "Lebak Bulus", value: "Lebak Bulus" },
-];
+// const allocateTo = [
+//   { label: "Choose Location..", value: "" },
+//   { label: "Head Office", value: "Head Office" },
+//   { label: "Cempaka Putih", value: "Cempaka Putih" },
+//   { label: "Lebak Bulus", value: "Lebak Bulus" },
+// ];
 
-export default function ContohModal({ isOpen, onOpenChange, size }) {
+export default function ModalViewStock({
+  isOpen,
+  size,
+  onClose,
+  data,
+  title,
+  isApprove,
+}) {
+  const [status, setStatus] = useState("");
+
   return (
     <div>
       <Modal
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        onClose={onClose}
         size={size}
         backdrop="blur"
         classNames={{
@@ -66,9 +72,6 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-center">
-                <h1>Create New Stock Request</h1>
-              </ModalHeader>
               <Formik
                 initialValues={initialValues}
                 validationSchema={Yup.object({
@@ -79,15 +82,25 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                 onSubmit={async (values) => {
                   await new Promise((r) => setTimeout(r, 500));
                   alert(JSON.stringify(values, null, 2));
-                  // toastSuccess({ title: "Stock Request Success Created" });
+
+                  if (status == "approve") {
+                    toastSuccess({ title: `Stock Request Approved` });
+                  } else if (status == "reject") {
+                    toastFailed({ title: `Stock Request Rejected` });
+                  }
+
+                  onClose();
                 }}
               >
                 {(formik) => (
                   <Form>
+                    <ModalHeader className="flex flex-col gap-1 text-center">
+                      {title}
+                    </ModalHeader>
                     <ModalBody>
                       <div className="w-full grid grid-cols-12 gap-4">
                         <Input
-                          isDisabled
+                          isReadOnly
                           size="sm"
                           label="Request No"
                           name="request_no"
@@ -104,18 +117,65 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                         ) : null}
 
                         <Input
-                          isDisabled
+                          isReadOnly
                           size="sm"
-                          label="Request Date"
-                          name="req_date"
+                          label="Transfer Reference No"
+                          name="trfRef"
                           variant="bordered"
                           className="col-span-4"
                           onChange={formik.handleChange}
-                          value={formik.values.req_date}
+                          value={formik.values.trfRef}
                         />
-                        {formik.touched.req_date && formik.errors.req_date ? (
+                        {formik.touched.trfRef && formik.errors.trfRef ? (
                           <div className="text-md text-primary font-semibold">
-                            {formik.errors.req_date}
+                            {formik.errors.trfRef}
+                          </div>
+                        ) : null}
+
+                        <Input
+                          isReadOnly
+                          size="sm"
+                          label="Requested By"
+                          name="req_by"
+                          variant="bordered"
+                          className="col-span-4"
+                          onChange={formik.handleChange}
+                          value={formik.values.req_by}
+                        />
+                        {formik.touched.req_by && formik.errors.req_by ? (
+                          <div className="text-md text-primary font-semibold">
+                            {formik.errors.req_by}
+                          </div>
+                        ) : null}
+
+                        <Input
+                          isReadOnly
+                          size="sm"
+                          label="Card Type"
+                          name="card_type"
+                          variant="bordered"
+                          className="col-span-6"
+                          onChange={formik.handleChange}
+                          value={formik.values.card_type}
+                        />
+                        {formik.touched.card_type && formik.errors.card_type ? (
+                          <div className="text-md text-primary font-semibold">
+                            {formik.errors.card_type}
+                          </div>
+                        ) : null}
+
+                        <Input
+                          size="sm"
+                          label="Quantity"
+                          name="qty"
+                          variant="bordered"
+                          className="col-span-6"
+                          onChange={formik.handleChange}
+                          value={formik.values.qty}
+                        />
+                        {formik.touched.qty && formik.errors.qty ? (
+                          <div className="text-md text-primary font-semibold">
+                            {formik.errors.qty}
                           </div>
                         ) : null}
 
@@ -124,7 +184,7 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                           label="Source Location"
                           name="src_location"
                           variant="bordered"
-                          className="col-span-4"
+                          className="col-span-6"
                           onChange={formik.handleChange}
                           value={formik.values.src_location}
                         />
@@ -134,9 +194,24 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                             {formik.errors.src_location}
                           </div>
                         ) : null}
+
+                        <Input
+                          size="sm"
+                          label="Allocated To"
+                          name="allocate"
+                          variant="bordered"
+                          className="col-span-6"
+                          onChange={formik.handleChange}
+                          value={formik.values.allocate}
+                        />
+                        {formik.touched.allocate && formik.errors.allocate ? (
+                          <div className="text-md text-primary font-semibold">
+                            {formik.errors.allocate}
+                          </div>
+                        ) : null}
                       </div>
 
-                      <FieldArray name="cards">
+                      {/* <FieldArray name="cards">
                         {({ insert, remove, push }) => (
                           <>
                             <div className="grid grid-cols-12 mt-3">
@@ -257,15 +332,31 @@ export default function ContohModal({ isOpen, onOpenChange, size }) {
                               ))}
                           </>
                         )}
-                      </FieldArray>
+                      </FieldArray> */}
                     </ModalBody>
                     <ModalFooter>
                       <Button color="danger" variant="light" onPress={onClose}>
                         Close
                       </Button>
-                      <Button color="primary" type="submit">
-                        Save
-                      </Button>
+
+                      {isApprove && (
+                        <>
+                          <Button
+                            color="primary"
+                            type="submit"
+                            onClick={() => setStatus("reject")}
+                          >
+                            Reject
+                          </Button>
+                          <Button
+                            color="primary"
+                            type="submit"
+                            onClick={() => setStatus("approve")}
+                          >
+                            Approve
+                          </Button>
+                        </>
+                      )}
                     </ModalFooter>
                   </Form>
                 )}

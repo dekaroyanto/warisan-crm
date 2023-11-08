@@ -11,17 +11,12 @@ import {
   Button,
   Tooltip,
   useDisclosure,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
 } from "@nextui-org/react";
 
 import { toastSuccess } from "@/components/ToastAlert";
 
 import DataTable from "@/components/dataTable";
-import ModalAction from "@/components/modalAction";
+import ModalAction from "@/components/modal/modalAction";
 
 import ModalCreate from "./ModalCreateProduct";
 import ModalSafetyStock from "./ModalSafetyStock";
@@ -95,7 +90,7 @@ export default function ProductProfile() {
   // open Modal
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalDeactive, setOpenModalDeactive] = useState(false);
-  const [openModalActive, setOpenModal2] = useState(false);
+  const [openModalActive, setOpenModalActive] = useState(false);
   const [openModalSafetyStock, setOpenModalSafetyStock] = useState(false);
   const [openModalView, setOpenModalView] = useState(false);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
@@ -104,40 +99,39 @@ export default function ProductProfile() {
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
 
-  const handleOpenModalDelete = () => {
-    setOpenModalDelete((value) => !value);
-  };
-
-  const handleOpenModalDeactive = () => {
-    setOpenModalDeactive((value) => !value);
-  };
-
-  const handleOpenModalActive = () => {
-    setOpenModal2((value) => !value);
-  };
-
-  const handleOpenModalSafetyStock = () => {
-    setOpenModalSafetyStock((value) => !value);
-  };
-
-  const handleOpenModalView = () => {
-    setOpenModalView((value) => !value);
-  };
-
-  const handleOpenModalUpdate = () => {
-    setOpenModalUpdate((value) => !value);
-  };
-
-  const handleOpenModalProcess = () => {
-    setOpenModalProcess((value) => !value);
+  const handleOpenModal = (e) => {
+    switch (e) {
+      case "view":
+        setOpenModalView((value) => !value);
+        break;
+      case "update":
+        setOpenModalUpdate((value) => !value);
+        break;
+      case "process":
+        setOpenModalProcess((value) => !value);
+        break;
+      case "stock":
+        setOpenModalSafetyStock((value) => !value);
+        break;
+      case "delete":
+        setOpenModalDelete((value) => !value);
+        break;
+      case "deactive":
+        setOpenModalDeactive((value) => !value);
+        break;
+      case "active":
+        setOpenModalActive((value) => !value);
+        break;
+      default:
+        break;
+    }
   };
 
   // Handle Actions
-
   const handleDelete = async (e) => {
     try {
       toastSuccess({ title: `Product Profile ID ${e} has Deleted` });
-      handleOpenModalDelete();
+      handleOpenModal("delete");
       setId("");
     } catch (error) {
       console.log(error);
@@ -148,7 +142,7 @@ export default function ProductProfile() {
     try {
       toastSuccess({ title: `Product Profile ID ${e} has Deactived` });
       setId("");
-      handleOpenModalDeactive();
+      handleOpenModal("deactive");
     } catch (error) {
       console.log(error);
     }
@@ -158,7 +152,7 @@ export default function ProductProfile() {
     try {
       toastSuccess({ title: `Product Profile ID ${e} has Actived` });
       setId("");
-      handleOpenModalActive();
+      handleOpenModal("active");
     } catch (error) {
       console.log(error);
     }
@@ -178,7 +172,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModalView(e);
+                handleOpenModal("view");
                 setView(e);
               }}
             >
@@ -196,7 +190,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModalUpdate();
+                handleOpenModal("update");
                 setView(e);
               }}
             >
@@ -214,7 +208,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModalProcess();
+                handleOpenModal("process");
                 setView(e);
               }}
             >
@@ -232,7 +226,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModalSafetyStock();
+                handleOpenModal("stock");
                 setId(e.id);
               }}
             >
@@ -250,7 +244,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModalDelete();
+                handleOpenModal("delete");
                 setId(e.id);
               }}
             >
@@ -268,7 +262,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModalDeactive();
+                handleOpenModal("deactive");
                 setId(e.id);
               }}
             >
@@ -286,7 +280,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModalActive();
+                handleOpenModal("active");
                 setId(e.id);
               }}
             >
@@ -462,7 +456,7 @@ export default function ProductProfile() {
       {/* Modal Safety Stock */}
       <ModalSafetyStock
         isOpen={openModalSafetyStock}
-        onClose={handleOpenModalSafetyStock}
+        onClose={() => handleOpenModal("stock")}
         size="4xl"
         id={id}
       />
@@ -470,7 +464,7 @@ export default function ProductProfile() {
       {/* Modal View */}
       <ModalViewProductProfile
         isOpen={openModalView}
-        onClose={handleOpenModalView}
+        onClose={() => handleOpenModal("view")}
         size="4xl"
         data={view}
         title="View Product Profile"
@@ -479,7 +473,7 @@ export default function ProductProfile() {
       {/* Modal Update */}
       <ModalViewProductProfile
         isOpen={openModalUpdate}
-        onClose={setOpenModalUpdate}
+        onClose={() => handleOpenModal("update")}
         size="4xl"
         data={view}
         title="Update Product Profile"
@@ -489,7 +483,7 @@ export default function ProductProfile() {
       {/* Modal Process */}
       <ModalViewProductProfile
         isOpen={openModalProcess}
-        onClose={setOpenModalProcess}
+        onClose={() => handleOpenModal("process")}
         size="4xl"
         data={view}
         title="Process Product Profile"
@@ -499,7 +493,7 @@ export default function ProductProfile() {
       {/* Modal Delete */}
       <ModalAction
         isOpen={openModalDelete}
-        onClose={handleOpenModalDelete}
+        onClose={() => handleOpenModal("delete")}
         title="Delete This Product Profile ?"
         handleAction={() => handleDelete(id)}
       />
@@ -507,7 +501,7 @@ export default function ProductProfile() {
       {/* Modal Deactive */}
       <ModalAction
         isOpen={openModalDeactive}
-        onClose={handleOpenModalDeactive}
+        onClose={() => handleOpenModal("deactive")}
         title="Deactive This Product Profile ?"
         handleAction={() => handleDeactive(id)}
       />
@@ -515,7 +509,7 @@ export default function ProductProfile() {
       {/* Modal Active */}
       <ModalAction
         isOpen={openModalActive}
-        onClose={handleOpenModalActive}
+        onClose={() => handleOpenModal("active")}
         title="Active This Product Profile ?"
         handleAction={() => handleActive(id)}
       />

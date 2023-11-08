@@ -17,6 +17,8 @@ import {
 import DataTable from "@/components/dataTable";
 
 import ModalCreateStock from "./ModalCreateStock";
+import ModalViewStock from "./ModalViewStock";
+import ModalReserveStock from "./ModalReserveStock";
 
 const dummyData = [
   {
@@ -131,6 +133,46 @@ export default function StockRequest() {
     setDateTo("");
   };
 
+  // open Modal
+  const [openModalView, setOpenModalView] = useState(false);
+  const [openModalGenerateGC, setOpenModalGenerateGC] = useState(false);
+  const [openModalProcess, setOpenModalProcess] = useState(false);
+  const [openModalPrint, setOpenModalPrint] = useState(false);
+  const [openModalPrintEncrypt, setOpenModalPrintEncrypt] = useState(false);
+  const [openModalReserve, setOpenModalReserve] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+
+  const [id, setId] = useState("");
+  const [view, setView] = useState([]);
+
+  const handleOpenModal = (e) => {
+    switch (e) {
+      case "view":
+        setOpenModalView((value) => !value);
+        break;
+      case "generate":
+        setOpenModalGenerateGC((value) => !value);
+        break;
+      case "process":
+        setOpenModalProcess((value) => !value);
+        break;
+      case "print":
+        setOpenModalPrint((value) => !value);
+        break;
+      case "print_enc":
+        setOpenModalPrintEncrypt((value) => !value);
+        break;
+      case "reverse":
+        setOpenModalReserve((value) => !value);
+        break;
+      case "delete":
+        setOpenModalDelete((value) => !value);
+        break;
+      default:
+        break;
+    }
+  };
+
   const setActionButton = (e) => {
     const isApproved = e == "APPROVED" && true;
     const isForTransfer = e == "FOR TRANSFER OUT" && true;
@@ -150,7 +192,13 @@ export default function StockRequest() {
         isTransferOut ||
         isForTransfer ? (
           <Tooltip content="View Stock" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("view");
+                setView(e);
+              }}
+            >
               <Image src={ICONS.ViewIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -162,7 +210,13 @@ export default function StockRequest() {
 
         {isSubmitted ? (
           <Tooltip content="Process" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("process");
+                setView(e);
+              }}
+            >
               <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -186,7 +240,12 @@ export default function StockRequest() {
 
         {isApproved || isIncomplete ? (
           <Tooltip content="Reserve Gift Card" closeDelay={0}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("reverse");
+              }}
+            >
               <Image src={ICONS.ReceiveIcon} alt="icon" width={28} />
             </span>
           </Tooltip>
@@ -384,11 +443,6 @@ export default function StockRequest() {
         >
           Create New Stock Request
         </Button>
-        <ModalCreateStock
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          size="4xl"
-        />
       </div>
 
       {/* Data Table */}
@@ -396,6 +450,37 @@ export default function StockRequest() {
         columns={columns}
         rows={data}
         selectMode={data == "" ? "single" : "multiple"}
+      />
+
+      {/* Modal Create */}
+      <ModalCreateStock
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        size="4xl"
+      />
+
+      {/* Modal View */}
+      <ModalViewStock
+        isOpen={openModalView}
+        size="4xl"
+        title="Detail Stock Request"
+        onClose={() => handleOpenModal("view")}
+      />
+
+      {/* Modal Process */}
+      <ModalViewStock
+        isOpen={openModalProcess}
+        size="4xl"
+        title="Process Stock Request"
+        onClose={() => handleOpenModal("process")}
+        isApprove={true}
+      />
+
+      {/* Modal Reverse */}
+      <ModalReserveStock
+        isOpen={openModalReserve}
+        size="4xl"
+        onClose={() => handleOpenModal("reverse")}
       />
     </div>
   );
