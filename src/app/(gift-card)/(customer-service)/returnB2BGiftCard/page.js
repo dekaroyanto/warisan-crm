@@ -20,6 +20,20 @@ import {
 
 import DataTable from "@/components/dataTable";
 import ModalByCard from "./ModalByCard";
+import Modal2 from "./modal2";
+
+const [id, setId] = useState("");
+const [view, setView] = useState([]);
+
+const handleOpenModal = (e) => {
+  switch (e) {
+    case "modal2":
+      setOpenModalUpdate((value) => !value);
+      break;
+    default:
+      break;
+  }
+};
 
 const fieldList = [
   { label: "Product", value: "product" },
@@ -73,6 +87,7 @@ const typeList = [
 const returnB2BGiftCard = () => {
   //Open Modal
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [openModal2, setOpenModal2] = useState(false);
 
   const [field, setField] = useState("");
   const [modal, setModal] = useState("");
@@ -223,6 +238,10 @@ const returnB2BGiftCard = () => {
             color="primary"
             className=" font-semibold py-2 px-4 rounded"
             radius="sm"
+            onClick={() => {
+              handleOpenModal("modal2");
+              setView(e);
+            }}
           >
             Return B2B
           </Button>
@@ -235,6 +254,13 @@ const returnB2BGiftCard = () => {
             Return B2B by Card Number
           </Button>
           <ModalByCard isOpen={isOpen} onOpenChange={onOpenChange} size="5xl" />
+          <Modal2
+            isOpen={openModal2}
+            size="4xl"
+            title="Modal 2"
+            onClose={() => handleOpenModal("modal2")}
+            isUpdate={true}
+          />
         </div>
       </div>
 
