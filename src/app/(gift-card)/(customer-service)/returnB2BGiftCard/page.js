@@ -19,10 +19,50 @@ import {
 } from "@nextui-org/react";
 
 import DataTable from "@/components/dataTable";
+import ModalByCard from "./ModalByCard";
 
 const fieldList = [
   { label: "Product", value: "product" },
   { label: "Order No", value: "order_no" },
+];
+
+const columns = [
+  {
+    key: "id",
+    label: "Return No",
+  },
+  {
+    key: "date_returned",
+    label: "Date Returned",
+  },
+  {
+    key: "customer_name",
+    label: "Customer Name",
+  },
+  {
+    key: "sales_order_no",
+    label: "Sales Order No",
+  },
+  {
+    key: "return_amount",
+    label: "Return Amount",
+  },
+  {
+    key: "refund_amount",
+    label: "Refund Amount",
+  },
+  {
+    key: "replace_amount",
+    label: "Replace Amount",
+  },
+  {
+    key: "created_by",
+    label: "Created By",
+  },
+  {
+    key: "status",
+    label: "Status",
+  },
 ];
 
 const typeList = [
@@ -43,6 +83,18 @@ const returnB2BGiftCard = () => {
   const clearInput = () => {
     setSearchForm("");
   };
+
+  // get data pp
+  const [data, setData] = useState([]);
+
+  //   useEffect(() => {
+  //     const respons = dummyData?.map((e) => {
+  //       return {
+  //         ...e,
+  //       };
+  //     });
+  //     setData(respons);
+  //   }, []);
 
   return (
     <div className="md:container mx-auto py-2 pb-10">
@@ -153,14 +205,14 @@ const returnB2BGiftCard = () => {
           {/* <!-- Tombol di sebelah kiri --> */}
           <Dropdown>
             <DropdownTrigger>
-              <Button variant="bordered">Open Menu</Button>
+              <Button variant="solid" color="primary" className="font-semibold">
+                Open Menu
+              </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-              <DropdownItem key="new">New file</DropdownItem>
-              <DropdownItem key="copy">Copy link</DropdownItem>
-              <DropdownItem key="edit">Edit file</DropdownItem>
-              <DropdownItem key="delete" className="text-danger" color="danger">
-                Delete file
+              <DropdownItem key="return_b2b">Return B2B</DropdownItem>
+              <DropdownItem key="return_b2b_by_card_number">
+                Return B2B by Card Number
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -182,15 +234,11 @@ const returnB2BGiftCard = () => {
           >
             Return B2B by Card Number
           </Button>
-          {/* <ModalCreateSalesOrder
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-            size="5xl"
-          /> */}
+          <ModalByCard isOpen={isOpen} onOpenChange={onOpenChange} size="5xl" />
         </div>
       </div>
 
-      {/* <DataTable columns={columns} rows={data} keys={data.id} /> */}
+      <DataTable columns={columns} rows={data} keys={data.id} />
     </div>
   );
 };

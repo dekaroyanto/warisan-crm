@@ -21,22 +21,22 @@ import * as Yup from "yup";
 import { toastSuccess } from "@/components/ToastAlert";
 import DeleteIcon from "@/assets/icons/trash-icon.svg";
 
-export default function ModalCreateCustomer({ isOpen, onOpenChange, size }) {
-  const TransactionType = [
-    { label: "Activation", value: "activation" },
-    { label: "Void Activated", value: "void_activated" },
-    { label: "Redemption", value: "redemption" },
-    { label: "Void Redemption", value: "void_redemption" },
-    { label: "Reload", value: "reload" },
-    { label: "Void Reload", value: "void_reload" },
-    { label: "Gift To Customer", value: "gift_to_customer" },
+export default function ModalByCard({ isOpen, onOpenChange, size }) {
+  const ReasonList = [
+    { label: "Replace Denomination", value: "replace_denomination" },
+    { label: "Broken", value: "broken" },
+    { label: "Expired", value: "expired" },
+    { label: "Wrong Physical Card", value: "wrong_physical_card" },
   ];
 
   const initialValues = {
-    merchant: "",
-    terminal_id: "",
-    cashier_id: "",
-    transaction_no: "",
+    return_no: "",
+    custumer: "",
+    date_returned: "",
+    sales_order_no: "",
+    reason: "",
+    starting_series: "",
+    ending_series: "",
   };
 
   return (
@@ -55,15 +55,15 @@ export default function ModalCreateCustomer({ isOpen, onOpenChange, size }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-center">
-                Create new Lose Transaction
+                Return B2B Gift Card
               </ModalHeader>
               <Formik
                 initialValues={initialValues}
                 validationSchema={Yup.object({
-                  merchant: Yup.string().required(
+                  return_no: Yup.string().required(
                     "Merchant code must be required"
                   ),
-                  terminal_id: Yup.string().required(
+                  return_no: Yup.string().required(
                     "Terminal ID must be required"
                   ),
                 })}
@@ -71,7 +71,7 @@ export default function ModalCreateCustomer({ isOpen, onOpenChange, size }) {
                   await new Promise((r) => setTimeout(r, 500));
                   // alert(JSON.stringify(values, null, 2));
                   toastSuccess({
-                    title: "POS Lose Transaction Success Created",
+                    title: "Return B2B Gift Card Success Created",
                   });
                   onClose();
                 }}
@@ -84,15 +84,15 @@ export default function ModalCreateCustomer({ isOpen, onOpenChange, size }) {
                           <Input
                             isRequired
                             size="sm"
-                            label="Merchant"
-                            name="merchant"
+                            label="Return No"
+                            name="return_no"
                             variant="bordered"
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                           />
-                          {props.touched.merchant && props.errors.merchant ? (
+                          {props.touched.return_no && props.errors.return_no ? (
                             <div className="text-sm text-primary font-semibold">
-                              {props.errors.merchant}
+                              {props.errors.return_no}
                             </div>
                           ) : null}
                         </div>
@@ -108,7 +108,7 @@ export default function ModalCreateCustomer({ isOpen, onOpenChange, size }) {
                             onBlur={props.handleBlur}
                             value={props.values.transaction_type}
                           >
-                            {TransactionType.map((e) => (
+                            {ReasonList.map((e) => (
                               <SelectItem key={e.value} value={e.value}>
                                 {e.label}
                               </SelectItem>
