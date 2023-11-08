@@ -296,19 +296,19 @@ export const listItem = [
             submenu: [
               {
                 title: "Gift Card Information",
-                href: "",
+                href: "/giftcard-information",
               },
               {
                 title: "POS Lose Transaction",
-                href: "",
+                href: "/poslose",
               },
               {
                 title: "Print Service Request",
-                href: "",
+                href: "/printServiceRequest",
               },
               {
                 title: "Return B2B Gift Cards",
-                href: "",
+                href: "/returnB2BGiftCard",
               },
             ],
           },
