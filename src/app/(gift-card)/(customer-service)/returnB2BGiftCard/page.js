@@ -20,20 +20,8 @@ import {
 
 import DataTable from "@/components/dataTable";
 import ModalByCard from "./ModalByCard";
-import Modal2 from "./modal2";
-
-const [id, setId] = useState("");
-const [view, setView] = useState([]);
-
-const handleOpenModal = (e) => {
-  switch (e) {
-    case "modal2":
-      setOpenModalUpdate((value) => !value);
-      break;
-    default:
-      break;
-  }
-};
+import Modal1 from "./Modal1";
+import Modal2 from "./Modal2";
 
 const fieldList = [
   { label: "Product", value: "product" },
@@ -86,8 +74,9 @@ const typeList = [
 
 const returnB2BGiftCard = () => {
   //Open Modal
+  const [modal1IsOpen, setModal1IsOpen, onOpenChange1] = useState(false);
+  const [modal2IsOpen, setModal2IsOpen] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [openModal2, setOpenModal2] = useState(false);
 
   const [field, setField] = useState("");
   const [modal, setModal] = useState("");
@@ -220,7 +209,12 @@ const returnB2BGiftCard = () => {
           {/* <!-- Tombol di sebelah kiri --> */}
           <Dropdown>
             <DropdownTrigger>
-              <Button variant="solid" color="primary" className="font-semibold">
+              <Button
+                variant="solid"
+                color="primary"
+                radius="sm"
+                className="font-semibold rounded"
+              >
                 Open Menu
               </Button>
             </DropdownTrigger>
@@ -234,17 +228,12 @@ const returnB2BGiftCard = () => {
         </div>
         <div>
           {/* <!-- Tombol di sebelah kanan --> */}
-          <Button
-            color="primary"
-            className=" font-semibold py-2 px-4 rounded"
+          <Modal1
+            isOpen={modal1IsOpen}
+            onClose={() => setModal1IsOpen(false)}
+            className=" font-semibold py-2 px-4 rounded ml-2"
             radius="sm"
-            onClick={() => {
-              handleOpenModal("modal2");
-              setView(e);
-            }}
-          >
-            Return B2B
-          </Button>
+          />
           <Button
             color="primary"
             className=" font-semibold py-2 px-4 rounded ml-2"
@@ -254,13 +243,6 @@ const returnB2BGiftCard = () => {
             Return B2B by Card Number
           </Button>
           <ModalByCard isOpen={isOpen} onOpenChange={onOpenChange} size="5xl" />
-          <Modal2
-            isOpen={openModal2}
-            size="4xl"
-            title="Modal 2"
-            onClose={() => handleOpenModal("modal2")}
-            isUpdate={true}
-          />
         </div>
       </div>
 
