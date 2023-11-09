@@ -155,6 +155,30 @@ export default function ModalByCard({ isOpen, onOpenChange, size }) {
                             </div>
                           ) : null}
                         </div>
+
+                        <div className="col-span-6">
+                          <Select
+                            isRequired
+                            size="sm"
+                            label="Reason"
+                            variant="bordered"
+                            className="col-span-12"
+                            name="reason"
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                          >
+                            {ReasonList.map((e) => (
+                              <SelectItem key={e.value} value={e.value}>
+                                {e.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                          {props.touched.reason && props.errors.reason ? (
+                            <div className="text-md text-primary font-semibold">
+                              {props.errors.reason}
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
                     </ModalBody>
 
