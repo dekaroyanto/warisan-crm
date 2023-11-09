@@ -204,19 +204,19 @@ export const listItem = [
         menu: [
           {
             title: "Manufacture Order",
-            href: "",
+            href: "/manufacture-orders",
           },
           {
             title: "Loyalty Card Inventory",
-            href: "",
+            href: "/loyaltycard-inventory",
           },
           {
             title: "Daily Tracking",
-            href: "",
+            href: "/daily-tracking",
           },
           {
             title: "Physical Count",
-            href: "",
+            href: "/physical-count",
           },
         ],
       },
@@ -238,7 +238,7 @@ export const listItem = [
               },
               {
                 title: "Manufacture Order",
-                href: "/manufactur-order",
+                href: "/manufacture-order",
               },
             ],
           },

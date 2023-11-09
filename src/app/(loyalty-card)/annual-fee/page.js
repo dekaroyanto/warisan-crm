@@ -3,19 +3,12 @@ import { useState, useEffect } from "react";
 import { ICONS } from "@/utils";
 
 import Image from "next/image";
-import {
-  Input,
-  Select,
-  SelectItem,
-  Button,
-  Tooltip,
-  useDisclosure,
-} from "@nextui-org/react";
-
-import { toastSuccess } from "@/components/ToastAlert";
+import { Button, Tooltip } from "@nextui-org/react";
 
 import DataTable from "@/components/dataTable";
 import ModalAction from "@/components/modal/modalAction";
+import SearchForm from "@/components/searchForm";
+import { toastSuccess } from "@/components/ToastAlert";
 
 import ModalAnnualFee from "./ModalAnnualFeeSchema";
 
@@ -198,6 +191,7 @@ export default function AnnualFeeSchema() {
       };
     });
     setData(respons);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -206,84 +200,7 @@ export default function AnnualFeeSchema() {
         Annual Fee Scheme
       </h1>
 
-      {/* search Section */}
-      <div className="flex w-full h-min bg-[#e0e0e0] rounded-xl py-5 px-14 mb-6">
-        {/* <div className="md:flex gap-6 items-end mb-2"> */}
-        <h1 className="self-start pt-1 text-right font-medium min-w-max mr-4">
-          SEARCH BY:{" "}
-        </h1>
-
-        <div className="w-full grid grid-cols-8 gap-4 gap-y-4">
-          {schemaSeacrh?.map((e, i) => {
-            if (e.type == "text" || e.type == "date") {
-              return (
-                <div key={i} className={`col-span-${e.length}`}>
-                  <Input
-                    // label={e.title}
-                    aria-label={e.title}
-                    placeholder={e.title}
-                    type={e.type}
-                    labelPlacement="outside"
-                    isClearable={e.isClear ? true : false}
-                    size="sm"
-                    value={searchForm}
-                    onValueChange={setSearchForm}
-                  />
-                </div>
-              );
-            }
-
-            if (e.type == "select") {
-              return (
-                <div key={i} className={`col-span-${e.length}`}>
-                  <Select
-                    // label={e.title}
-                    aria-label={e.title}
-                    placeholder={e.title}
-                    labelPlacement="outside"
-                    size="sm"
-                    classNames={{
-                      label: ["min-w-[5rem]"],
-                      innerWrapper: "max-w-max",
-                      listboxWrapper: "",
-                    }}
-                    onSelectionChange={setRequest}
-                    selectedKeys={request}
-                  >
-                    {e?.data?.map((e) => (
-                      <SelectItem key={e.value} value={e.value}>
-                        {e.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                </div>
-              );
-            }
-
-            if (e.type == "button") {
-              return (
-                <>
-                  <Button
-                    color="primary"
-                    className="col-auto self-end hover:bg-secondary font-semibold"
-                    size="sm"
-                  >
-                    Search
-                  </Button>
-
-                  <Button
-                    className="col-auto self-end outline outline-1 outline-[#aaa] font-semibold"
-                    size="sm"
-                    onClick={clearInput}
-                  >
-                    Reset
-                  </Button>
-                </>
-              );
-            }
-          })}
-        </div>
-      </div>
+      <SearchForm schema={schemaSeacrh} />
 
       {/* Button Create*/}
       <div className="w-full flex justify-end">

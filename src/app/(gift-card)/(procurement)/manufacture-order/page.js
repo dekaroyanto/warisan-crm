@@ -527,7 +527,7 @@ export default function ManufacturOrder() {
         onClose={() => handleOpenModal("print")}
       />
 
-      {/* Modal Print */}
+      {/* Modal Receive */}
       <ModalReceiveGiftCard
         isOpen={openModalReceive}
         onClose={() => handleOpenModal("receive")}

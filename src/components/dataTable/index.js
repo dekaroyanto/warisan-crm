@@ -44,7 +44,6 @@ export default function DataTable({ columns, rows, keys, selectMode, length }) {
       {rows.length > 0 && (
         <p className="font-medium text-sm">
           Showing: 1 to {rows.length > 10 ? "10" : rows.length} ({rows.length})
-          {page}
         </p>
       )}
       <Table
