@@ -21,7 +21,6 @@ import {
 import DataTable from "@/components/dataTable";
 import ModalByCard from "./ModalByCard";
 import Modal1 from "./Modal1";
-import Modal2 from "./Modal2";
 
 const fieldList = [
   { label: "Product", value: "product" },
@@ -74,8 +73,7 @@ const typeList = [
 
 const returnB2BGiftCard = () => {
   //Open Modal
-  const [modal1IsOpen, setModal1IsOpen, onOpenChange1] = useState(false);
-  const [modal2IsOpen, setModal2IsOpen] = useState(false);
+  const [modal1IsOpen, setModal1IsOpen] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [field, setField] = useState("");
