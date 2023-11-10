@@ -1,33 +1,25 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-
+import React from "react";
 import {
-  Button,
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Button,
+  useDisclosure,
+  Checkbox,
   Input,
-  Select,
-  SelectItem,
+  Link,
 } from "@nextui-org/react";
 
 import { Formik, Form, FieldArray, useFormik, ErrorMessage } from "formik";
-
 import * as Yup from "yup";
 
 import { toastSuccess } from "@/components/ToastAlert";
-import DeleteIcon from "@/assets/icons/trash-icon.svg";
 
-export default function ModalByCard({ isOpen, onOpenChange, size }) {
-  const ReasonList = [
-    { label: "Replace Denomination", value: "replace_denomination" },
-    { label: "Broken", value: "broken" },
-    { label: "Expired", value: "expired" },
-    { label: "Wrong Physical Card", value: "wrong_physical_card" },
-  ];
+export default function Modal1() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const initialValues = {
     return_no: "",
@@ -40,11 +32,19 @@ export default function ModalByCard({ isOpen, onOpenChange, size }) {
   };
 
   return (
-    <div>
+    <>
+      <Button
+        onPress={onOpen}
+        color="primary"
+        radius="sm"
+        className=" font-semibold py-2 px-4 rounded ml-2"
+      >
+        Return B2B
+      </Button>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        size={size}
+        size="4xl"
         backdrop="blur"
         classNames={{
           body: "py-6",
@@ -155,30 +155,6 @@ export default function ModalByCard({ isOpen, onOpenChange, size }) {
                             </div>
                           ) : null}
                         </div>
-
-                        <div className="col-span-6">
-                          <Select
-                            isRequired
-                            size="sm"
-                            label="Reason"
-                            variant="bordered"
-                            className="col-span-12"
-                            name="reason"
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                          >
-                            {ReasonList.map((e) => (
-                              <SelectItem key={e.value} value={e.value}>
-                                {e.label}
-                              </SelectItem>
-                            ))}
-                          </Select>
-                          {props.touched.reason && props.errors.reason ? (
-                            <div className="text-md text-primary font-semibold">
-                              {props.errors.reason}
-                            </div>
-                          ) : null}
-                        </div>
                       </div>
                     </ModalBody>
 
@@ -198,6 +174,6 @@ export default function ModalByCard({ isOpen, onOpenChange, size }) {
           )}
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 }

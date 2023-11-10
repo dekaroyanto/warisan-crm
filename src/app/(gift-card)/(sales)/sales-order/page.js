@@ -17,6 +17,7 @@ import {
 
 import DataTable from "@/components/dataTable";
 import ModalCreateSalesOrder from "./ModalCreateSalesOrder";
+import CreateInternalOrder from "./CreateInternalOrder";
 
 const content = [];
 
@@ -130,8 +131,7 @@ const typeList = [
 export default function SalesOrder() {
   //Open Modal
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { isOpen2, onOpen2, onOpenChange2 } = useDisclosure();
-  const { isOpen3, onOpen3, onOpenChange3 } = useDisclosure();
+  const [modalInternalIsOpen, setModalInternalIsOpen] = useState(false);
 
   const [field, setField] = useState("");
   const [modal, setModal] = useState("");
@@ -334,6 +334,12 @@ export default function SalesOrder() {
           >
             Create Replacement
           </Button>
+          <CreateInternalOrder
+            isOpen={modalInternalIsOpen}
+            onClose={() => setModalInternalIsOpen(false)}
+            className=" font-semibold py-2 px-4 rounded ml-2"
+            radius="sm"
+          />
           <Button
             color="primary"
             className=" font-semibold py-2 px-4 rounded ml-2"

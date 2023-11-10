@@ -1,7 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-
+import React from "react";
 import {
   Button,
   Modal,
@@ -10,41 +8,48 @@ import {
   ModalBody,
   ModalFooter,
   Input,
-  Select,
-  SelectItem,
+  Checkbox,
+  Textarea,
+  CheckboxGroup,
+  useDisclosure,
 } from "@nextui-org/react";
 
 import { Formik, Form, FieldArray, useFormik, ErrorMessage } from "formik";
-
 import * as Yup from "yup";
 
 import { toastSuccess } from "@/components/ToastAlert";
-import DeleteIcon from "@/assets/icons/trash-icon.svg";
 
-export default function ModalByCard({ isOpen, onOpenChange, size }) {
-  const ReasonList = [
-    { label: "Replace Denomination", value: "replace_denomination" },
-    { label: "Broken", value: "broken" },
-    { label: "Expired", value: "expired" },
-    { label: "Wrong Physical Card", value: "wrong_physical_card" },
-  ];
+export default function CreateInternalOrder() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const initialValues = {
-    return_no: "",
-    custumer: "",
-    date_returned: "",
     sales_order_no: "",
-    reason: "",
-    starting_series: "",
-    ending_series: "",
+    sales_store: "",
+    type: "",
+    customer: "",
+    order_date: "",
+    contact_person: "",
+    notes: "",
+    contact_number: "",
+    category: "",
+    email: "",
+    total_face_amount: 0,
   };
 
   return (
-    <div>
+    <>
+      <Button
+        onPress={onOpen}
+        color="primary"
+        radius="sm"
+        className=" font-semibold py-2 px-4 rounded ml-2"
+      >
+        Create Internal Order
+      </Button>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        size={size}
+        size="4xl"
         backdrop="blur"
         classNames={{
           body: "py-6",
@@ -55,7 +60,7 @@ export default function ModalByCard({ isOpen, onOpenChange, size }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-center">
-                Return B2B Gift Card
+                Internal Order
               </ModalHeader>
               <Formik
                 initialValues={initialValues}
@@ -155,30 +160,6 @@ export default function ModalByCard({ isOpen, onOpenChange, size }) {
                             </div>
                           ) : null}
                         </div>
-
-                        <div className="col-span-6">
-                          <Select
-                            isRequired
-                            size="sm"
-                            label="Reason"
-                            variant="bordered"
-                            className="col-span-12"
-                            name="reason"
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                          >
-                            {ReasonList.map((e) => (
-                              <SelectItem key={e.value} value={e.value}>
-                                {e.label}
-                              </SelectItem>
-                            ))}
-                          </Select>
-                          {props.touched.reason && props.errors.reason ? (
-                            <div className="text-md text-primary font-semibold">
-                              {props.errors.reason}
-                            </div>
-                          ) : null}
-                        </div>
                       </div>
                     </ModalBody>
 
@@ -198,6 +179,6 @@ export default function ModalByCard({ isOpen, onOpenChange, size }) {
           )}
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 }

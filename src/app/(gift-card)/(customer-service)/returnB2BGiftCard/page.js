@@ -20,6 +20,7 @@ import {
 
 import DataTable from "@/components/dataTable";
 import ModalByCard from "./ModalByCard";
+import Modal1 from "./Modal1";
 
 const fieldList = [
   { label: "Product", value: "product" },
@@ -72,6 +73,7 @@ const typeList = [
 
 const returnB2BGiftCard = () => {
   //Open Modal
+  const [modal1IsOpen, setModal1IsOpen] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [field, setField] = useState("");
@@ -205,7 +207,12 @@ const returnB2BGiftCard = () => {
           {/* <!-- Tombol di sebelah kiri --> */}
           <Dropdown>
             <DropdownTrigger>
-              <Button variant="solid" color="primary" className="font-semibold">
+              <Button
+                variant="solid"
+                color="primary"
+                radius="sm"
+                className="font-semibold rounded"
+              >
                 Open Menu
               </Button>
             </DropdownTrigger>
@@ -219,13 +226,12 @@ const returnB2BGiftCard = () => {
         </div>
         <div>
           {/* <!-- Tombol di sebelah kanan --> */}
-          <Button
-            color="primary"
-            className=" font-semibold py-2 px-4 rounded"
+          <Modal1
+            isOpen={modal1IsOpen}
+            onClose={() => setModal1IsOpen(false)}
+            className=" font-semibold py-2 px-4 rounded ml-2"
             radius="sm"
-          >
-            Return B2B
-          </Button>
+          />
           <Button
             color="primary"
             className=" font-semibold py-2 px-4 rounded ml-2"
