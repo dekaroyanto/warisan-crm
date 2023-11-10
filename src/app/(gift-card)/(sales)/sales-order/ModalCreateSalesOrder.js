@@ -362,7 +362,7 @@ const ModalCreateSalesOrder = ({ isOpen, onOpenChange, size }) => {
                                 push({
                                   cardType: "",
                                   qty: 0,
-                                  expDate: "",
+                                  face_value: "",
                                   expLatter: false,
                                 })
                               }
