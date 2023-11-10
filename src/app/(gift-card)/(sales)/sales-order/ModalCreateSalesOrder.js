@@ -364,6 +364,7 @@ const ModalCreateSalesOrder = ({ isOpen, onOpenChange, size }) => {
                                   qty: 0,
                                   face_value: "",
                                   expLatter: false,
+                                  test: "",
                                 })
                               }
                             >
