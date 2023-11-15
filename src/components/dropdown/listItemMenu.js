@@ -142,7 +142,7 @@ export const listItem = [
         menu: [
           {
             title: "Employee List",
-            href: "",
+            href: "/employee-list",
           },
           {
             title: "Upload Employees",

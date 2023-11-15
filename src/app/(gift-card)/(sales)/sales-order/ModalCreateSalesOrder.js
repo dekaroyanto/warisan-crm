@@ -446,11 +446,11 @@ const ModalCreateSalesOrder = ({ isOpen, onOpenChange, size }) => {
                                     />
 
                                     <Checkbox
-                                      name={`cards.${index}.expLatter`}
+                                      name={`cards.${index}.free_print`}
                                       radius="sm"
-                                      isSelected={card.expLatter}
+                                      isSelected={card.free_print}
                                       {...props.getFieldProps(
-                                        `cards.${index}.expLatter`
+                                        `cards.${index}.free_print`
                                       )}
                                     >
                                       Free Print Fee

@@ -14,64 +14,8 @@ import {
 } from "@nextui-org/react";
 
 import DataTable from "@/components/dataTable";
-
-const dummyData = [
-  {
-    id: 1,
-    customer: "MyTesGC",
-    minimum_qualify: "1000000",
-    start_discount: "10%",
-    req_accumulation: "1500000",
-    end_discount: "10%",
-    start_date: "23-04-2017",
-    end_date: "30-04-2017",
-  },
-  {
-    id: 2,
-    customer: "MyTesGC",
-    minimum_qualify: "1000000",
-    start_discount: "10%",
-    req_accumulation: "1500000",
-    end_discount: "10%",
-    start_date: "23-04-2017",
-    end_date: "30-04-2017",
-  },
-];
-
-const columns = [
-  {
-    key: "customer",
-    label: "CUSTOMER",
-  },
-  {
-    key: "minimum_qualify",
-    label: "MINIMUM QUALIFIED PURCHASE *",
-  },
-  {
-    key: "start_discount",
-    label: "STARTING DISCOUNT",
-  },
-  {
-    key: "req_accumulation",
-    label: "REQUIRED ACCUMULATION *",
-  },
-  {
-    key: "end_discount",
-    label: "ENDING DISCOUNT	",
-  },
-  {
-    key: "start_date",
-    label: "START DATE",
-  },
-  {
-    key: "end_date",
-    label: "ENDING DATE",
-  },
-  {
-    key: "action",
-    label: "ACTION",
-  },
-];
+import { dummyData, columns } from "./dataList";
+import CreateCardDiscount from "./CreateCardDiscount";
 
 export default function DiscountSchema() {
   const setActionButton = (e) => {
@@ -113,9 +57,7 @@ export default function DiscountSchema() {
 
       {/* Button Create*/}
       <div className="w-full flex justify-end">
-        <Button color="primary" radius="sm" className="mb-5 font-semibold">
-          Create Gift Card Discount Schema
-        </Button>
+        <CreateCardDiscount />
       </div>
 
       {/* Data Table */}
