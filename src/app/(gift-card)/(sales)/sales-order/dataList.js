@@ -8,7 +8,7 @@ export const dummyData = [
     payment_amount: "0",
     sales_order_amount: "500.000",
     type: "INTERNAL ORDER",
-    status: "APPROVED",
+    status: "FOR ACTIVATION",
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ export const dummyData = [
     payment_amount: "0",
     sales_order_amount: "500.000",
     type: "INTERNAL ORDER",
-    status: "APPROVED",
+    status: "SOLD",
   },
   {
     id: 3,
@@ -31,6 +31,18 @@ export const dummyData = [
     sales_order_amount: "500.000",
     type: "INTERNAL ORDER",
     status: "APPROVED",
+  },
+
+  {
+    id: 4,
+    last_update_date: "1-11-2023",
+    order_date: "1-11-2023",
+    company: "HRD HO",
+    store: "10007",
+    payment_amount: "0",
+    sales_order_amount: "500.000",
+    type: "INTERNAL ORDER",
+    status: "ALLOCATED",
   },
 ];
 
@@ -84,7 +96,7 @@ export const fieldList = [
 ];
 
 export const statusList = [
-  { label: "Approve", value: "approve" },
+  { label: "APPROVED", value: "APPROVED" },
   { label: "For Approval", value: "For Approval" },
   { label: "Draft", value: "Draft" },
   { label: "Allocated", value: "Allocated" },

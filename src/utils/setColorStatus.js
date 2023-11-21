@@ -27,7 +27,12 @@ export default function setColorStatus(e) {
     e == "FOR TRANSFER OUT"
   ) {
     color = "bg-[#F78022]";
-  } else if (e == "DRAFT" || e == "INCOMPLETE" || e == "MISSING") {
+  } else if (
+    e == "DRAFT" ||
+    e == "INCOMPLETE" ||
+    e == "MISSING" ||
+    e == "SOLD"
+  ) {
     color = "bg-[#5B7282]";
   } else if (
     e == "REJECTED" ||
@@ -41,6 +46,7 @@ export default function setColorStatus(e) {
     e == "GENERATED" ||
     e == "IN TRANSIT" ||
     e == "RECEIVED" ||
+    e == "ALLOCATED" ||
     e == "FOUND"
   ) {
     color = "bg-[#1D4ED8]";

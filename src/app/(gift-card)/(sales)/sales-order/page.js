@@ -6,6 +6,19 @@ import PrintIcon from "@/assets/icons/ac_print.svg";
 
 import Image from "next/image";
 import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  Chip,
+  User,
+  Pagination,
   Input,
   Select,
   SelectItem,
@@ -43,20 +56,130 @@ export default function SalesOrder() {
     setSearchForm("");
   };
 
-  const setActionButton = () => {
+  const setActionButton = (e) => {
+    const isSold = e.status == "SOLD" && true;
+    const isDeactivated = e.status == "DEACTIVATED" && true;
+    const isApproved = e.status == "APPROVED" && true;
+    const isAllocated = e.status == "ALLOCATED" && true;
+    const isForActivation = e.status == "FOR ACTIVATION" && true;
+
     return (
       <div className="relative flex items-center gap-2">
-        <Tooltip content="Edit" closeDelay={0}>
-          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.EditIcon} alt="icon" width={28} />
+        {isSold ||
+        isApproved ||
+        isDeactivated ||
+        isAllocated ||
+        isForActivation ? (
+          <Tooltip content="View" closeDelay={0}>
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("view");
+                setView(e);
+              }}
+            >
+              <Image src={ICONS.ViewIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={ICONS.ViewIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
+        )}
 
-        <Tooltip content="Customer Notes" closeDelay={0}>
-          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.EditIcon} alt="icon" width={28} />
+        {isAllocated ? (
+          <Tooltip content="Print Document" closeDelay={0}>
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("update");
+                setView(e);
+              }}
+            >
+              <Image src={ICONS.PrintIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={ICONS.PrintIconDisable} alt="icon" width={28} />
           </span>
-        </Tooltip>
+        )}
+
+        {isAllocated ? (
+          <Tooltip content="Update" closeDelay={0}>
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("update");
+                setId(e.id);
+              }}
+            >
+              <Image src={ICONS.EditIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={ICONS.EditIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isAllocated ? (
+          <Tooltip content="Cancel Order" closeDelay={0}>
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("cancel");
+                setView(e);
+              }}
+            >
+              <Image src={ICONS.DeactiveIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={ICONS.DeactiveIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isForActivation ? (
+          <Tooltip content="Activate B2B Cards" closeDelay={0}>
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("activate");
+                setId(e.id);
+              }}
+            >
+              <Image src={ICONS.ActiveIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={ICONS.ActiveIconDisable} alt="icon" width={28} />
+          </span>
+        )}
+
+        {isSold ||
+        isApproved ||
+        isDeactivated ||
+        isAllocated ||
+        isForActivation ? (
+          <Tooltip content="History" closeDelay={0}>
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => {
+                handleOpenModal("view");
+                setView(e);
+              }}
+            >
+              <Image src={ICONS.ViewIcon} alt="icon" width={28} />
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="text-lg text-default-400 cursor-not-allowed active:opacity-50">
+            <Image src={ICONS.ViewIconDisable} alt="icon" width={28} />
+          </span>
+        )}
       </div>
     );
   };
@@ -68,7 +191,8 @@ export default function SalesOrder() {
     const respons = dummyData?.map((e) => {
       return {
         ...e,
-        action: setActionButton(),
+        status: SetColorStatus(e.status),
+        action: setActionButton(e),
       };
     });
     setData(respons);
