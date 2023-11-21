@@ -33,11 +33,15 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+## Update Patch 6.9
+
 ```bash
-Update Patch 6.9:
 Program Setup:
   -User Management
+
 Procurement:
+  -Product Profile
+  -Manufacture Order
   
 
 ```
