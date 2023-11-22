@@ -17,7 +17,7 @@ export const listItem = [
           },
           {
             title: "Location Management",
-            href: "",
+            href: "/location-management",
           },
           {
             title: "Application Configuration",
