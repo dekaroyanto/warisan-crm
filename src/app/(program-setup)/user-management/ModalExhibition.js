@@ -18,10 +18,9 @@ import * as Yup from "yup";
 
 import { toastSuccess } from "@/components/ToastAlert";
 
-export default function ModalChangePassword({ isOpen, size, onClose }) {
+export default function ModalAsignExhibition({ isOpen, size, onClose }) {
   const initialValues = {
-    new_password: "",
-    conf_password: "",
+    exhibition_location: "",
   };
 
   return (
@@ -40,21 +39,18 @@ export default function ModalChangePassword({ isOpen, size, onClose }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-center">
-                Change Password
+                Asign Exhibition
               </ModalHeader>
               <Formik
                 initialValues={initialValues}
                 validationSchema={Yup.object({
-                  new_password: Yup.string().min(
-                    8,
-                    "Must be at least 8 characters"
-                  ),
+                  // Add validation schema if needed
                 })}
                 onSubmit={async (values) => {
                   // Consider removing the setTimeout for testing purposes
                   await new Promise((r) => setTimeout(r, 500));
                   toastSuccess({
-                    title: "Password Changed Successfully",
+                    title: "Asign Exhibition Changed Successfully",
                   });
                   onClose();
                 }}
@@ -66,33 +62,16 @@ export default function ModalChangePassword({ isOpen, size, onClose }) {
                         <Input
                           isRequired
                           size="sm"
-                          label="New Password"
-                          name="new_password"
+                          label="Exhibition Location"
+                          name="exhibition_location"
                           variant="bordered"
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                         />
-                        {props.touched.new_password &&
-                        props.errors.new_password ? (
+                        {props.touched.exhibition_location &&
+                        props.errors.exhibition_location ? (
                           <div className="text-sm text-primary font-semibold">
-                            {props.errors.new_password}
-                          </div>
-                        ) : null}
-                      </div>
-                      <div>
-                        <Input
-                          isRequired
-                          size="sm"
-                          label="Confirm Password"
-                          name="conf_password"
-                          variant="bordered"
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                        />
-                        {props.touched.conf_password &&
-                        props.errors.conf_password ? (
-                          <div className="text-sm text-primary font-semibold">
-                            {props.errors.conf_password}
+                            {props.errors.exhibition_location}
                           </div>
                         ) : null}
                       </div>

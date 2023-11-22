@@ -31,9 +31,9 @@ import DataTable from "@/components/dataTable";
 import ModalCreateUser from "./ModalCreateUser";
 import ModalEditUser from "./ModalEditUser";
 import ModalRoleUser from "./ModalRoleUser";
-// import ModalCreateSalesOrder from "./ModalCreateSalesOrder";
-// import CreateInternalOrder from "./CreateInternalOrder";
-// import CreateReplacement from "./CreateReplacement";
+import ModalChangePassword from "./ModalChangePassword";
+import ModalAsignExhibition from "./ModalExhibition";
+
 import {
   dummyData,
   columns,
@@ -49,6 +49,9 @@ export default function UserManagement() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [openModalRole, setOpenModalRole] = useState(false);
+  const [openModalChangePassword, setOpenModalChangePassword] = useState(false);
+  const [openModalAsignExhibition, setOpenModalAsignExhibition] =
+    useState(false);
 
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
@@ -61,11 +64,11 @@ export default function UserManagement() {
       case "role":
         setOpenModalRole((value) => !value);
         break;
-      case "process":
-        setOpenModalProcess((value) => !value);
+      case "change_password":
+        setOpenModalChangePassword((value) => !value);
         break;
-      case "print":
-        setOpenModalPrint((value) => !value);
+      case "asign_exhibition":
+        setOpenModalAsignExhibition((value) => !value);
         break;
       case "print_enc":
         setOpenModalPrintEncrypt((value) => !value);
@@ -119,7 +122,7 @@ export default function UserManagement() {
           <span
             className="text-lg text-default-400 cursor-pointer active:opacity-50"
             onClick={() => {
-              handleOpenModal("view");
+              handleOpenModal("change_password");
               setView(e);
             }}
           >
@@ -130,7 +133,7 @@ export default function UserManagement() {
           <span
             className="text-lg text-default-400 cursor-pointer active:opacity-50"
             onClick={() => {
-              handleOpenModal("view");
+              handleOpenModal("asign_exhibition");
               setView(e);
             }}
           >
@@ -243,6 +246,20 @@ export default function UserManagement() {
         size="4xl"
         tittle="Assign Role and Permissions"
         onClose={() => handleOpenModal("role")}
+        isUpdate={true}
+      />
+      <ModalChangePassword
+        isOpen={openModalChangePassword}
+        size="l"
+        tittle="Change Password"
+        onClose={() => handleOpenModal("change_password")}
+        isUpdate={true}
+      />
+      <ModalAsignExhibition
+        isOpen={openModalAsignExhibition}
+        size="l"
+        tittle="Asign Exhibition"
+        onClose={() => handleOpenModal("asign_exhibition")}
         isUpdate={true}
       />
     </div>
