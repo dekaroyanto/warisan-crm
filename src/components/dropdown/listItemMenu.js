@@ -13,7 +13,7 @@ export const listItem = [
           },
           {
             title: "Lookup Management",
-            href: "",
+            href: "/lookup-management",
           },
           {
             title: "Location Management",
