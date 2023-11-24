@@ -9,7 +9,8 @@ import React from "react";
 export const dummyData = [
   {
     id: 1,
-    province: "Jawa Barat",
+    province: "Aceh",
+    // value: "",
   },
 ];
 
@@ -18,7 +19,10 @@ export const columns = [
     key: "province",
     label: "PROVINCE",
   },
-
+  // {
+  //   key: "value",
+  //   label: "VALUE",
+  // },
   { label: "ACTIONS", key: "action" },
 ];
 

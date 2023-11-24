@@ -28,7 +28,7 @@ import {
 } from "@nextui-org/react";
 
 import DataTable from "@/components/dataTable";
-import ModalEditLookup from "./ModalEditLookup";
+import ModalEditAppConf from "./ModalEditAppConf";
 
 import {
   dummyData,
@@ -37,13 +37,24 @@ import {
   statusList,
   typeList,
 } from "./dataList";
+import DateTimeComponent from "./DateTimeComponent";
 
 const content = [];
 
+function getDate() {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const date = today.getDate();
+  return `${month}/${date}/${year}`;
+}
+
 export default function LookupManagement() {
+  const [currentDate, setCurrentDate] = useState(getDate());
+
   //Open Modal
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [openModalEditLookup, setOpenModalEditLookup] = useState(false);
+  const [openModalEditAppConf, setOpenModalEditAppConf] = useState(false);
 
   useState(false);
 
@@ -57,9 +68,8 @@ export default function LookupManagement() {
   const handleOpenModal = (e) => {
     switch (e) {
       case "edit":
-        setOpenModalEditLookup((value) => !value);
+        setOpenModalEditAppConf((value) => !value);
         break;
-
       default:
         break;
     }
@@ -114,73 +124,22 @@ export default function LookupManagement() {
   return (
     <div className="md:container mx-auto py-2 pb-10">
       <h1 className="text-5xl font-thin text-title mb-6 mt-4">
-        Lookup Management
+        Application Configuration
       </h1>
 
       {/* search Section */}
-      <div className="w-full h-max bg-[#e0e0e0] rounded-xl py-5 px-14 mb-5">
-        <div className="flex mb-4">
-          <h1 className="self-center text-right font-medium min-w-[5rem] mr-4 float-right">
-            SEARCH:
-          </h1>
-
-          <div className="w-full grid grid-cols-4 gap-4 ">
-            <Select
-              // label="Criteria"
-              aria-label="Criteria"
-              placeholder="Search Criteria"
-              labelPlacement="outside"
-              className="col-span-2"
-              size="sm"
-              classNames={{
-                label: ["min-w-[5rem]"],
-                innerWrapper: "max-w-max",
-                listboxWrapper: "",
-              }}
-              selectedKeys={criteria}
-              // onSelectionChange={setCriteria}
-              onChange={handleCriteriaChange}
-            >
-              {fieldList.map((e) => (
-                <SelectItem key={e.value} value={e.value}>
-                  {e.label}
-                </SelectItem>
-              ))}
-            </Select>
-
-            <Button
-              color="primary"
-              className="col-auto self-end hover:bg-secondary font-semibold"
-              size="sm"
-              type="button"
-              onClick={filterSearch}
-            >
-              Search
-            </Button>
-
-            <Button
-              className="col-auto self-end outline outline-1 outline-[#aaa] font-semibold"
-              size="sm"
-              onClick={clearInput}
-            >
-              Clear
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Button Create*/}
-      <div class="flex justify-end mb-5">
-        <div>{/* <ModalCreateUser /> */}</div>
-        <div></div>
+      <div className="w-full bg-[#e0e0e0] rounded-xl py-5 px-14 mb-5">
+        <h1 className="text-3xl text-center font-thin mb-6 mt-4 ">
+          <DateTimeComponent />
+        </h1>
       </div>
 
       <DataTable columns={columns} rows={data} keys={data.id} />
 
       {/* Modal Edit */}
-      <ModalEditLookup
-        isOpen={openModalEditLookup}
-        size="l"
+      <ModalEditAppConf
+        isOpen={openModalEditAppConf}
+        size="sm"
         title="Update Lookup Detail"
         onClose={() => handleOpenModal("edit")}
         isUpdate={true}

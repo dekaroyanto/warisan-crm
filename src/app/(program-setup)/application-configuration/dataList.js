@@ -9,30 +9,19 @@ import React from "react";
 export const dummyData = [
   {
     id: 1,
-    detail_code: "CARD CMC",
-    detail_desc: "card 1",
-    status: "ACTIVE",
-  },
-  {
-    id: 2,
-    detail_code: "CARD CMC",
-    detail_desc: "card 1",
-    status: "INACTIVE",
+    key: "ALLOW_NO_LOYALTYCARD_TO_EARN",
+    value: "",
   },
 ];
 
 export const columns = [
   {
-    key: "detail_code",
-    label: "DETAIL CODE",
+    key: "key",
+    label: "KEY",
   },
   {
-    key: "detail_desc",
-    label: "DETAIL DESCRIPTION",
-  },
-  {
-    key: "status",
-    label: "STATUS",
+    key: "value",
+    label: "VALUE",
   },
   { label: "ACTIONS", key: "action" },
 ];

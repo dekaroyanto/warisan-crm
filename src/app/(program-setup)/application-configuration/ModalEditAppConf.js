@@ -61,7 +61,7 @@ export default function ModalEditAppConf({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-center">
-                Lookup Detail
+                Update Application Config
               </ModalHeader>
               <Formik
                 initialValues={initialValues}
@@ -86,16 +86,15 @@ export default function ModalEditAppConf({
                           <Input
                             isDisabled
                             size="sm"
-                            label="Detail Code"
-                            name="detail_code"
+                            label="KEY"
+                            name="key"
                             variant="bordered"
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                           />
-                          {props.touched.detail_code &&
-                          props.errors.detail_code ? (
+                          {props.touched.key && props.errors.key ? (
                             <div className="text-sm text-primary font-semibold">
-                              {props.errors.detail_code}
+                              {props.errors.key}
                             </div>
                           ) : null}
                         </div>
@@ -103,39 +102,16 @@ export default function ModalEditAppConf({
                           <Input
                             isRequired
                             size="sm"
-                            label="Detail Description"
-                            name="detail_desc"
+                            label="Value"
+                            name="value"
                             variant="bordered"
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
-                            value={props.values.detail_desc}
+                            value={props.values.value}
                           />
-                          {props.touched.detail_desc &&
-                          props.errors.detail_desc ? (
+                          {props.touched.value && props.errors.value ? (
                             <div className="text-sm text-primary font-semibold">
-                              {props.errors.detail_desc}
-                            </div>
-                          ) : null}
-                        </div>
-
-                        <div className="mb-4">
-                          <Select
-                            size="sm"
-                            label="Status"
-                            variant="bordered"
-                            name="status"
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                          >
-                            {statusList.map((e) => (
-                              <SelectItem key={e.value} value={e.value}>
-                                {e.label}
-                              </SelectItem>
-                            ))}
-                          </Select>
-                          {props.touched.type && props.errors.type ? (
-                            <div className="text-sm text-primary font-semibold">
-                              {props.errors.type}
+                              {props.errors.value}
                             </div>
                           ) : null}
                         </div>

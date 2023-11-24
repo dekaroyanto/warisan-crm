@@ -38,7 +38,8 @@ export default function setColorStatus(e) {
     e == "REJECTED" ||
     e == "DEACTIVATED" ||
     e == "BURNED" ||
-    e == "DISABLED"
+    e == "DISABLED" ||
+    e == "INACTIVE"
   ) {
     color = "bg-[#CF1E30]";
   } else if (

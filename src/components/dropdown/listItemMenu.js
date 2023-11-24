@@ -21,7 +21,7 @@ export const listItem = [
           },
           {
             title: "Application Configuration",
-            href: "",
+            href: "/application-configuration",
           },
           {
             title: "Point Configuration",
