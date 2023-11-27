@@ -14,16 +14,39 @@ export const dummyData = [
   },
 ];
 
-export const columns = [
+export const columnsParent = [
+  { key: "province", label: "PROVINCE" },
   {
-    key: "province",
-    label: "PROVINCE",
+    key: "action",
+    label: "ACTION",
   },
-  // {
-  //   key: "value",
-  //   label: "VALUE",
-  // },
-  { label: "ACTIONS", key: "action" },
+];
+
+export const columnsChild = [
+  {
+    key: "product_code",
+    label: "PRODUCT CODE",
+  },
+  {
+    key: "product_desc",
+    label: "PRODUCT DESCRIPTION",
+  },
+  {
+    key: "face_value",
+    label: "FACE VALUE",
+  },
+  {
+    key: "card_fee",
+    label: "CARD FEE",
+  },
+  {
+    key: "status",
+    label: "STATUS",
+  },
+  {
+    key: "action",
+    label: "ACTION",
+  },
 ];
 
 export const fieldList = [

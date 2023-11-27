@@ -5,19 +5,6 @@ import { SetColorStatus, ICONS } from "@/utils";
 
 import Image from "next/image";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  Chip,
-  User,
-  Pagination,
   Input,
   Select,
   SelectItem,
@@ -31,13 +18,7 @@ import ModalUpdateProvince from "./ModalUpdateProvince";
 import ModalAction from "@/components/modal/modalAction";
 import { toastSuccess } from "@/components/ToastAlert";
 
-import {
-  dummyData,
-  columns,
-  fieldList,
-  statusList,
-  typeList,
-} from "./dataList";
+import { dummyData, fieldList, columnsParent, columnsChild } from "./dataList";
 import TableComponent from "./TableComponent";
 
 const content = [];
@@ -212,7 +193,7 @@ export default function LocationManagement() {
         </div>
       </div>
 
-      <DataTable columns={columns} rows={data} keys={data.id} />
+      <DataTable columns={columnsParent} rows={data} keys={data.id} />
 
       <ModalUpdateProvince
         isOpen={openModalUpdateProvince}

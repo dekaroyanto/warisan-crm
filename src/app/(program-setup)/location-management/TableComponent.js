@@ -31,19 +31,41 @@
 // export default TableComponent;
 
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "@/components/dataTable";
+import { columnsParent, columnsChild } from "./dataList";
+import { API, URL } from "@/API/api";
 
 const TableComponent = () => {
-  const columns = [{ key: "test", label: "test" }];
-  const data = [{ id: 1, test: "cobain" }];
-
   const [openModalUpdateCity, setOpenModalUpdateCity] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
+
+  // get data pp
+  const [data, setData] = useState([]);
+
+  const loadData = async () => {
+    try {
+      const res = await API.get(`${URL.PP_LIST}`);
+      const respons = await res.data?.result?.items?.map((e) => {
+        return {
+          ...e,
+          status: SetColorStatus(e.status),
+          action: setActionButton(e),
+        };
+      });
+      setData(respons);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
   return (
     <div>
       {" "}
-      <DataTable columns={columns} rows={data} keys={data.id} />
+      <DataTable columns={columnsChild} rows={data} keys={data.id} />
     </div>
   );
 };

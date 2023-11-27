@@ -25,11 +25,15 @@ export const listItem = [
           },
           {
             title: "Point Configuration",
-            href: "",
+            href: "/points-configuration",
+          },
+          {
+            title: "PeopleSoft Store Mapping",
+            href: "/people-soft",
           },
           {
             title: "Store-Member Scheme",
-            href: "",
+            href: "/people-soft",
           },
           {
             title: "Store Logs",
