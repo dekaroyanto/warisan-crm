@@ -50,7 +50,6 @@ export const columnsChild = [
 ];
 
 export const fieldList = [
-  { label: "Username", value: "username" },
-  { label: "Email", value: "email" },
-  { label: "First/Last Name", value: "first_name" },
+  { label: "Province", value: "province" },
+  { label: "City", value: "city" },
 ];

@@ -32,6 +32,11 @@ export default function LocationManagement() {
   const handleButtonClick = () => {
     setTableVisible(!isTableVisible);
   };
+
+  const handleCriteriaChange = (e) => {
+    setCriteria([e.target.value]);
+  };
+
   //Open Modal
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [openModalUpdateProvince, setOpenModalUpdateProvince] = useState(false);
@@ -69,17 +74,20 @@ export default function LocationManagement() {
   const [field, setField] = useState("");
   const [modal, setModal] = useState("");
 
+  // Search Feature
+  const [criteria, setCriteria] = useState("");
   const [searchForm, setSearchForm] = useState("");
 
   // clear search form
   const clearInput = () => {
+    setCriteria([]);
     setSearchForm("");
   };
 
   const setActionButton = (e) => {
     return (
       <div className="relative flex items-center gap-4">
-        <Tooltip content="Edit" closeDelay={0}>
+        <Tooltip content="View" closeDelay={0}>
           <span
             className="text-lg text-default-400 cursor-pointer active:opacity-50"
             onClick={() => {
@@ -155,6 +163,9 @@ export default function LocationManagement() {
                 innerWrapper: "max-w-max",
                 listboxWrapper: "",
               }}
+              selectedKeys={criteria}
+              // onSelectionChange={setCriteria}
+              onChange={handleCriteriaChange}
             >
               {fieldList.map((e) => (
                 <SelectItem key={e.value} value={e.value}>
@@ -203,7 +214,7 @@ export default function LocationManagement() {
           className="mb-5 font-semibold"
           onPress={onOpen}
         >
-          Create Product Profile
+          Create Province
         </Button>
       </div>
 
@@ -211,7 +222,7 @@ export default function LocationManagement() {
 
       <ModalUpdateProvince
         isOpen={openModalUpdateProvince}
-        size="l"
+        size="sm"
         tittle="Update Province"
         onClose={() => handleOpenModal("update")}
         isUpdate={true}
@@ -222,7 +233,7 @@ export default function LocationManagement() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
-        size="4xl"
+        size="sm"
       />
 
       {/* Modal Delete */}

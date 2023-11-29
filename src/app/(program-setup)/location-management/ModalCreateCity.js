@@ -20,10 +20,10 @@ import DeleteIcon from "@/assets/icons/trash-icon.svg";
 import { toastSuccess } from "@/components/ToastAlert";
 
 const initialValues = {
-  provinceName: "",
+  cityName: "",
 };
 
-export default function ModalCreateProvince({ isOpen, onOpenChange, size }) {
+export default function ModalCreateCity({ isOpen, onOpenChange, size }) {
   return (
     <div>
       <Modal
@@ -40,20 +40,20 @@ export default function ModalCreateProvince({ isOpen, onOpenChange, size }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-center">
-                <h1>Create Province</h1>
+                <h1>Create City</h1>
               </ModalHeader>
               <Formik
                 initialValues={initialValues}
                 validationSchema={Yup.object({
-                  province: Yup.string().min(
+                  cityName: Yup.string().min(
                     3,
-                    "Province Name must be at least 3 characters"
+                    "City Name must be at least 3 characters"
                   ),
                 })}
                 onSubmit={async (values) => {
                   await new Promise((r) => setTimeout(r, 500));
                   alert(JSON.stringify(values, null, 2));
-                  toastSuccess({ title: "Province Name Success Created" });
+                  toastSuccess({ title: "city Name Success Created" });
                   onClose();
                 }}
               >
@@ -65,16 +65,15 @@ export default function ModalCreateProvince({ isOpen, onOpenChange, size }) {
                           <Input
                             size="sm"
                             label="Name"
-                            name="provinceName"
+                            name="cityName"
                             variant="bordered"
                             isRequired
                             onChange={props.handleChange}
-                            value={props.values.provinceName}
+                            value={props.values.cityName}
                           />
-                          {props.touched.provinceName &&
-                          props.errors.provinceName ? (
+                          {props.touched.cityName && props.errors.cityName ? (
                             <div className="text-sm text-primary font-medium">
-                              {props.errors.provinceName}
+                              {props.errors.cityName}
                             </div>
                           ) : null}
                         </div>
