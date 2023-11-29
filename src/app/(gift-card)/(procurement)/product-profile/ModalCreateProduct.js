@@ -132,19 +132,8 @@ export default function ModalCreateProduct({
                 onSubmit={async (values) => {
                   await new Promise((r) => setTimeout(r, 500));
                   alert(JSON.stringify(values, null, 2));
-                  console.log(JSON.stringify(values));
-                  try {
-                    const res = await API.post(
-                      `${URL.PP_CREATE}`,
-                      JSON.stringify(values)
-                    );
-                    toastSuccess({ title: `Create Product Profile Success` });
-                    onClose();
-
-                    console.log("res ", res);
-                  } catch (error) {
-                    console.log(error);
-                  }
+                  toastSuccess({ title: "Gift Card Success Created" });
+                  onClose();
                 }}
               >
                 {(props) => (

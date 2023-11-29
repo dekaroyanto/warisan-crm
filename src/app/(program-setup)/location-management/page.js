@@ -13,6 +13,8 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
+import ModalCreateProvince from "./ModalCreateProvince";
+
 import DataTable from "@/components/dataTable";
 import ModalUpdateProvince from "./ModalUpdateProvince";
 import ModalAction from "@/components/modal/modalAction";
@@ -31,7 +33,7 @@ export default function LocationManagement() {
     setTableVisible(!isTableVisible);
   };
   //Open Modal
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [openModalUpdateProvince, setOpenModalUpdateProvince] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
 
@@ -193,6 +195,18 @@ export default function LocationManagement() {
         </div>
       </div>
 
+      {/* Button Create*/}
+      <div className="w-full flex justify-end">
+        <Button
+          color="primary"
+          radius="sm"
+          className="mb-5 font-semibold"
+          onPress={onOpen}
+        >
+          Create Product Profile
+        </Button>
+      </div>
+
       <DataTable columns={columnsParent} rows={data} keys={data.id} />
 
       <ModalUpdateProvince
@@ -201,6 +215,14 @@ export default function LocationManagement() {
         tittle="Update Province"
         onClose={() => handleOpenModal("update")}
         isUpdate={true}
+      />
+
+      {/* Modal Create  */}
+      <ModalCreateProvince
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onClose={onClose}
+        size="4xl"
       />
 
       {/* Modal Delete */}

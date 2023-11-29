@@ -11,7 +11,7 @@ import {
 
 export default function index({ isOpen, onClose, title, handleAction }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} size="l">
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
         <ModalFooter>

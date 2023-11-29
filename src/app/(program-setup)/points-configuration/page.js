@@ -89,24 +89,6 @@ export default function PointConfiguration() {
     setStore([]);
   };
 
-  const setActionButton = (e) => {
-    return (
-      <div className="relative flex items-center gap-4">
-        <Tooltip content="Edit" closeDelay={0}>
-          <span
-            className="text-lg text-default-400 cursor-pointer active:opacity-50"
-            onClick={() => {
-              handleOpenModal("edit");
-              setView(e);
-            }}
-          >
-            <Image src={ICONS.EditIcon} alt="icon" width={28} />
-          </span>
-        </Tooltip>
-      </div>
-    );
-  };
-
   const filterSearch = () => {
     alert(JSON.stringify(`${URL.PP_LIST}?${criteria}`, null, 2));
   };
@@ -119,7 +101,7 @@ export default function PointConfiguration() {
       return {
         ...e,
         status: SetColorStatus(e.status),
-        action: setActionButton(e),
+        // action: setActionButton(e),
       };
     });
     setData(respons);
@@ -290,7 +272,7 @@ export default function PointConfiguration() {
       <DataTable columns={columns} rows={data} keys={data.id} />
 
       {/* Modal Edit */}
-      <ModalEditPoint />
+      <ModalEditPoint size="2xl" isOpen={isOpen} onOpenChange={onOpenChange} />
     </div>
   );
 }
