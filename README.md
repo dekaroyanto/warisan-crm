@@ -33,15 +33,26 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-## Update Patch 6.9
+## 🚀 Program Setup 🚀
 
 ```bash
-Program Setup:
-  -User Management
+MAINTENANCE
+✅ User Management
+✅ Lookup Management
+✅ Location Management
+✅ Application Configuration
+✅ Point Configuration
+✅ PeopleSoft Store Mapping
+```
 
-Procurement:
-  -Product Profile
-  -Manufacture Order
-  
+## 🤝 Loyalty Card Management 🤝
 
+```bash
+MAINTENANCE
+✅ Anual Fee Scheme
+
+LOYALTY CARD
+✅ Manufacture Order
+✅ Loyalty Card Inventory
+✅ Daily Tracking
 ```
