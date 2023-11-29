@@ -49,10 +49,3 @@ CUSTOMER SERVICE
 ✅ POS Lose Transaction
 ✅ Print Service Request
 ✅ Return B2B Gift Card
-
-
-
-
-
-
-
