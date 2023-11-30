@@ -1,6 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { API, URL } from "@/API/api";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+const BASE_URL = "http://10.21.9.212:1945/crmreborn";
+const ENDPOINT = "/pp/create";
 
 import Image from "next/image";
 
@@ -90,6 +95,22 @@ export default function ModalCreateProduct({
     // ],
   };
 
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      const response = await axios.post(`${BASE_URL}${ENDPOINT}`, values);
+
+      resetForm();
+      toast.success("Gift Card Success Created");
+      console.log("Data berhasil dikirim:", response.data);
+      onClose(); // Tutup modal setelah berhasil menambahkan data
+    } catch (error) {
+      console.error("Error saat mengirim data:", error);
+      toast.error("Gagal menambahkan data.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -129,12 +150,7 @@ export default function ModalCreateProduct({
                     "unit cost must be required"
                   ),
                 })}
-                onSubmit={async (values) => {
-                  await new Promise((r) => setTimeout(r, 500));
-                  alert(JSON.stringify(values, null, 2));
-                  toastSuccess({ title: "Gift Card Success Created" });
-                  onClose();
-                }}
+                onSubmit={handleSubmit}
               >
                 {(props) => (
                   <Form>
@@ -151,7 +167,6 @@ export default function ModalCreateProduct({
                             label="Product Code"
                             name="product_code"
                             variant="bordered"
-                            className=""
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             value={props.values.product_code}
