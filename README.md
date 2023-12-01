@@ -29,7 +29,7 @@ LOYALTY CARD
 
 ```bash
 PROCUREMENT
-✅ Product Profile
+✅ Product Profile: create, search
 ✅ Manufacture Order
 
 INVENTORY
