@@ -3,6 +3,10 @@ import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { API, URL } from "@/API/api";
 import { SetColorStatus, ICONS } from "@/utils";
 
+import ModalUpdateProduct from "./ModalUpdateProduct";
+
+// import { columns, statusList, criteriaList } from "./dataList";
+
 import Image from "next/image";
 import {
   Input,
@@ -21,6 +25,8 @@ import ModalAction from "@/components/modal/modalAction";
 import ModalCreate from "./ModalCreateProduct";
 import ModalSafetyStock from "./ModalSafetyStock";
 import ModalViewProductProfile from "./ModalViewProductProfile";
+
+import SearchComponent from "./SearchComponent";
 
 const columns = [
   {
@@ -99,7 +105,7 @@ export default function ProductProfile() {
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
 
-  const handleOpenModal = (e) => {
+  const handleOpenModal = async (e) => {
     switch (e) {
       case "view":
         setOpenModalView((value) => !value);
@@ -296,14 +302,28 @@ export default function ProductProfile() {
     );
   };
 
-  const filterSearch = () => {
-    alert(
-      JSON.stringify(
-        `${URL.PP_LIST}?${criteria}=${searchForm}&status=${status}`,
-        null,
-        2
-      )
-    );
+  const filterSearch = async () => {
+    try {
+      const params = new URLSearchParams({
+        [criteria]: searchForm,
+        status: status,
+      });
+
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/viewbyfilter?${params.toString()}`;
+
+      const response = await fetch(apiUrl);
+      const result = await response.json();
+
+      setData(
+        result?.result?.items?.map((e) => ({
+          ...e,
+          status: SetColorStatus(e.status),
+          action: setActionButton(e),
+        })) || []
+      );
+    } catch (error) {
+      console.error("Error fetching filtered data:", error);
+    }
   };
 
   // get data pp
@@ -460,7 +480,6 @@ export default function ProductProfile() {
         size="4xl"
         id={id}
       />
-
       {/* Modal View */}
       <ModalViewProductProfile
         isOpen={openModalView}

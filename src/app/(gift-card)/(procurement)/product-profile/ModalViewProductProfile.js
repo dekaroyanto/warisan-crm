@@ -1,3 +1,4 @@
+// ModalViewProductProfile.js
 "use client";
 import React, { useEffect, useState } from "react";
 import { API, URL } from "@/API/api";
@@ -16,8 +17,7 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 
-import { Formik, Form, FieldArray, useFormik, ErrorMessage } from "formik";
-
+import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
 
 import { toastSuccess, toastFailed, toastInfo } from "@/components/ToastAlert";
@@ -63,11 +63,6 @@ export default function ModalViewProductProfile({
     max_amount: 0,
     effective_months: 0,
     unit_cost: 0,
-    // business_unit: [
-    //   {
-    //     value: "",
-    //   },
-    // ],
   };
 
   const [status, setStatus] = useState("");
@@ -111,28 +106,26 @@ export default function ModalViewProductProfile({
                   ),
                 })}
                 onSubmit={async (values) => {
-                  await new Promise((r) => setTimeout(r, 500));
-                  // alert(JSON.stringify(values, null, 2));
                   try {
-                    // const res = await API.post(
-                    //   `${URL.PP_CREATE}`,
-                    //   JSON.stringify(values)
-                    // );
-                    if (status == "draft") {
-                      toastInfo({ title: `Product Profile in Draft` });
-                    } else if (status == "submit") {
-                      toastSuccess({
-                        title: `Product Profile Created. Waiting For Approval`,
-                      });
-                    } else if (status == "approve") {
-                      toastSuccess({ title: `Product Profile Approved` });
-                    } else if (status == "reject") {
-                      toastFailed({ title: `Product Profile Rejected` });
-                    }
+                    const response = await API.post(
+                      `${URL.PP_EDIT}`, // Ganti dengan URL API yang sesuai
+                      JSON.stringify(values)
+                    );
 
-                    onClose();
+                    if (response.data.success) {
+                      // Berhasil - mungkin Anda ingin menanggapi respons API di sini
+                      toastSuccess({ title: "Data berhasil diperbarui!" });
+                      onClose();
+                    } else {
+                      // Gagal - tanggapi sesuai kebutuhan
+                      toastFailed({ title: "Gagal memperbarui data." });
+                    }
                   } catch (error) {
-                    console.log(error);
+                    // Tangani kesalahan seperti jaringan atau kesalahan server
+                    console.error("Kesalahan:", error);
+                    toastFailed({
+                      title: "Terjadi kesalahan. Silakan coba lagi nanti.",
+                    });
                   }
                 }}
               >
@@ -385,7 +378,7 @@ export default function ModalViewProductProfile({
                           type="submit"
                           onClick={() => setStatus("submit")}
                         >
-                          Sumbit For Approval
+                          Submit For Approval
                         </Button>
                       </ModalFooter>
                     )}
