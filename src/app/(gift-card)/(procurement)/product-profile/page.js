@@ -23,10 +23,7 @@ import DataTable from "@/components/dataTable";
 import ModalAction from "@/components/modal/modalAction";
 
 import ModalCreate from "./ModalCreateProduct";
-import ModalSafetyStock from "./ModalSafetyStock";
 import ModalViewProductProfile from "./ModalViewProductProfile";
-
-import SearchComponent from "./SearchComponent";
 
 const columns = [
   {
@@ -78,6 +75,7 @@ export default function ProductProfile() {
   const [criteria, setCriteria] = useState("");
   const [status, setStatus] = useState("");
   const [searchForm, setSearchForm] = useState("");
+  const [productCode, setProductCode] = useState("");
 
   const handleCriteriaChange = (e) => {
     setCriteria([e.target.value]);
@@ -94,44 +92,18 @@ export default function ProductProfile() {
   }, []);
 
   // open Modal
+  const [openModalView, setOpenModalView] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalDeactive, setOpenModalDeactive] = useState(false);
   const [openModalActive, setOpenModalActive] = useState(false);
-  const [openModalSafetyStock, setOpenModalSafetyStock] = useState(false);
-  const [openModalView, setOpenModalView] = useState(false);
-  const [openModalUpdate, setOpenModalUpdate] = useState(false);
-  const [openModalProcess, setOpenModalProcess] = useState(false);
 
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
 
-  const handleOpenModal = async (e) => {
-    switch (e) {
-      case "view":
-        setOpenModalView((value) => !value);
-        break;
-      case "update":
-        setOpenModalUpdate((value) => !value);
-        break;
-      case "process":
-        setOpenModalProcess((value) => !value);
-        break;
-      case "stock":
-        setOpenModalSafetyStock((value) => !value);
-        break;
-      case "delete":
-        setOpenModalDelete((value) => !value);
-        break;
-      case "deactive":
-        setOpenModalDeactive((value) => !value);
-        break;
-      case "active":
-        setOpenModalActive((value) => !value);
-        break;
-      default:
-        break;
-    }
-  };
+  const handleOpenModalView = useCallback((productCode) => {
+    setProductCode(productCode);
+    setOpenModalView(true);
+  }, []);
 
   // Handle Actions
   const handleDelete = async (e) => {
@@ -178,8 +150,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("view");
-                setView(e);
+                handleOpenModalView(e.product_code);
               }}
             >
               <Image src={ICONS.ViewIcon} alt="icon" width={28} />
@@ -473,40 +444,14 @@ export default function ProductProfile() {
         size="4xl"
       />
 
-      {/* Modal Safety Stock */}
-      <ModalSafetyStock
-        isOpen={openModalSafetyStock}
-        onClose={() => handleOpenModal("stock")}
-        size="4xl"
-        id={id}
-      />
-      {/* Modal View */}
       <ModalViewProductProfile
         isOpen={openModalView}
-        onClose={() => handleOpenModal("view")}
-        size="4xl"
-        data={view}
-        title="View Product Profile"
-      />
-
-      {/* Modal Update */}
-      <ModalViewProductProfile
-        isOpen={openModalUpdate}
-        onClose={() => handleOpenModal("update")}
-        size="4xl"
-        data={view}
-        title="Update Product Profile"
-        isUpdate={true}
-      />
-
-      {/* Modal Process */}
-      <ModalViewProductProfile
-        isOpen={openModalProcess}
-        onClose={() => handleOpenModal("process")}
-        size="4xl"
-        data={view}
-        title="Process Product Profile"
-        isApprove={true}
+        onOpenChange={setOpenModalView}
+        onClose={() => {
+          setOpenModalView(false);
+          setProductCode(""); // Reset product code when modal is closed
+        }}
+        productCode={productCode}
       />
 
       {/* Modal Delete */}
