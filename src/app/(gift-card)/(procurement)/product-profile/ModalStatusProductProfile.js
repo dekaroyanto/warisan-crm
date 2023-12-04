@@ -13,13 +13,14 @@ import {
 import { API } from "@/API/api";
 import { SetColorStatus } from "@/utils";
 
-const ModalViewProductProfile = ({
+const ModalStatusProductProfile = ({
   isOpen,
   onOpenChange,
   onClose,
   productCode,
 }) => {
   const [productData, setProductData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +49,39 @@ const ModalViewProductProfile = ({
     }
   }, [isOpen, productCode]);
 
+  const handleStatusChange = async (status) => {
+    try {
+      setLoading(true);
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/actionStatus`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productCode,
+          status: status === "APPROVED" ? 0 : 1,
+        }),
+      });
+      const result = await response.json();
+
+      console.log("Status Update Response:", result);
+
+      // Assuming the API returns updated product data
+      if (result.result && result.result.items.length > 0) {
+        const updatedProduct = result.result.items[0];
+        setProductData({
+          ...updatedProduct,
+          status: SetColorStatus(updatedProduct.status),
+        });
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -61,7 +95,7 @@ const ModalViewProductProfile = ({
     >
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1 text-center">
-          Detail Product Profile
+          Update Status
         </ModalHeader>
         <ModalBody>
           {productData ? (
@@ -117,14 +151,28 @@ const ModalViewProductProfile = ({
             <Spinner />
           )}
         </ModalBody>
+        <ModalFooter>
+          <Button
+            color="primary"
+            onClick={() => handleStatusChange("APPROVED")}
+            disabled={loading}
+          >
+            {loading ? "Approving..." : "Approve"}
+          </Button>
+          <Button
+            color="primary"
+            onClick={() => handleStatusChange("REJECTED")}
+            disabled={loading}
+          >
+            {loading ? "Rejecting..." : "Reject"}
+          </Button>
+          <Button auto onClick={onClose}>
+            Close
+          </Button>
+        </ModalFooter>
       </ModalContent>
-      <ModalFooter>
-        <Button auto onClick={onClose}>
-          Close
-        </Button>
-      </ModalFooter>
     </Modal>
   );
 };
 
-export default ModalViewProductProfile;
+export default ModalStatusProductProfile;

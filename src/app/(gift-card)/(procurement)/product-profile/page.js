@@ -3,9 +3,7 @@ import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { API, URL } from "@/API/api";
 import { SetColorStatus, ICONS } from "@/utils";
 
-import ModalUpdateProduct from "./ModalUpdateProduct";
-
-// import { columns, statusList, criteriaList } from "./dataList";
+import { columns, statusList, criteriaList } from "./dataList";
 
 import Image from "next/image";
 import {
@@ -24,48 +22,7 @@ import ModalAction from "@/components/modal/modalAction";
 
 import ModalCreate from "./ModalCreateProduct";
 import ModalViewProductProfile from "./ModalViewProductProfile";
-
-const columns = [
-  {
-    key: "product_code",
-    label: "PRODUCT CODE",
-  },
-  {
-    key: "product_desc",
-    label: "PRODUCT DESCRIPTION",
-  },
-  {
-    key: "face_value",
-    label: "FACE VALUE",
-  },
-  {
-    key: "card_fee",
-    label: "CARD FEE",
-  },
-  {
-    key: "status",
-    label: "STATUS",
-  },
-  {
-    key: "action",
-    label: "ACTION",
-  },
-];
-
-const statusList = [
-  { label: "APPROVED", value: "APPROVED" },
-  { label: "REJECTED", value: "REJECTED" },
-  { label: "DRAFT", value: "DRAFT" },
-  { label: "SUBMITTED", value: "SUBMITTED" },
-  { label: "DEACTIVED", value: "DEACTIVED" },
-];
-
-const criteriaList = [
-  { label: "Product Code", value: "product_code" },
-  { label: "Product Description", value: "product_dec" },
-  { label: "Face Value", value: "face_value" },
-  { label: "Card Fee", value: "card_fee" },
-];
+import ModalStatusProductProfile from "./ModalStatusProductProfile";
 
 export default function ProductProfile() {
   // open modal create
@@ -93,16 +50,23 @@ export default function ProductProfile() {
 
   // open Modal
   const [openModalView, setOpenModalView] = useState(false);
+  const [openModalStatus, setOpenModalStatus] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalDeactive, setOpenModalDeactive] = useState(false);
   const [openModalActive, setOpenModalActive] = useState(false);
 
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
-
+  //Modal View
   const handleOpenModalView = useCallback((productCode) => {
     setProductCode(productCode);
     setOpenModalView(true);
+  }, []);
+
+  //Modal Update Status
+  const handleOpenModalStatus = useCallback((productCode) => {
+    setProductCode(productCode);
+    setOpenModalStatus(true);
   }, []);
 
   // Handle Actions
@@ -185,8 +149,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("process");
-                setView(e);
+                handleOpenModalStatus(e.product_code);
               }}
             >
               <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
@@ -449,7 +412,17 @@ export default function ProductProfile() {
         onOpenChange={setOpenModalView}
         onClose={() => {
           setOpenModalView(false);
-          setProductCode(""); // Reset product code when modal is closed
+          setProductCode("");
+        }}
+        productCode={productCode}
+      />
+
+      <ModalStatusProductProfile
+        isOpen={openModalStatus}
+        onOpenChange={setOpenModalStatus}
+        onClose={() => {
+          setOpenModalStatus(false);
+          setProductCode("");
         }}
         productCode={productCode}
       />
