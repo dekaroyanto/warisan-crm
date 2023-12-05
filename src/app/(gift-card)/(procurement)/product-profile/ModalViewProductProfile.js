@@ -17,6 +17,7 @@ const ModalViewProductProfile = ({
   isOpen,
   onOpenChange,
   onClose,
+  size,
   productCode,
 }) => {
   const [productData, setProductData] = useState(null);
@@ -53,6 +54,7 @@ const ModalViewProductProfile = ({
       isOpen={isOpen}
       onClose={onClose}
       onOpenChange={onOpenChange}
+      size={size}
       backdrop="blur"
       classNames={{
         body: "py-6",
@@ -74,7 +76,7 @@ const ModalViewProductProfile = ({
                   label="Product Code"
                   name="product_code"
                   variant="bordered"
-                  value={productData.id}
+                  value={productData.product_code}
                 />
               </div>
 
@@ -83,10 +85,10 @@ const ModalViewProductProfile = ({
                   isReadOnly
                   size="sm"
                   type="number"
-                  label="Product Code"
+                  label="ID"
                   name="product_code"
                   variant="bordered"
-                  value={productData.product_code}
+                  value={productData.id}
                 />
               </div>
 

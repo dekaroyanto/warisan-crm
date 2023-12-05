@@ -23,6 +23,7 @@ import ModalAction from "@/components/modal/modalAction";
 import ModalCreate from "./ModalCreateProduct";
 import ModalViewProductProfile from "./ModalViewProductProfile";
 import ModalStatusProductProfile from "./ModalStatusProductProfile";
+import ModalUpdateProduct from "./ModalUpdateProduct";
 
 export default function ProductProfile() {
   // open modal create
@@ -50,6 +51,7 @@ export default function ProductProfile() {
 
   // open Modal
   const [openModalView, setOpenModalView] = useState(false);
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [openModalStatus, setOpenModalStatus] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalDeactive, setOpenModalDeactive] = useState(false);
@@ -57,6 +59,7 @@ export default function ProductProfile() {
 
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
+
   //Modal View
   const handleOpenModalView = useCallback((productCode) => {
     setProductCode(productCode);
@@ -67,6 +70,12 @@ export default function ProductProfile() {
   const handleOpenModalStatus = useCallback((id) => {
     setId(id);
     setOpenModalStatus(true);
+  }, []);
+
+  //Modal Update Product
+  const handleOpenModalUpdate = useCallback((id) => {
+    setId(id);
+    setOpenModalUpdate(true);
   }, []);
 
   // Handle Actions
@@ -131,8 +140,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("update");
-                setView(e);
+                handleOpenModalUpdate(e.id);
               }}
             >
               <Image src={ICONS.EditIcon} alt="icon" width={28} />
@@ -415,6 +423,17 @@ export default function ProductProfile() {
           setProductCode("");
         }}
         productCode={productCode}
+        size="4xl"
+      />
+
+      <ModalUpdateProduct
+        isOpen={openModalUpdate}
+        onOpenChange={setOpenModalUpdate}
+        onClose={() => {
+          setOpenModalUpdate(false);
+          setId("");
+        }}
+        id={id}
       />
 
       <ModalStatusProductProfile

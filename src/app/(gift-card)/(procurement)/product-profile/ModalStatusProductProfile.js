@@ -109,6 +109,17 @@ const ModalStatusProductProfile = ({ isOpen, onOpenChange, onClose, id }) => {
                   isReadOnly
                   size="sm"
                   type="number"
+                  label="ID"
+                  name="product_code"
+                  variant="bordered"
+                  value={productData.id}
+                />
+              </div>
+              <div className="col-span-6 cursor-not-allowed">
+                <Input
+                  isReadOnly
+                  size="sm"
+                  type="number"
                   label="Product Code"
                   name="product_code"
                   variant="bordered"
