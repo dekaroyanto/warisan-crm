@@ -64,8 +64,8 @@ export default function ProductProfile() {
   }, []);
 
   //Modal Update Status
-  const handleOpenModalStatus = useCallback((productCode) => {
-    setProductCode(productCode);
+  const handleOpenModalStatus = useCallback((id) => {
+    setId(id);
     setOpenModalStatus(true);
   }, []);
 
@@ -149,7 +149,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModalStatus(e.product_code);
+                handleOpenModalStatus(e.id);
               }}
             >
               <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
@@ -422,9 +422,9 @@ export default function ProductProfile() {
         onOpenChange={setOpenModalStatus}
         onClose={() => {
           setOpenModalStatus(false);
-          setProductCode("");
+          setId("");
         }}
-        productCode={productCode}
+        id={id}
       />
 
       {/* Modal Delete */}

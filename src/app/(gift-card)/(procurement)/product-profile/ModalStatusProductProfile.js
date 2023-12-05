@@ -13,12 +13,7 @@ import {
 import { API } from "@/API/api";
 import { SetColorStatus } from "@/utils";
 
-const ModalStatusProductProfile = ({
-  isOpen,
-  onOpenChange,
-  onClose,
-  productCode,
-}) => {
+const ModalStatusProductProfile = ({ isOpen, onOpenChange, onClose, id }) => {
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -26,8 +21,16 @@ const ModalStatusProductProfile = ({
     const fetchData = async () => {
       try {
         console.log("Fetching product data...");
-        const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/viewbyproductcode?product_code=${productCode}`;
-        const response = await fetch(apiUrl);
+        const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/edit?id=${id}`;
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id,
+          }),
+        });
         const result = await response.json();
 
         console.log("API Response:", result);
@@ -44,12 +47,12 @@ const ModalStatusProductProfile = ({
       }
     };
 
-    if (isOpen && productCode) {
+    if (isOpen && id) {
       fetchData();
     }
-  }, [isOpen, productCode]);
+  }, [isOpen, id]);
 
-  const handleStatusChange = async (status) => {
+  const handleStatusChange = async (action) => {
     try {
       setLoading(true);
       const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/actionStatus`;
@@ -59,8 +62,9 @@ const ModalStatusProductProfile = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productCode,
-          status: status === "APPROVED" ? 0 : 1,
+          id,
+          // status: status === "APPROVED" ? 0 : 2,
+          action: action === "APPROVED" ? "APPROVED" : "REJECTED",
         }),
       });
       const result = await response.json();
