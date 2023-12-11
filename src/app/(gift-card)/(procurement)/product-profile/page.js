@@ -26,6 +26,8 @@ import ModalStatusProductProfile from "./ModalStatusProductProfile";
 import ModalUpdateProduct from "./ModalUpdateProduct";
 
 export default function ProductProfile() {
+  const [isDataTableVisible, setIsDataTableVisible] = useState(false);
+
   // open modal create
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -47,6 +49,7 @@ export default function ProductProfile() {
     setCriteria([]);
     setStatus([]);
     setSearchForm("");
+    setIsDataTableVisible(false);
   }, []);
 
   // open Modal
@@ -59,6 +62,22 @@ export default function ProductProfile() {
 
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
+
+  const handleOpenModal = (modalType) => {
+    switch (modalType) {
+      case "delete":
+        setOpenModalDelete(true);
+        break;
+      case "deactive":
+        setOpenModalDeactive(true);
+        break;
+      case "active":
+        setOpenModalActive(true);
+        break;
+      default:
+        break;
+    }
+  };
 
   //Modal View
   const handleOpenModalView = useCallback((productCode) => {
@@ -79,11 +98,28 @@ export default function ProductProfile() {
   }, []);
 
   // Handle Actions
-  const handleDelete = async (e) => {
+  const handleDelete = async (id) => {
     try {
-      toastSuccess({ title: `Product Profile ID ${e} has Deleted` });
-      handleOpenModal("delete");
-      setId("");
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/destroy/${id}`;
+      const response = await fetch(apiUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+        }),
+      });
+      const result = await response.json();
+
+      if (response.success) {
+        toastSuccess({ title: `Product Profile ID ${id} has been deleted` });
+        loadData();
+        setOpenModalDelete(false);
+        setId("");
+      } else {
+        console.error("Failed to delete product profile");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -205,7 +241,7 @@ export default function ProductProfile() {
           </span>
         )}
 
-        {isDraft || isApproved ? (
+        {isDraft || isApproved || isSubmitted ? (
           <Tooltip color="primary" content="Deactive" closeDelay={0}>
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
@@ -263,6 +299,7 @@ export default function ProductProfile() {
           action: setActionButton(e),
         })) || []
       );
+      setIsDataTableVisible(true);
     } catch (error) {
       console.error("Error fetching filtered data:", error);
     }
@@ -287,9 +324,11 @@ export default function ProductProfile() {
     }
   };
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  const dataTableComponent = useMemo(() => {
+    return isDataTableVisible ? (
+      <DataTable columns={columns} rows={data} keys={data.id} />
+    ) : null;
+  }, [isDataTableVisible, data]);
 
   return (
     <div className="md:container mx-auto py-2 pb-10">
@@ -405,7 +444,9 @@ export default function ProductProfile() {
       </div>
 
       {/* Data Table */}
-      <DataTable columns={columns} rows={data} keys={data.id} />
+      {/* <DataTable columns={columns} rows={data} keys={data.id} /> */}
+
+      {dataTableComponent}
 
       {/* Modal Create  */}
       <ModalCreate
@@ -449,7 +490,7 @@ export default function ProductProfile() {
       {/* Modal Delete */}
       <ModalAction
         isOpen={openModalDelete}
-        onClose={() => handleOpenModal("delete")}
+        onClose={() => setOpenModalDelete(false)}
         title="Delete This Product Profile ?"
         handleAction={() => handleDelete(id)}
       />

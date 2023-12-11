@@ -52,7 +52,7 @@ const ModalStatusProductProfile = ({ isOpen, onOpenChange, onClose, id }) => {
     }
   }, [isOpen, id]);
 
-  const handleStatusChange = async (action) => {
+  const handleStatusChange = async (status) => {
     try {
       setLoading(true);
       const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/actionStatus`;
@@ -64,7 +64,7 @@ const ModalStatusProductProfile = ({ isOpen, onOpenChange, onClose, id }) => {
         body: JSON.stringify({
           id,
           // status: status === "APPROVED" ? 0 : 2,
-          action: action === "APPROVED" ? "APPROVED" : "REJECTED",
+          action: status === "APPROVED" ? "APPROVED" : "REJECTED",
         }),
       });
       const result = await response.json();

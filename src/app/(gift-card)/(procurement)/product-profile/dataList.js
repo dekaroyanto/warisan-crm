@@ -26,6 +26,7 @@ export const columns = [
 ];
 
 export const statusList = [
+  { label: "ALL", value: "ALL" },
   { label: "APPROVED", value: "APPROVED" },
   { label: "REJECTED", value: "REJECTED" },
   { label: "DRAFT", value: "DRAFT" },

@@ -131,23 +131,27 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
                   name="product_desc"
                   variant="bordered"
                   value={productData.product_desc}
+                  onValueChange={(value) =>
+                    setProductData((prev) => ({ ...prev, product_desc: value }))
+                  }
                 />
               </div>
 
               <div className="col-span-6 cursor-not-allowed">
                 <Input
-                  isReadOnly
                   size="sm"
                   label="Face Value"
                   name="face_value"
                   variant="bordered"
                   value={productData.face_value}
+                  onValueChange={(value) =>
+                    setProductData((prev) => ({ ...prev, face_value: value }))
+                  }
                 />
               </div>
 
               <div className="col-span-6 cursor-not-allowed">
                 <Input
-                  isReadOnly
                   size="sm"
                   type="number"
                   label="Card Fee"
@@ -155,6 +159,56 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
                   variant="bordered"
                   placeholder="1"
                   value={productData.card_fee}
+                  onValueChange={(value) =>
+                    setProductData((prev) => ({ ...prev, card_fee: value }))
+                  }
+                />
+              </div>
+              <div className="col-span-6 cursor-not-allowed">
+                <Input
+                  size="sm"
+                  type="number"
+                  label="Max Amount"
+                  name="max_amount"
+                  variant="bordered"
+                  placeholder="1"
+                  value={productData.max_amount}
+                  onValueChange={(value) =>
+                    setProductData((prev) => ({ ...prev, max_amount: value }))
+                  }
+                />
+              </div>
+
+              <div className="col-span-6 cursor-not-allowed">
+                <Input
+                  size="sm"
+                  type="number"
+                  label="Effective Months"
+                  name="effective_months"
+                  variant="bordered"
+                  placeholder="1"
+                  value={productData.effective_months}
+                  onValueChange={(value) =>
+                    setProductData((prev) => ({
+                      ...prev,
+                      effective_months: value,
+                    }))
+                  }
+                />
+              </div>
+
+              <div className="col-span-6 cursor-not-allowed">
+                <Input
+                  size="sm"
+                  type="number"
+                  label="Unit Cost"
+                  name="unit_cost"
+                  variant="bordered"
+                  placeholder="1"
+                  value={productData.unit_cost}
+                  onValueChange={(value) =>
+                    setProductData((prev) => ({ ...prev, unit_cost: value }))
+                  }
                 />
               </div>
             </div>
