@@ -287,7 +287,7 @@ export default function ProductProfile() {
         status: status,
       });
 
-      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/viewbyfilter?${params.toString()}`;
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/getPpAll?${params.toString()}`;
 
       const response = await fetch(apiUrl);
       const result = await response.json();

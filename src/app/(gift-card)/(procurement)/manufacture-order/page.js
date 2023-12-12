@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
+} from "react";
 import { SetColorStatus, ICONS } from "@/utils";
 
 import {
@@ -26,107 +32,39 @@ import ModalPrint from "@/components/modal/modalPrint";
 import ModalCreateGiftCard from "./ModalCreateGiftCard";
 import ModalViewGiftCard from "./ModalViewGiftCard";
 import ModalReceiveGiftCard from "./ModalReceiveGiftCard";
-
-const users = [
-  {
-    id: 1,
-    mo_number: "2308000009",
-    mo_date: "04-09-2023	",
-    po_number: "123412341234",
-    po_date: "23-08-2023	",
-    supplier: "PT Trans Retail Indonesia	",
-    status: "APPROVED",
-  },
-  {
-    id: 2,
-    mo_number: "2309000002",
-    mo_date: "04-09-2023	",
-    po_number: "0109202302",
-    po_date: "01-09-2023	",
-    supplier: "PT Trans Retail Indonesia	",
-    status: "BARCODING",
-  },
-  {
-    id: 3,
-    mo_number: "2309000001",
-    mo_date: "01-09-2023	",
-    po_number: "0109202301",
-    po_date: "23-08-2023	",
-    supplier: "PT Trans Retail Indonesia	",
-    status: "DRAFT",
-  },
-  {
-    id: 4,
-    mo_number: "2308000012",
-    mo_date: "28-08-2023	",
-    po_number: "2808202302",
-    po_date: "23-08-2023	",
-    supplier: "PT Trans Retail Indonesia	",
-    status: "FOR APPROVAL",
-  },
-  {
-    id: 5,
-    mo_number: "2308000013",
-    mo_date: "28-08-2023	",
-    po_number: "2808202303",
-    po_date: "23-08-2023	",
-    supplier: "PT Trans Retail Indonesia	",
-    status: "FULL",
-  },
-  {
-    id: 6,
-    mo_number: "2308000013",
-    mo_date: "28-08-2023	",
-    po_number: "2808202303",
-    po_date: "23-08-2023	",
-    supplier: "PT Trans Retail Indonesia	",
-    status: "GENERATED",
-  },
-  {
-    id: 7,
-    mo_number: "2308000013",
-    mo_date: "28-08-2023	",
-    po_number: "2808202303",
-    po_date: "23-08-2023	",
-    supplier: "PT Trans Retail Indonesia	",
-    status: "PARTIAL",
-  },
-];
-
-const columns = [
-  { label: "MO NUMBER", key: "mo_number" },
-  { label: "MO DATE", key: "mo_date" },
-  { label: "PO NUMBER", key: "po_number" },
-  { label: "PO DATE", key: "po_date" },
-  { label: "SUPPLIER", key: "supplier" },
-  { label: "STATUS", key: "status" },
-  { label: "ACTIONS", key: "action" },
-];
-
-const statusList = [
-  { label: "APPROVED", value: "APPROVED" },
-  { label: "BARCODING", value: "BARCODING" },
-  { label: "DRAFT", value: "DRAFT" },
-  { label: "FOR APPROVAL", value: "FOR APPROVAL" },
-  { label: "FULL", value: "FULL" },
-  { label: "GENERATED", value: "GENERATED" },
-  { label: "PARTIAL", value: "PARTIAL" },
-];
+import { users, statusList, columns } from "./dataList";
 
 export default function ManufacturOrder() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDataTableVisible, setIsDataTableVisible] = useState(false);
+
+  // open modal create
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
   // Search Feature
   const [criteria, setCriteria] = useState("");
   const [status, setStatus] = useState("");
-  const [supplier, setSupplier] = useState("");
+  const [suplier, setSuplier] = useState("");
   const [poDate, setPODate] = useState("");
   const [searchForm, setSearchForm] = useState("");
+
+  const handleCriteriaChange = (e) => {
+    setCriteria([e.target.value]);
+  };
+
+  const handleStatusChange = (e) => {
+    setStatus([e.target.value]);
+  };
+
+  const handleSuplierChange = (e) => {
+    setSuplier([e.target.value]);
+  };
 
   const clearInput = useCallback(() => {
     setCriteria([]);
     setStatus([]);
-    setSupplier([]);
-    setPODate("");
     setSearchForm("");
+    setIsDataTableVisible(false);
   }, []);
 
   // open Modal
@@ -318,22 +256,67 @@ export default function ManufacturOrder() {
     );
   };
 
+  const filterSearch = async () => {
+    try {
+      const params = new URLSearchParams();
+
+      // Add criteria to params if it exists
+      if (criteria && searchForm) {
+        params.append(criteria, searchForm);
+      }
+
+      // Add status to params if it exists
+      if (status) {
+        params.append("status", status);
+      }
+
+      // Add suplier to params if it exists
+      if (suplier) {
+        params.append("suplier", suplier);
+      }
+
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/mo/getMoAll?${params.toString()}`;
+
+      const response = await fetch(apiUrl);
+      const result = await response.json();
+
+      setData(
+        result?.result?.items?.map((e) => ({
+          ...e,
+          status: SetColorStatus(e.status),
+          action: setActionButton(e),
+        })) || []
+      );
+      setIsDataTableVisible(true);
+    } catch (error) {
+      console.error("Error fetching filtered data:", error);
+    }
+  };
+
   // get data
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const respons = users?.map((e) => {
-      return {
-        ...e,
-        status: SetColorStatus(e.status),
-        action: setActionButton(e.status),
-      };
-    });
-    setData(respons);
-  }, []);
+  const loadData = async () => {
+    try {
+      const res = await API.get(`${URL.MO_LIST}`);
+      const respons = await res.data?.result?.items?.map((e) => {
+        return {
+          ...e,
+          status: SetColorStatus(e.status),
+          action: setActionButton(e),
+        };
+      });
+      setData(respons);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // open modal create
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const dataTableComponent = useMemo(() => {
+    return isDataTableVisible ? (
+      <DataTable columns={columns} rows={data} keys={data.id} />
+    ) : null;
+  }, [isDataTableVisible, data]);
 
   return (
     <div className="md:container py-2 mx-auto">
@@ -401,6 +384,7 @@ export default function ManufacturOrder() {
               color="primary"
               className="col-auto self-end hover:bg-secondary font-semibold"
               size="sm"
+              onClick={filterSearch}
             >
               Search
             </Button>
@@ -433,8 +417,9 @@ export default function ManufacturOrder() {
                 innerWrapper: "max-w-max",
                 listboxWrapper: "",
               }}
-              onSelectionChange={setSupplier}
-              selectedKeys={supplier}
+              selectedKeys={suplier}
+              // onSelectionChange={setStatus}
+              onChange={handleSuplierChange}
             >
               <SelectItem
                 key="pt.transretail"
@@ -442,7 +427,7 @@ export default function ManufacturOrder() {
               >
                 PT. Transretial Indonesia
               </SelectItem>
-              <SelectItem key="pt.wahyu" value="PT. Wahyu">
+              <SelectItem key="PT. WAHYU" value="PT. WAHYU">
                 PT. Wahyu
               </SelectItem>
             </Select>
@@ -459,8 +444,9 @@ export default function ManufacturOrder() {
                 innerWrapper: "max-w-max",
                 listboxWrapper: "",
               }}
-              onSelectionChange={setStatus}
               selectedKeys={status}
+              // onSelectionChange={setStatus}
+              onChange={handleStatusChange}
             >
               {statusList.map((e) => (
                 <SelectItem key={e.value} value={e.value}>
@@ -485,7 +471,7 @@ export default function ManufacturOrder() {
       </div>
 
       {/* Data Table */}
-      <DataTable columns={columns} rows={data} keys={users.id} />
+      {dataTableComponent}
 
       {/* Modal Create */}
       <ModalCreateGiftCard

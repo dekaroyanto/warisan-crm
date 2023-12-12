@@ -26,8 +26,20 @@ const ModalViewProductProfile = ({
     const fetchData = async () => {
       try {
         console.log("Fetching product data...");
-        const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/viewbyproductcode?product_code=${productCode}`;
-        const response = await fetch(apiUrl);
+
+        const apiUrl = "http://10.21.9.212:1945/crmreborn/pp/viewbyproductcode";
+
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any additional headers if needed
+            // "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+          },
+          body: JSON.stringify({ product_code: productCode }),
+        };
+
+        const response = await fetch(apiUrl, requestOptions);
         const result = await response.json();
 
         console.log("API Response:", result);
