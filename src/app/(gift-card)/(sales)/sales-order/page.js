@@ -340,7 +340,6 @@ export default function SalesOrder() {
       {/* Button Create*/}
       <div class="flex justify-between mb-5">
         <div>
-          {/* <!-- Tombol di sebelah kiri --> */}
           <Button
             color="primary"
             className=" font-semibold py-2 px-4 rounded"
@@ -350,7 +349,6 @@ export default function SalesOrder() {
           </Button>
         </div>
         <div>
-          {/* <!-- Tombol di sebelah kanan --> */}
           <CreateReplacement
             isOpen={modalInternalIsOpen}
             onClose={() => setModalInternalIsOpen(false)}
@@ -378,30 +376,6 @@ export default function SalesOrder() {
           />
         </div>
       </div>
-
-      {/* <div className="px-auto grid grid-cols-8 gap-4">
-        <Button
-          color="primary"
-          radius="sm"
-          className=" mb-5 font-semibold col-span-1 col-start-1 "
-          endContent={PrintIcon}
-        >
-          Print
-        </Button>
-        <Button
-          color="primary"
-          radius="sm"
-          className="mb-5 font-semibold col-span-2 col-end-12"
-          onPress={onOpen}
-        >
-          Create Sales Order
-        </Button>
-        <ModalCreateSalesOrder
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          size="5xl"
-        />
-      </div> */}
 
       <DataTable columns={columns} rows={data} keys={data.id} />
     </div>

@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { API, URL } from "@/API/api";
 import { SetColorStatus, ICONS } from "@/utils";
 import PrintIcon from "@/assets/icons/ac_print.svg";
 

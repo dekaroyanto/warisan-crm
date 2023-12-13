@@ -97,7 +97,7 @@ export default function ModalCreateProduct({
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      const status = values.submitType === "submit" ? "2" : "3";
+      const status = values.submitType === "submit" ? 2 : 3;
 
       // Set status ke dalam nilai yang akan dikirim
       values.status = status;
@@ -309,6 +309,64 @@ export default function ModalCreateProduct({
                           ) : null}
                         </div>
                       </div>
+
+                      {/* <FieldArray name="business_unit">
+                        {({ insert, remove, push }) => (
+                          <>
+                            <div className="grid grid-cols-12 mt-3">
+                              <div className="col-span-11 rounded-md bg-primary py-2 px-4 text-white font-semibold">
+                                BUSINESS UNIT
+                              </div>
+                              <button
+                                type="button"
+                                className="secondary"
+                                onClick={() => push({ value: "" })}
+                              >
+                                +
+                              </button>
+                            </div>
+
+                            <div className="max-h-64 overflow-auto">
+                              {props.values.business_unit.length > 0 &&
+                                props.values.business_unit.map((e, index) => (
+                                  <div
+                                    key={index}
+                                    className="grid grid-cols-12 mb-2"
+                                  >
+                                    <div className="col-span-11">
+                                      <select
+                                        aria-label="Business Unit"
+                                        name={`business_unit.${index}.value`}
+                                        onChange={props.handleChange}
+                                        value={e.value}
+                                        required
+                                        className="border-slate-300 hover:border-slate-500 border-solid border-2 w-full p-3 rounded-lg "
+                                      >
+                                        {businessUnit?.map((e) => (
+                                          <option key={e.value} value={e.value}>
+                                            {e.value == ""
+                                              ? "Please Select.."
+                                              : e.value}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                    <div className="flex justify-center items-center">
+                                      <Image
+                                        className="cursor-pointer"
+                                        src={DeleteIcon}
+                                        alt="icon"
+                                        onClick={() => {
+                                          remove(index);
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                            </div>
+                          </>
+                        )}
+                      </FieldArray> */}
                     </ModalBody>
 
                     <ModalFooter>
@@ -318,7 +376,7 @@ export default function ModalCreateProduct({
                       <Button
                         color="primary"
                         onPress={() => {
-                          props.setFieldValue("submitType", "draft");
+                          // props.setFieldValue("submitType", "draft");
                           props.handleSubmit();
                         }}
                       >
@@ -327,7 +385,7 @@ export default function ModalCreateProduct({
                       <Button
                         color="primary"
                         onPress={() => {
-                          props.setFieldValue("submitType", "submit");
+                          // props.setFieldValue("submitType", "submit");
                           props.handleSubmit();
                         }}
                       >

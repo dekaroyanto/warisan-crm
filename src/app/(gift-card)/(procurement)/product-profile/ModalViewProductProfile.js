@@ -13,6 +13,8 @@ import {
 import { API } from "@/API/api";
 import { SetColorStatus } from "@/utils";
 
+import { Formik, Form, FieldArray, useFormik, ErrorMessage } from "formik";
+
 const ModalViewProductProfile = ({
   isOpen,
   onOpenChange,
@@ -96,18 +98,6 @@ const ModalViewProductProfile = ({
                 <Input
                   isReadOnly
                   size="sm"
-                  type="number"
-                  label="ID"
-                  name="product_code"
-                  variant="bordered"
-                  value={productData.id}
-                />
-              </div>
-
-              <div className="col-span-6 cursor-not-allowed">
-                <Input
-                  isReadOnly
-                  size="sm"
                   label="Product Desc"
                   name="product_desc"
                   variant="bordered"
@@ -138,6 +128,33 @@ const ModalViewProductProfile = ({
                   value={productData.card_fee}
                 />
               </div>
+              {productData.business_units &&
+                productData.business_units.length > 0 && (
+                  <div className="col-span-12 cursor-not-allowed">
+                    <div className="grid grid-cols-12 mt-3">
+                      <div className="col-span-12 rounded-md bg-primary py-2 px-4 text-white text-center font-semibold mb-2">
+                        BUSINESS UNIT
+                      </div>
+                    </div>
+
+                    <div className="max-h-64 overflow-auto">
+                      {productData.business_units.map((businessUnit, index) => (
+                        <div key={index} className="grid grid-cols-6 mb-2">
+                          <div className="col-span-6">
+                            <Input
+                              isReadOnly
+                              size="sm"
+                              type="text"
+                              label="Business Unit"
+                              name={`business_unit.${index}.value`}
+                              value={businessUnit || ""}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
             </div>
           ) : (
             <Spinner />

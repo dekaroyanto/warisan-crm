@@ -9,7 +9,7 @@ export const columns = [
 ];
 
 export const statusList = [
-  { label: "ALL", value: "ALL" },
+  { label: "ALL", value: "ALL", key: "ALL" },
   { label: "APPROVED", value: "APPROVED" },
   { label: "BARCODING", value: "BARCODING" },
   { label: "DRAFT", value: "DRAFT" },

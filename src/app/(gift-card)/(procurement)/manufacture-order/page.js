@@ -314,8 +314,12 @@ export default function ManufacturOrder() {
 
   const dataTableComponent = useMemo(() => {
     return isDataTableVisible ? (
-      <DataTable columns={columns} rows={data} keys={data.id} />
-    ) : null;
+      <DataTable
+        columns={columns}
+        rows={data.map((item) => ({ ...item, key: item.id }))} // Add a unique key to each row
+      />
+    ) : // <DataTable columns={columns} rows={data} />
+    null;
   }, [isDataTableVisible, data]);
 
   return (

@@ -24,6 +24,7 @@ import ModalCreate from "./ModalCreateProduct";
 import ModalViewProductProfile from "./ModalViewProductProfile";
 import ModalStatusProductProfile from "./ModalStatusProductProfile";
 import ModalUpdateProduct from "./ModalUpdateProduct";
+import ModalSafetyStock from "./ModalSafetyStock";
 
 export default function ProductProfile() {
   const [isDataTableVisible, setIsDataTableVisible] = useState(false);
@@ -57,6 +58,7 @@ export default function ProductProfile() {
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [openModalStatus, setOpenModalStatus] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [openModalSafetyStock, setOpenModalSafetyStock] = useState(false);
   const [openModalDeactive, setOpenModalDeactive] = useState(false);
   const [openModalActive, setOpenModalActive] = useState(false);
 
@@ -67,6 +69,9 @@ export default function ProductProfile() {
     switch (modalType) {
       case "delete":
         setOpenModalDelete(true);
+        break;
+      case "stock":
+        setOpenModalSafetyStock((value) => !value);
         break;
       case "deactive":
         setOpenModalDeactive(true);
@@ -484,6 +489,14 @@ export default function ProductProfile() {
           setOpenModalStatus(false);
           setId("");
         }}
+        id={id}
+      />
+
+      {/* Modal Safety Stock */}
+      <ModalSafetyStock
+        isOpen={openModalSafetyStock}
+        onClose={() => handleOpenModal("stock")}
+        size="4xl"
         id={id}
       />
 

@@ -221,7 +221,7 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
             Close
           </Button>
           {productData && (
-            <Button auto color="success" onClick={handleUpdate}>
+            <Button auto color="primary" onClick={handleUpdate}>
               Update
             </Button>
           )}
