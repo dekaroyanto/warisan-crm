@@ -13,72 +13,86 @@ import {
 import { API } from "@/API/api";
 import { SetColorStatus } from "@/utils";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { useFormik } from "formik";
 
 const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
   const [productData, setProductData] = useState(null);
+  const formik = useFormik({
+    initialValues: {
+      id: "",
+      product_code: "",
+      product_desc: "",
+      face_value: "",
+      card_fee: "",
+      max_amount: "",
+      effective_months: "",
+      unit_cost: "",
+    },
+    onSubmit: async (values) => {
+      try {
+        const updateUrl = `http://10.21.9.212:1945/crmreborn/pp/update`;
+
+        const updateData = {
+          id: values.id,
+          product_code: values.product_code,
+          product_desc: values.product_desc,
+          face_value: values.face_value,
+          card_fee: values.card_fee,
+          max_amount: values.max_amount,
+          effective_months: values.effective_months,
+          unit_cost: values.unit_cost,
+        };
+
+        const response = await axios.post(updateUrl, updateData);
+
+        console.log("Update Response:", response);
+
+        toast.success("Product data updated successfully!");
+
+        onClose();
+        fetchData();
+      } catch (error) {
+        console.error("Error updating product data:", error);
+      }
+    },
+  });
+
+  const fetchData = async () => {
+    try {
+      console.log("Fetching product data...");
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/edit?id=${id}`;
+      const response = await axios.post(apiUrl, { id });
+
+      const result = response.data;
+
+      console.log("API Response:", result);
+
+      if (result.result && result.result.items.length > 0) {
+        const product = result.result.items[0];
+        setProductData({
+          ...product,
+          status: SetColorStatus(product.status),
+        });
+        formik.setValues({
+          ...product,
+          status: SetColorStatus(product.status),
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+    }
+  };
+
+  const handleUpdate = () => {
+    formik.handleSubmit();
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("Fetching product data...");
-        const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/edit?id=${id}`;
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id,
-          }),
-        });
-        const result = await response.json();
-
-        console.log("API Response:", result);
-
-        if (result.result && result.result.items.length > 0) {
-          const product = result.result.items[0];
-          setProductData({
-            ...product,
-            status: SetColorStatus(product.status),
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
-
     if (isOpen && id) {
       fetchData();
     }
   }, [isOpen, id]);
-
-  const handleUpdate = async () => {
-    try {
-      const updateUrl = `http://10.21.9.212:1945/crmreborn/pp/update`;
-
-      const updateData = {
-        id: productData.id,
-        product_code: productData.product_code,
-        product_desc: productData.product_desc,
-        face_value: productData.face_value,
-        card_fee: productData.card_fee,
-        max_amount: productData.max_amount,
-        effective_months: productData.effective_months,
-        unit_cost: productData.unit_cost,
-      };
-
-      const response = await API.post(updateUrl, updateData);
-
-      console.log("Update Response:", response);
-
-      toast.success("Product data updated successfully!");
-
-      onClose();
-      fetchData();
-    } catch (error) {
-      console.error("Error updating product data:", error);
-    }
-  };
 
   return (
     <Modal
@@ -98,133 +112,102 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
         </ModalHeader>
         <ModalBody>
           {productData ? (
-            <div className="w-full grid grid-cols-12 gap-4">
-              <div className="col-span-6 cursor-not-allowed">
-                <Input
-                  isReadOnly
-                  size="sm"
-                  type="number"
-                  label="ID"
-                  name="product_code"
-                  variant="bordered"
-                  value={productData.id}
-                />
-              </div>
-              <div className="col-span-6">
-                <Input
-                  size="sm"
-                  type="number"
-                  label="Product Code"
-                  name="product_code"
-                  variant="bordered"
-                  value={productData.product_code}
-                  onValueChange={(value) =>
-                    setProductData((prev) => ({ ...prev, product_code: value }))
-                  }
-                />
-              </div>
+            <form onSubmit={formik.handleSubmit}>
+              <div className="w-full grid grid-cols-12 gap-4">
+                <div className="col-span-6">
+                  <Input
+                    size="sm"
+                    type="number"
+                    label="Product Code"
+                    name="product_code"
+                    variant="bordered"
+                    value={formik.values.product_code}
+                    onChange={formik.handleChange}
+                  />
+                </div>
 
-              <div className="col-span-6 cursor-not-allowed">
-                <Input
-                  size="sm"
-                  label="Product Desc"
-                  name="product_desc"
-                  variant="bordered"
-                  value={productData.product_desc}
-                  onValueChange={(value) =>
-                    setProductData((prev) => ({ ...prev, product_desc: value }))
-                  }
-                />
-              </div>
+                <div className="col-span-6">
+                  <Input
+                    size="sm"
+                    label="Product Desc"
+                    name="product_desc"
+                    variant="bordered"
+                    value={formik.values.product_desc}
+                    onChange={formik.handleChange}
+                  />
+                </div>
 
-              <div className="col-span-6 cursor-not-allowed">
-                <Input
-                  size="sm"
-                  label="Face Value"
-                  name="face_value"
-                  variant="bordered"
-                  value={productData.face_value}
-                  onValueChange={(value) =>
-                    setProductData((prev) => ({ ...prev, face_value: value }))
-                  }
-                />
+                <div className="col-span-6">
+                  <Input
+                    size="sm"
+                    label="Face Value"
+                    name="face__value"
+                    variant="bordered"
+                    value={formik.values.face_value}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="col-span-6">
+                  <Input
+                    size="sm"
+                    type="number"
+                    placeholder="0"
+                    label="Card Fee"
+                    name="card_fee"
+                    variant="bordered"
+                    value={formik.values.card_fee}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="col-span-6">
+                  <Input
+                    placeholder="0"
+                    size="sm"
+                    type="number"
+                    label="Max Amount"
+                    name="max_amount"
+                    variant="bordered"
+                    value={formik.values.max_amount}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="col-span-6">
+                  <Input
+                    placeholder="0"
+                    size="sm"
+                    type="number"
+                    label="Effective Months"
+                    name="effective_months"
+                    variant="bordered"
+                    value={formik.values.effective_months}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="col-span-6">
+                  <Input
+                    placeholder="0"
+                    size="sm"
+                    type="number"
+                    label="Unit Cost"
+                    name="unit_cost"
+                    variant="bordered"
+                    value={formik.values.unit_cost}
+                    onChange={formik.handleChange}
+                  />
+                </div>
               </div>
-
-              <div className="col-span-6 cursor-not-allowed">
-                <Input
-                  size="sm"
-                  type="number"
-                  label="Card Fee"
-                  name="card_fee"
-                  variant="bordered"
-                  placeholder="1"
-                  value={productData.card_fee}
-                  onValueChange={(value) =>
-                    setProductData((prev) => ({ ...prev, card_fee: value }))
-                  }
-                />
-              </div>
-              <div className="col-span-6 cursor-not-allowed">
-                <Input
-                  size="sm"
-                  type="number"
-                  label="Max Amount"
-                  name="max_amount"
-                  variant="bordered"
-                  placeholder="1"
-                  value={productData.max_amount}
-                  onValueChange={(value) =>
-                    setProductData((prev) => ({ ...prev, max_amount: value }))
-                  }
-                />
-              </div>
-
-              <div className="col-span-6 cursor-not-allowed">
-                <Input
-                  size="sm"
-                  type="number"
-                  label="Effective Months"
-                  name="effective_months"
-                  variant="bordered"
-                  placeholder="1"
-                  value={productData.effective_months}
-                  onValueChange={(value) =>
-                    setProductData((prev) => ({
-                      ...prev,
-                      effective_months: value,
-                    }))
-                  }
-                />
-              </div>
-
-              <div className="col-span-6 cursor-not-allowed">
-                <Input
-                  size="sm"
-                  type="number"
-                  label="Unit Cost"
-                  name="unit_cost"
-                  variant="bordered"
-                  placeholder="1"
-                  value={productData.unit_cost}
-                  onValueChange={(value) =>
-                    setProductData((prev) => ({ ...prev, unit_cost: value }))
-                  }
-                />
-              </div>
-            </div>
+            </form>
           ) : (
             <Spinner />
           )}
         </ModalBody>
         <ModalFooter>
+          <Button auto type="submit" color="primary" onClick={handleUpdate}>
+            Update
+          </Button>
           <Button auto onClick={onClose}>
             Close
           </Button>
-          {productData && (
-            <Button auto color="primary" onClick={handleUpdate}>
-              Update
-            </Button>
-          )}
         </ModalFooter>
       </ModalContent>
     </Modal>

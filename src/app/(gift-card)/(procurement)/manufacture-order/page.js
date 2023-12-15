@@ -258,22 +258,10 @@ export default function ManufacturOrder() {
 
   const filterSearch = async () => {
     try {
-      const params = new URLSearchParams();
-
-      // Add criteria to params if it exists
-      if (criteria && searchForm) {
-        params.append(criteria, searchForm);
-      }
-
-      // Add status to params if it exists
-      if (status) {
-        params.append("status", status);
-      }
-
-      // Add suplier to params if it exists
-      if (suplier) {
-        params.append("suplier", suplier);
-      }
+      const params = new URLSearchParams({
+        [criteria]: searchForm,
+        status: status,
+      });
 
       const apiUrl = `http://10.21.9.212:1945/crmreborn/mo/getMoAll?${params.toString()}`;
 
@@ -296,30 +284,10 @@ export default function ManufacturOrder() {
   // get data
   const [data, setData] = useState([]);
 
-  const loadData = async () => {
-    try {
-      const res = await API.get(`${URL.MO_LIST}`);
-      const respons = await res.data?.result?.items?.map((e) => {
-        return {
-          ...e,
-          status: SetColorStatus(e.status),
-          action: setActionButton(e),
-        };
-      });
-      setData(respons);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const dataTableComponent = useMemo(() => {
     return isDataTableVisible ? (
-      <DataTable
-        columns={columns}
-        rows={data.map((item) => ({ ...item, key: item.id }))} // Add a unique key to each row
-      />
-    ) : // <DataTable columns={columns} rows={data} />
-    null;
+      <DataTable columns={columns} rows={data} keys="mo_number" />
+    ) : null;
   }, [isDataTableVisible, data]);
 
   return (

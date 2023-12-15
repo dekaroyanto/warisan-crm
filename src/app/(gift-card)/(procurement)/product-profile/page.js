@@ -313,21 +313,21 @@ export default function ProductProfile() {
   // get data pp
   const [data, setData] = useState([]);
 
-  const loadData = async () => {
-    try {
-      const res = await API.get(`${URL.PP_LIST}`);
-      const respons = await res.data?.result?.items?.map((e) => {
-        return {
-          ...e,
-          status: SetColorStatus(e.status),
-          action: setActionButton(e),
-        };
-      });
-      setData(respons);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const loadData = async () => {
+  //   try {
+  //     const res = await API.get(`${URL.PP_LIST}`);
+  //     const respons = await res.data?.result?.items?.map((e) => {
+  //       return {
+  //         ...e,
+  //         status: SetColorStatus(e.status),
+  //         action: setActionButton(e),
+  //       };
+  //     });
+  //     setData(respons);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const dataTableComponent = useMemo(() => {
     return isDataTableVisible ? (
@@ -473,6 +473,7 @@ export default function ProductProfile() {
       />
 
       <ModalUpdateProduct
+        size="4xl"
         isOpen={openModalUpdate}
         onOpenChange={setOpenModalUpdate}
         onClose={() => {
@@ -511,7 +512,7 @@ export default function ProductProfile() {
       {/* Modal Deactive */}
       <ModalAction
         isOpen={openModalDeactive}
-        onClose={() => handleOpenModal("deactive")}
+        onClose={() => setOpenModalDeactive(false)}
         title="Deactive This Product Profile ?"
         handleAction={() => handleDeactive(id)}
       />

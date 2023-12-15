@@ -109,6 +109,7 @@ const ModalViewProductProfile = ({
                 <Input
                   isReadOnly
                   size="sm"
+                  placeholder="-"
                   label="Face Value"
                   name="face_value"
                   variant="bordered"
