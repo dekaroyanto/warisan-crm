@@ -59,7 +59,7 @@ export default function ProductProfile() {
   const [openModalStatus, setOpenModalStatus] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalSafetyStock, setOpenModalSafetyStock] = useState(false);
-  const [openModalDeactive, setOpenModalDeactive] = useState(false);
+  const [openModalDeactivated, setOpenModalDeactivated] = useState(false);
   const [openModalActive, setOpenModalActive] = useState(false);
 
   const [id, setId] = useState("");
@@ -73,8 +73,8 @@ export default function ProductProfile() {
       case "stock":
         setOpenModalSafetyStock((value) => !value);
         break;
-      case "deactive":
-        setOpenModalDeactive(true);
+      case "deactivated":
+        setOpenModalDeactivated(true);
         break;
       case "active":
         setOpenModalActive(true);
@@ -105,7 +105,7 @@ export default function ProductProfile() {
   // Handle Actions
   const handleDelete = async (id) => {
     try {
-      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/destroy/${id}`;
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/destroy`;
       const response = await fetch(apiUrl, {
         method: "PUT",
         headers: {
@@ -118,8 +118,7 @@ export default function ProductProfile() {
       const result = await response.json();
 
       if (response.success) {
-        toastSuccess({ title: `Product Profile ID ${id} has been deleted` });
-        loadData();
+        toast.success("Product data updated successfully!");
         setOpenModalDelete(false);
         setId("");
       } else {
@@ -128,30 +127,71 @@ export default function ProductProfile() {
     } catch (error) {
       console.log(error);
     }
+    filterSearch();
   };
 
-  const handleDeactive = (e) => {
+  const handleDeactivated = async (id) => {
     try {
-      toastSuccess({ title: `Product Profile ID ${e} has Deactived` });
-      setId("");
-      handleOpenModal("deactive");
+      // Panggil API untuk mengubah status menjadi "DEACTIVATED"
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/edit/${id}`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "DEACTIVATED",
+        }),
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        toastSuccess({
+          title: `Product Profile ID ${id} has been Deactivated`,
+        });
+        setId("");
+        filterSearch(); // Memicu pembaruan tabel setelah mengubah status
+      } else {
+        console.error("Failed to deactivate product profile");
+      }
+
+      setOpenModalDeactivated(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleActive = (e) => {
+  const handleActive = async (id) => {
     try {
-      toastSuccess({ title: `Product Profile ID ${e} has Actived` });
-      setId("");
-      handleOpenModal("active");
+      // Panggil API untuk mengubah status menjadi "APPROVED"
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/edit/${id}`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "APPROVED",
+        }),
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        toastSuccess({ title: `Product Profile ID ${id} has been Approved` });
+        setId("");
+        filterSearch(); // Memicu pembaruan tabel setelah mengubah status
+      } else {
+        console.error("Failed to approve product profile");
+      }
+
+      setOpenModalActive(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   const setActionButton = (e) => {
-    const isDeactive = e.status == "DEACTIVATED" && true;
+    const isDeactivated = e.status == "DEACTIVATED" && true;
     const isDraft = e.status == "DRAFT" && true;
     const isApproved = e.status == "APPROVED" && true;
     const isSubmitted = e.status == "SUBMITTED" && true;
@@ -246,12 +286,12 @@ export default function ProductProfile() {
           </span>
         )}
 
-        {isDraft || isApproved || isSubmitted ? (
-          <Tooltip color="primary" content="Deactive" closeDelay={0}>
+        {isDraft || isApproved ? (
+          <Tooltip color="primary" content="Deactivated" closeDelay={0}>
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("deactive");
+                handleOpenModal("deactivated");
                 setId(e.id);
               }}
             >
@@ -264,7 +304,7 @@ export default function ProductProfile() {
           </span>
         )}
 
-        {isDeactive ? (
+        {isDeactivated ? (
           <Tooltip content="Active" closeDelay={0}>
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
@@ -312,22 +352,6 @@ export default function ProductProfile() {
 
   // get data pp
   const [data, setData] = useState([]);
-
-  // const loadData = async () => {
-  //   try {
-  //     const res = await API.get(`${URL.PP_LIST}`);
-  //     const respons = await res.data?.result?.items?.map((e) => {
-  //       return {
-  //         ...e,
-  //         status: SetColorStatus(e.status),
-  //         action: setActionButton(e),
-  //       };
-  //     });
-  //     setData(respons);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const dataTableComponent = useMemo(() => {
     return isDataTableVisible ? (
@@ -479,6 +503,7 @@ export default function ProductProfile() {
         onClose={() => {
           setOpenModalUpdate(false);
           setId("");
+          filterSearch();
         }}
         id={id}
       />
@@ -504,17 +529,20 @@ export default function ProductProfile() {
       {/* Modal Delete */}
       <ModalAction
         isOpen={openModalDelete}
-        onClose={() => setOpenModalDelete(false)}
+        onClose={() => {
+          setOpenModalDelete(false);
+          setId("");
+        }}
         title="Delete This Product Profile ?"
         handleAction={() => handleDelete(id)}
       />
 
-      {/* Modal Deactive */}
+      {/* Modal Deactivated */}
       <ModalAction
-        isOpen={openModalDeactive}
-        onClose={() => setOpenModalDeactive(false)}
-        title="Deactive This Product Profile ?"
-        handleAction={() => handleDeactive(id)}
+        isOpen={openModalDeactivated}
+        onClose={() => setOpenModalDeactivated(false)}
+        title="Deactivated This Product Profile ?"
+        handleAction={() => handleDeactivated(id)}
       />
 
       {/* Modal Active */}

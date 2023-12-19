@@ -19,4 +19,7 @@ export const statusList = [
   { label: "PARTIAL", value: "PARTIAL" },
 ];
 
-export const criteriaList = [{ label: "MO NUMBER", value: "mo_number" }];
+export const criteriaList = [
+  { label: "MO NUMBER", value: "mo_number" },
+  { label: "PO NUMBER", value: "po_number" },
+];

@@ -8,6 +8,7 @@ const BASE_URL = "http://10.21.9.212:1945/crmreborn";
 const ENDPOINT = "/pp/create";
 
 import Image from "next/image";
+import { faceValue, businessUnit } from "./dataList";
 
 import {
   Button,
@@ -27,28 +28,6 @@ import * as Yup from "yup";
 
 import { toastSuccess } from "@/components/ToastAlert";
 import DeleteIcon from "@/assets/icons/trash-icon.svg";
-
-const faceValue = [
-  { label: "100.000", value: "PPFV01" },
-  { label: "200.000", value: "PPFV02" },
-  { label: "500.000", value: "PPFV05" },
-  { label: "10.000", value: "PPFV06" },
-  { label: "25.000", value: "PPFV07" },
-  { label: "50.000", value: "PPFV09" },
-  { label: "250.000", value: "PPFV10" },
-  { label: "1.000.000", value: "PPFV11" },
-  { label: "275.000", value: "PPFV12" },
-  { label: "5.000", value: "PPFV13" },
-  { label: "15.000", value: "PPFV14" },
-  { label: "35.000", value: "PPFV15" },
-];
-
-const businessUnit = [
-  { id: "", value: "" },
-  { id: "ID030", value: "ID030 - Carefour" },
-  { id: "ID020", value: "ID020 - Transmart" },
-  { id: "ID010", value: "ID010 - Trans Snow" },
-];
 
 export default function ModalCreateProduct({
   isOpen,

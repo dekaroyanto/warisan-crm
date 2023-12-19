@@ -9,12 +9,15 @@ import {
   Button,
   Spinner,
   Input,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { API } from "@/API/api";
 import { SetColorStatus } from "@/utils";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useFormik } from "formik";
+import { faceValue } from "./dataList";
 
 const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
   const [productData, setProductData] = useState(null);
@@ -51,7 +54,6 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
         toast.success("Product data updated successfully!");
 
         onClose();
-        fetchData();
       } catch (error) {
         console.error("Error updating product data:", error);
       }
@@ -93,6 +95,16 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
       fetchData();
     }
   }, [isOpen, id]);
+
+  useEffect(() => {
+    // Set the default value for "Face Value" dropdown after fetching data
+    if (productData) {
+      formik.setValues((prevValues) => ({
+        ...prevValues,
+        face_value: productData.face_value, // Assuming the API response has a "face_value" field
+      }));
+    }
+  }, [productData]);
 
   return (
     <Modal
@@ -138,14 +150,25 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
                 </div>
 
                 <div className="col-span-6">
-                  <Input
+                  <Select
                     size="sm"
                     label="Face Value"
-                    name="face__value"
+                    name="face_value"
                     variant="bordered"
                     value={formik.values.face_value}
                     onChange={formik.handleChange}
-                  />
+                    defaultSelectedKeys={formik.values.face_value}
+                  >
+                    {faceValue.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        value={option.value}
+                        selected={formik.values.face_value === option.value}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </Select>
                 </div>
                 <div className="col-span-6">
                   <Input
