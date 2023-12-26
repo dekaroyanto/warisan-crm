@@ -264,7 +264,7 @@ export default function ManufacturOrder() {
         suplier: suplier,
       });
 
-      const apiUrl = `http://10.40.6.182:1945/crmreborn/mo/getMoAll?${params.toString()}`;
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/mo/getMoAll?${params.toString()}`;
 
       const response = await fetch(apiUrl);
       const result = await response.json();

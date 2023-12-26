@@ -19,12 +19,16 @@ import { toastSuccess } from "@/components/ToastAlert";
 
 import DataTable from "@/components/dataTable";
 import ModalAction from "@/components/modal/modalAction";
+import ActionActivate from "./ActionActivate";
+import ActionDeactivate from "./ActionDeactivate";
 
 import ModalCreate from "./ModalCreateProduct";
 import ModalViewProductProfile from "./ModalViewProductProfile";
 import ModalStatusProductProfile from "./ModalStatusProductProfile";
 import ModalUpdateProduct from "./ModalUpdateProduct";
 import ModalSafetyStock from "./ModalSafetyStock";
+
+import jsPDF from "jspdf";
 
 export default function ProductProfile() {
   const [isDataTableVisible, setIsDataTableVisible] = useState(false);
@@ -59,13 +63,13 @@ export default function ProductProfile() {
   const [openModalStatus, setOpenModalStatus] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalSafetyStock, setOpenModalSafetyStock] = useState(false);
-  const [openModalDeactivated, setOpenModalDeactivated] = useState(false);
-  const [openModalActive, setOpenModalActive] = useState(false);
+  const [openModalDeactivate, setOpenModalDeactivate] = useState(false);
+  const [openModalActivate, setOpenModalActivate] = useState(false);
 
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
 
-  const handleOpenModal = (modalType) => {
+  const handleOpenModal = async (modalType) => {
     switch (modalType) {
       case "delete":
         setOpenModalDelete(true);
@@ -73,17 +77,10 @@ export default function ProductProfile() {
       case "stock":
         setOpenModalSafetyStock((value) => !value);
         break;
-      case "deactivated":
-        setOpenModalDeactivated(true);
-        break;
-      case "active":
-        setOpenModalActive(true);
-        break;
       default:
         break;
     }
   };
-
   //Modal View
   const handleOpenModalView = useCallback((productCode) => {
     setProductCode(productCode);
@@ -94,6 +91,18 @@ export default function ProductProfile() {
   const handleOpenModalStatus = useCallback((id) => {
     setId(id);
     setOpenModalStatus(true);
+  }, []);
+
+  //Modal Activate Product
+  const handleOpenModalActivate = useCallback((id) => {
+    setId(id);
+    setOpenModalStatus(true);
+  }, []);
+
+  //Modal Activate Product
+  const handleOpenModalDeactivate = useCallback((id) => {
+    setId(id);
+    setOpenModalDeactivate(true);
   }, []);
 
   //Modal Update Product
@@ -128,66 +137,6 @@ export default function ProductProfile() {
       console.log(error);
     }
     filterSearch();
-  };
-
-  const handleDeactivated = async (id) => {
-    try {
-      // Panggil API untuk mengubah status menjadi "DEACTIVATED"
-      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/edit/${id}`;
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: "DEACTIVATED",
-        }),
-      });
-      const result = await response.json();
-
-      if (result.success) {
-        toastSuccess({
-          title: `Product Profile ID ${id} has been Deactivated`,
-        });
-        setId("");
-        filterSearch(); // Memicu pembaruan tabel setelah mengubah status
-      } else {
-        console.error("Failed to deactivate product profile");
-      }
-
-      setOpenModalDeactivated(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleActive = async (id) => {
-    try {
-      // Panggil API untuk mengubah status menjadi "APPROVED"
-      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/edit/${id}`;
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: "APPROVED",
-        }),
-      });
-      const result = await response.json();
-
-      if (result.success) {
-        toastSuccess({ title: `Product Profile ID ${id} has been Approved` });
-        setId("");
-        filterSearch(); // Memicu pembaruan tabel setelah mengubah status
-      } else {
-        console.error("Failed to approve product profile");
-      }
-
-      setOpenModalActive(false);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const setActionButton = (e) => {
@@ -291,8 +240,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("deactivated");
-                setId(e.id);
+                handleOpenModalDeactivate(e.id);
               }}
             >
               <Image src={ICONS.DeactiveIcon} alt="icon" width={28} />
@@ -309,8 +257,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("active");
-                setId(e.id);
+                handleOpenModalActivate(e.id);
               }}
             >
               <Image src={ICONS.ActiveIcon} alt="icon" width={28} />
@@ -526,6 +473,18 @@ export default function ProductProfile() {
         id={id}
       />
 
+      {/* Activate Product */}
+      <ActionActivate
+        isOpen={openModalActivate}
+        onOpenChange={setOpenModalActivate}
+        onClose={() => {
+          setOpenModalActivate(false);
+          setId("");
+          filterSearch();
+        }}
+        id={id}
+      />
+
       {/* Modal Delete */}
       <ModalAction
         isOpen={openModalDelete}
@@ -537,21 +496,13 @@ export default function ProductProfile() {
         handleAction={() => handleDelete(id)}
       />
 
-      {/* Modal Deactivated */}
-      <ModalAction
-        isOpen={openModalDeactivated}
-        onClose={() => setOpenModalDeactivated(false)}
-        title="Deactivated This Product Profile ?"
-        handleAction={() => handleDeactivated(id)}
-      />
-
       {/* Modal Active */}
-      <ModalAction
-        isOpen={openModalActive}
+      {/* <ModalAction
+        isOpen={openModalActivate}
         onClose={() => handleOpenModal("active")}
         title="Active This Product Profile ?"
         handleAction={() => handleActive(id)}
-      />
+      /> */}
     </div>
   );
 }

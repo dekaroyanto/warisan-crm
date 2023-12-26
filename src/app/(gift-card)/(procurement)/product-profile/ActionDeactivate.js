@@ -15,7 +15,7 @@ import { SetColorStatus } from "@/utils";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ModalStatusProductProfile = ({ isOpen, onOpenChange, onClose, id }) => {
+const ActionDeactivate = ({ isOpen, onOpenChange, onClose, id }) => {
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -101,98 +101,15 @@ const ModalStatusProductProfile = ({ isOpen, onOpenChange, onClose, id }) => {
       >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1 text-center">
-            Update Status
+            Deactivate this product?
           </ModalHeader>
-          <ModalBody>
-            {productData ? (
-              <div className="w-full grid grid-cols-12 gap-4">
-                <div className="col-span-6 cursor-not-allowed">
-                  <Input
-                    isReadOnly
-                    size="sm"
-                    type="number"
-                    label="ID"
-                    name="product_code"
-                    variant="bordered"
-                    value={productData.id}
-                  />
-                </div>
-                <div className="col-span-6 cursor-not-allowed">
-                  <Input
-                    isReadOnly
-                    size="sm"
-                    type="number"
-                    label="Product Code"
-                    name="product_code"
-                    variant="bordered"
-                    value={productData.product_code}
-                  />
-                </div>
-
-                <div className="col-span-6 cursor-not-allowed">
-                  <Input
-                    isReadOnly
-                    size="sm"
-                    label="Product Desc"
-                    name="product_desc"
-                    variant="bordered"
-                    value={productData.product_desc}
-                  />
-                </div>
-
-                <div className="col-span-6 cursor-not-allowed">
-                  <Input
-                    isReadOnly
-                    size="sm"
-                    label="Face Value"
-                    name="face_value"
-                    variant="bordered"
-                    value={productData.face_value}
-                  />
-                </div>
-
-                <div className="col-span-6 cursor-not-allowed">
-                  <Input
-                    isReadOnly
-                    size="sm"
-                    type="number"
-                    label="Card Fee"
-                    name="card_fee"
-                    variant="bordered"
-                    placeholder="1"
-                    value={productData.card_fee}
-                  />
-                </div>
-                <div className="col-span-6 cursor-not-allowed">
-                  <Input
-                    isReadOnly
-                    size="sm"
-                    label="Status"
-                    name="status"
-                    variant="bordered"
-                    placeholder="1"
-                    value={productData.status}
-                  />
-                </div>
-              </div>
-            ) : (
-              <Spinner />
-            )}
-          </ModalBody>
           <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => handleStatusChange("APPROVED")}
-              disabled={loading}
-            >
-              {loading ? "Approving..." : "Approve"}
-            </Button>
             <Button
               color="primary"
               onClick={() => handleStatusChange("REJECTED")}
               disabled={loading}
             >
-              {loading ? "Rejecting..." : "Reject"}
+              {loading ? "Rejecting..." : "Deactivate"}
             </Button>
             <Button auto onClick={onClose}>
               Close
@@ -204,4 +121,4 @@ const ModalStatusProductProfile = ({ isOpen, onOpenChange, onClose, id }) => {
   );
 };
 
-export default ModalStatusProductProfile;
+export default ActionDeactivate;

@@ -127,6 +127,7 @@ export default function ModalSafetyStock({
                     label="Safety Stock"
                     name="safety_stocks_ea_mo"
                     variant="bordered"
+                    placeholder="0"
                     value={productData.safety_stocks_ea_mo}
                     onValueChange={(value) =>
                       setProductData((prev) => ({

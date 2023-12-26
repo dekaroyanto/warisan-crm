@@ -186,6 +186,7 @@ export default function ModalCreateProduct({
 
                         <div className="col-span-6">
                           <Select
+                            isRequired
                             size="sm"
                             label="Face Value"
                             variant="bordered"

@@ -57,7 +57,6 @@ export const faceValue = [
 ];
 
 export const businessUnit = [
-  { id: "", value: "" },
   { id: "ID030", value: "ID030 - Carefour" },
   { id: "ID020", value: "ID020 - Transmart" },
   { id: "ID010", value: "ID010 - Trans Snow" },
