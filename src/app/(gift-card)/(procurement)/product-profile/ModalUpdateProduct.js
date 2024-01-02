@@ -31,11 +31,12 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
       max_amount: "",
       effective_months: "",
       unit_cost: "",
+      submitType: "",
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setSubmitting }) => {
       try {
         const updateUrl = `http://10.21.9.212:1945/crmreborn/pp/update`;
-
+        const status = values.submitType === "submit" ? 2 : 3;
         const updateData = {
           id: values.id,
           product_code: values.product_code,
@@ -45,6 +46,7 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
           max_amount: values.max_amount,
           effective_months: values.effective_months,
           unit_cost: values.unit_cost,
+          status: status,
         };
 
         const response = await axios.post(updateUrl, updateData);
@@ -56,6 +58,8 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
         onClose();
       } catch (error) {
         console.error("Error updating product data:", error);
+      } finally {
+        setSubmitting(false);
       }
     },
   });
@@ -87,6 +91,18 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
   };
 
   const handleUpdate = () => {
+    formik.handleSubmit();
+  };
+
+  const handleDraft = () => {
+    // Set the status to 3 for Draft
+    formik.setFieldValue("status", 3);
+    formik.handleSubmit();
+  };
+
+  const handleSubmitForApproval = () => {
+    // Set the status to 2 for Submit for Approval
+    formik.setFieldValue("status", 2);
     formik.handleSubmit();
   };
 
@@ -225,8 +241,26 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
           )}
         </ModalBody>
         <ModalFooter>
+          <Button
+            color="primary"
+            onPress={() => {
+              formik.setFieldValue("submitType", "submit");
+              formik.handleSubmit();
+            }}
+          >
+            Submit For Approval
+          </Button>
+          <Button
+            color="primary"
+            onPress={() => {
+              formik.setFieldValue("submitType", "draft");
+              formik.handleSubmit();
+            }}
+          >
+            Draft
+          </Button>
           <Button auto type="submit" color="primary" onClick={handleUpdate}>
-            Update
+            Save
           </Button>
           <Button auto onClick={onClose}>
             Close

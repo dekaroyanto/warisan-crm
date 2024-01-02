@@ -11,6 +11,7 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { Formik, Form, FieldArray } from "formik";
+import axios from "axios";
 
 import * as Yup from "yup";
 
@@ -25,23 +26,45 @@ const initialValues = {
   poNumber: "123",
   poDate: "",
   supplier: "",
-  cards: [],
+  // cards: [],
+  cards: [
+    {
+      cardType: "",
+      qty: 0,
+      expDate: "",
+      expLatter: false,
+    },
+  ],
 };
 
-const supplierList = [
-  { label: "ID030 - Carefour", value: "ID030 - Carefour" },
-  { label: "ID020 - Transmart", value: "ID020 - Transmart" },
-  { label: "ID010 - Trans Snow", value: "ID010 - Trans Snow" },
-];
-
-const cardType = [
-  { label: "Choose Card..", value: "" },
-  { label: "Voucher 500.000", value: "500000" },
-  { label: "Voucher 200.000", value: "200000" },
-  { label: "Voucher 100.000", value: "100000" },
-];
+import { supplierList, cardType } from "./dataList";
 
 export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.post(
+        "http://10.21.9.212:1945/crmreborn/mo/create",
+        values,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Assuming the API response is in JSON format
+      const responseData = response.data;
+      console.log(responseData); // Handle API response according to your logic
+      toastSuccess({ title: "Gift Card Success Created" });
+      onClose();
+    } catch (error) {
+      console.error("Error creating gift card:", error);
+      // Handle error cases
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -72,12 +95,7 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                   poDate: Yup.string(),
                   supplier: Yup.string(),
                 })}
-                onSubmit={async (values) => {
-                  await new Promise((r) => setTimeout(r, 500));
-                  // alert(JSON.stringify(values, null, 2));
-                  toastSuccess({ title: "Gift Card Success Created" });
-                  onClose();
-                }}
+                onSubmit={handleSubmit}
               >
                 {(props) => (
                   <Form>
@@ -220,11 +238,13 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                                           aria-label="Card Type"
                                           name={`cards.${index}.cardType`}
                                           required
-                                          className="border-slate-300 hover:border-slate-500 border-solid border-2 w-full p-3 rounded-lg "
-                                          {...props.getFieldProps(
-                                            `cards.${index}.cardType`
-                                          )}
+                                          className="border-slate-300 hover:border-slate-500 border-solid border-2 w-full p-3 rounded-lg"
+                                          value={card.cardType}
+                                          onChange={props.handleChange}
                                         >
+                                          <option value="" disabled>
+                                            Select Card Type
+                                          </option>
                                           {cardType?.map((e) => (
                                             <option
                                               key={e.value}
@@ -245,9 +265,8 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                                         variant="bordered"
                                         placeholder="0"
                                         required
-                                        {...props.getFieldProps(
-                                          `cards.${index}.qty`
-                                        )}
+                                        onChange={props.handleChange}
+                                        value={card.qty}
                                       />
 
                                       <Input
@@ -259,18 +278,15 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                                         type="date"
                                         placeholder="dd/mm/yyyy"
                                         name={`cards.${index}.expDate`}
-                                        {...props.getFieldProps(
-                                          `cards.${index}.expDate`
-                                        )}
+                                        onChange={props.handleChange}
+                                        value={card.expDate}
                                       />
 
                                       <Checkbox
                                         name={`cards.${index}.expLatter`}
                                         radius="sm"
                                         isSelected={card.expLatter}
-                                        {...props.getFieldProps(
-                                          `cards.${index}.expLatter`
-                                        )}
+                                        onChange={props.handleChange}
                                       >
                                         Exp Latter
                                       </Checkbox>

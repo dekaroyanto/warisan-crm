@@ -60,10 +60,16 @@ export default function ManufacturOrder() {
     setSuplier([e.target.value]);
   };
 
+  const handlePODateChange = (e) => {
+    setPODate(e.target.value);
+  };
+
   const clearInput = useCallback(() => {
     setCriteria([]);
     setStatus([]);
     setSearchForm("");
+    setPODate("");
+    setSuplier([]);
     setIsDataTableVisible(false);
   }, []);
 
@@ -119,13 +125,13 @@ export default function ManufacturOrder() {
   };
 
   const setActionButton = (e) => {
-    const isApproved = e == "APPROVED" && true;
-    const isBarcoding = e == "BARCODING" && true;
-    const isDraft = e == "DRAFT" && true;
-    const isSubmitted = e == "FOR APPROVAL" && true;
-    const isFull = e == "FULL" && true;
-    const isGenerated = e == "GENERATED" && true;
-    const isPartial = e == "PARTIAL" && true;
+    const isApproved = e.status == "APPROVED" && true;
+    const isBarcoding = e.status == "BARCODING" && true;
+    const isDraft = e.status == "DRAFT" && true;
+    const isSubmitted = e.status == "FOR APPROVAL" && true;
+    const isFull = e.status == "FULL" && true;
+    const isGenerated = e.status == "GENERATED" && true;
+    const isPartial = e.status == "PARTIAL" && true;
 
     return (
       <div className="relative flex items-center gap-2">
@@ -262,6 +268,7 @@ export default function ManufacturOrder() {
         [criteria]: searchForm,
         status: status,
         suplier: suplier,
+        poDate: poDate,
       });
 
       const apiUrl = `http://10.21.9.212:1945/crmreborn/mo/getMoAll?${params.toString()}`;
@@ -351,6 +358,7 @@ export default function ManufacturOrder() {
               className="col-span-2"
               value={poDate}
               onValueChange={setPODate}
+              onChange={handlePODateChange}
             />
 
             <Button
@@ -391,7 +399,7 @@ export default function ManufacturOrder() {
                 listboxWrapper: "",
               }}
               selectedKeys={suplier}
-              // onSelectionChange={setStatus}
+              // onSelectionChange={setSuplier}
               onChange={handleSuplierChange}
             >
               <SelectItem

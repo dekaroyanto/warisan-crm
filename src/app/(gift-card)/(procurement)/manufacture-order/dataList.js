@@ -23,3 +23,16 @@ export const criteriaList = [
   { label: "MO NUMBER", value: "mo_number" },
   { label: "PO NUMBER", value: "po_number" },
 ];
+
+export const supplierList = [
+  { label: "ID030 - Carefour", value: "ID030 - Carefour" },
+  { label: "ID020 - Transmart", value: "ID020 - Transmart" },
+  { label: "ID010 - Trans Snow", value: "ID010 - Trans Snow" },
+];
+
+export const cardType = [
+  { label: "Choose Card..", value: "" },
+  { label: "Voucher 500.000", value: "500000" },
+  { label: "Voucher 200.000", value: "200000" },
+  { label: "Voucher 100.000", value: "100000" },
+];

@@ -485,6 +485,18 @@ export default function ProductProfile() {
         id={id}
       />
 
+      {/* Activate Product */}
+      <ActionDeactivate
+        isOpen={openModalDeactivate}
+        onOpenChange={setOpenModalDeactivate}
+        onClose={() => {
+          setOpenModalDeactivate(false);
+          setId("");
+          filterSearch();
+        }}
+        id={id}
+      />
+
       {/* Modal Delete */}
       <ModalAction
         isOpen={openModalDelete}

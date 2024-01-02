@@ -2,8 +2,8 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { SetColorStatus, ICONS } from "@/utils";
 
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+// import jsPDF from "jspdf";
+// import "jspdf-autotable";
 
 import {
   Tooltip,

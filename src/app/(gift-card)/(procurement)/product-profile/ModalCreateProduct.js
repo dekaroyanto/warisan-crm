@@ -87,7 +87,7 @@ export default function ModalCreateProduct({
       resetForm();
       toast.success("Gift Card Success Created");
       console.log("Data berhasil dikirim:", response.data);
-      onClose(); // Tutup modal setelah berhasil menambahkan data
+      onClose();
     } catch (error) {
       console.error("Error saat mengirim data:", error);
       toast.error("Gagal menambahkan data.");
