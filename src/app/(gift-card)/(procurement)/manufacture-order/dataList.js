@@ -13,7 +13,7 @@ export const statusList = [
   { label: "APPROVED", value: "APPROVED" },
   { label: "BARCODING", value: "BARCODING" },
   { label: "DRAFT", value: "DRAFT" },
-  { label: "FOR APPROVAL", value: "FOR APPROVAL" },
+  { label: "FOR APPROVAL", value: "FOR_APPROVAL" },
   { label: "FULL", value: "FULL" },
   { label: "GENERATED", value: "GENERATED" },
   { label: "PARTIAL", value: "PARTIAL" },
