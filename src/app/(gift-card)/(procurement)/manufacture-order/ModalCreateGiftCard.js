@@ -40,8 +40,13 @@ const initialValues = {
 import { supplierList, cardType } from "./dataList";
 
 export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
+      const status = values.submitType === "submit" ? 2 : 3;
+
+      // Set status
+      values.status = status;
+
       const response = await axios.post(
         "http://10.21.9.212:1945/crmreborn/mo/create",
         values,
@@ -52,14 +57,14 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
         }
       );
 
-      // Assuming the API response is in JSON format
+      resetForm();
+
       const responseData = response.data;
-      console.log(responseData); // Handle API response according to your logic
+      console.log(responseData);
       toastSuccess({ title: "Gift Card Success Created" });
       onClose();
     } catch (error) {
       console.error("Error creating gift card:", error);
-      // Handle error cases
     } finally {
       setSubmitting(false);
     }
@@ -318,8 +323,23 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                       <Button color="danger" variant="light" onPress={onClose}>
                         Close
                       </Button>
-                      <Button color="primary" type="submit">
-                        Save
+                      <Button
+                        color="primary"
+                        onPress={() => {
+                          props.setFieldValue("submitType", "draft");
+                          props.handleSubmit();
+                        }}
+                      >
+                        Draft
+                      </Button>
+                      <Button
+                        color="primary"
+                        onPress={() => {
+                          props.setFieldValue("submitType", "submit");
+                          props.handleSubmit();
+                        }}
+                      >
+                        Submit For Approval
                       </Button>
                     </ModalFooter>
                   </Form>

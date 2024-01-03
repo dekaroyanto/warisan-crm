@@ -29,8 +29,10 @@ import DataTable from "@/components/dataTable";
 import ModalAction from "@/components/modal/modalAction";
 import ModalPrint from "@/components/modal/modalPrint";
 
+import ModalUpdateManufacture from "./ModalUpdateManufatcture";
+import ModalGenerateGC from "./ModalGenerateGC";
+
 import ModalCreateGiftCard from "./ModalCreateGiftCard";
-import ModalViewGiftCard from "./ModalViewGiftCard";
 import ModalReceiveGiftCard from "./ModalReceiveGiftCard";
 import { users, statusList, columns } from "./dataList";
 
@@ -85,33 +87,17 @@ export default function ManufacturOrder() {
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
 
-  const handleOpenModal = (e) => {
-    switch (e) {
-      case "update":
-        setOpenModalUpdate((value) => !value);
-        break;
-      case "generate":
-        setOpenModalGenerateGC((value) => !value);
-        break;
-      case "process":
-        setOpenModalProcess((value) => !value);
-        break;
-      case "print":
-        setOpenModalPrint((value) => !value);
-        break;
-      case "print_enc":
-        setOpenModalPrintEncrypt((value) => !value);
-        break;
-      case "receive":
-        setOpenModalReceive((value) => !value);
-        break;
-      case "delete":
-        setOpenModalDelete((value) => !value);
-        break;
-      default:
-        break;
-    }
-  };
+  //Modal Update Product
+  const handleOpenModalUpdate = useCallback((id) => {
+    setId(id);
+    setOpenModalUpdate(true);
+  }, []);
+
+  //Modal GenerateGC
+  const handleOpenModalGenerateGC = useCallback((id) => {
+    setId(id);
+    setOpenModalGenerateGC(true);
+  }, []);
 
   // Handle Actions
   const handleDelete = async (e) => {
@@ -146,8 +132,7 @@ export default function ManufacturOrder() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("update");
-                setView(e);
+                handleOpenModalUpdate(e.id);
               }}
             >
               <Image src={ICONS.EditIcon} alt="icon" width={28} />
@@ -164,8 +149,7 @@ export default function ManufacturOrder() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("generate");
-                setView(e);
+                handleOpenModalGenerateGC(e.id);
               }}
             >
               <Image src={ICONS.GenerateCardIcon} alt="icon" width={28} />
@@ -301,7 +285,7 @@ export default function ManufacturOrder() {
   return (
     <div className="md:container py-2 mx-auto">
       <h1 className="mt-4 mb-6 text-5xl font-thin text-title">
-        Manufactur Order
+        Manufacture Order
       </h1>
 
       {/* search Section */}
@@ -454,52 +438,76 @@ export default function ManufacturOrder() {
       {/* Data Table */}
       {dataTableComponent}
 
+      {/* Modal Update GC */}
+      <ModalUpdateManufacture
+        size="4xl"
+        isOpen={openModalUpdate}
+        onOpenChange={setOpenModalUpdate}
+        onClose={() => {
+          setOpenModalUpdate(false);
+          setId("");
+          filterSearch();
+        }}
+        id={id}
+      />
+
+      <ModalGenerateGC
+        isOpen={openModalGenerateGC}
+        onOpenChange={setOpenModalGenerateGC}
+        onClose={() => {
+          setOpenModalGenerateGC(false);
+          setId("");
+        }}
+        id={id}
+      />
+
       {/* Modal Create */}
       <ModalCreateGiftCard
         isOpen={isOpen}
         onOpenChange={onOpenChange}
+        onClose={onClose}
         size="4xl"
       />
 
       {/* Modal Update */}
-      <ModalViewGiftCard
+      {/* <ModalViewGiftCard
         isOpen={openModalUpdate}
         size="4xl"
         title="Update Gift card"
         onClose={() => handleOpenModal("update")}
         isUpdate={true}
-      />
+      /> */}
 
       {/* Modal Generate GC */}
-      <ModalViewGiftCard
+      {/* <ModalViewGiftCard
         isOpen={openModalGenerateGC}
         size="4xl"
         title="Generate Gift Card"
         onClose={() => handleOpenModal("generate")}
         isGenerated={true}
-      />
+      /> */}
 
       {/* Modal Process */}
-      <ModalViewGiftCard
+      {/* <ModalViewGiftCard
         isOpen={openModalProcess}
         size="4xl"
         title="Process Gift Card"
         onClose={() => handleOpenModal("process")}
         isApprove={true}
-      />
+      /> */}
 
       {/* Modal Print */}
-      <ModalPrint
+      {/* <ModalPrint
         isOpen={openModalPrint}
         onClose={() => handleOpenModal("print")}
-      />
+      /> */}
 
       {/* Modal Receive */}
-      <ModalReceiveGiftCard
+      {/* <ModalReceiveGiftCard
         isOpen={openModalReceive}
         onClose={() => handleOpenModal("receive")}
         size="4xl"
-      />
+      /> */}
 
       {/* Modal Delete */}
       <ModalAction
