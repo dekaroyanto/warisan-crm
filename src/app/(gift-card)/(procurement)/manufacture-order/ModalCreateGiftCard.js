@@ -73,7 +73,7 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
         status: values.submitType === "submit" ? "SUBMIT" : "DRAFT",
         items: values.items.map((item) => ({
           prod_profile: item.prod_profile,
-          quantity: item.quantity,
+          quantity: item.quantity.toString(),
           expire_date: item.expire_date,
         })),
       };
