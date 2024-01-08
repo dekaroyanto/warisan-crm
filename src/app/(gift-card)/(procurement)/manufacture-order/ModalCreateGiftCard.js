@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import {
   Modal,
   ModalContent,
@@ -21,50 +23,74 @@ import DeleteIcon from "@/assets/icons/trash-icon.svg";
 import { toastSuccess } from "@/components/ToastAlert";
 
 const initialValues = {
-  moNumber: "123",
-  moDate: "",
-  poNumber: "123",
-  poDate: "",
-  supplier: "",
-  // cards: [],
-  cards: [
+  mo_no: "123",
+  mo_date: "",
+  po_no: "123",
+  po_date: "",
+  vendor: "",
+  // items: [],
+  items: [
     {
-      cardType: "",
-      qty: 0,
-      expDate: "",
-      expLatter: false,
+      prod_profile: "",
+      quantity: 0,
+      expire_date: "",
+      // expLatter: false,
     },
   ],
 };
 
-import { supplierList, cardType } from "./dataList";
+import { vendorList, prod_profile } from "./dataList";
 
 export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://10.21.9.212:1945/crmreborn/pp/getPDesc"
+        );
+        const items = response.data?.result?.items || [];
+        setOptions(items);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setOptions([]);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      const status = values.submitType === "submit" ? 2 : 3;
+      // Map the form values to match the desired structure
+      const payload = {
+        mo_no: values.mo_no,
+        po_no: values.po_no,
+        mo_date: values.mo_date,
+        po_date: values.po_date,
+        vendor: values.vendor,
+        status: values.submitType === "submit" ? "SUBMIT" : "DRAFT",
+        items: values.items.map((item) => ({
+          prod_profile: item.prod_profile,
+          quantity: item.quantity,
+          expire_date: item.expire_date,
+        })),
+      };
 
-      // Set status
-      values.status = status;
-
+      // Send the mapped payload to the API
       const response = await axios.post(
         "http://10.21.9.212:1945/crmreborn/mo/create",
-        values,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        payload
       );
 
       resetForm();
-
-      const responseData = response.data;
-      console.log(responseData);
-      toastSuccess({ title: "Gift Card Success Created" });
+      toast.success("Gift Card Success Created");
+      console.log("Data berhasil dikirim:", response.data);
       onClose();
     } catch (error) {
-      console.error("Error creating gift card:", error);
+      console.error("Error saat mengirim data:", error);
+      toast.error("Gagal menambahkan data.");
     } finally {
       setSubmitting(false);
     }
@@ -91,14 +117,14 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
               <Formik
                 initialValues={initialValues}
                 validationSchema={Yup.object({
-                  moNumber: Yup.string().min(
+                  mo_no: Yup.string().min(
                     3,
                     "MO Number must be at least 3 characters"
                   ),
-                  moDate: Yup.string(),
-                  poNumber: Yup.string(),
-                  poDate: Yup.string(),
-                  supplier: Yup.string(),
+                  mo_date: Yup.string(),
+                  po_no: Yup.string(),
+                  po_date: Yup.string(),
+                  vendor: Yup.string(),
                 })}
                 onSubmit={handleSubmit}
               >
@@ -110,15 +136,15 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                           <Input
                             size="sm"
                             label="MO Number"
-                            name="moNumber"
+                            name="mo_no"
                             variant="bordered"
                             isRequired
                             onChange={props.handleChange}
-                            value={props.values.moNumber}
+                            value={props.values.mo_no}
                           />
-                          {props.touched.moNumber && props.errors.moNumber ? (
+                          {props.touched.mo_no && props.errors.mo_no ? (
                             <div className="text-sm text-primary font-medium">
-                              {props.errors.moNumber}
+                              {props.errors.mo_no}
                             </div>
                           ) : null}
                         </div>
@@ -126,79 +152,79 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                         <Input
                           size="sm"
                           label="MO Date"
-                          name="moDate"
+                          name="mo_date"
                           variant="bordered"
                           className="col-span-6"
                           type="date"
                           placeholder="dd/mm/yyyy"
                           isRequired
                           onChange={props.handleChange}
-                          value={props.values.moDate}
+                          value={props.values.mo_date}
                         />
-                        {props.touched.moDate && props.errors.moDate ? (
+                        {props.touched.mo_date && props.errors.mo_date ? (
                           <div className="text-md text-primary font-semibold">
-                            {props.errors.moDate}
+                            {props.errors.mo_date}
                           </div>
                         ) : null}
 
                         <Input
                           size="sm"
                           label="PO Number"
-                          name="poNumber"
+                          name="po_no"
                           variant="bordered"
                           className="col-span-6"
                           isRequired
                           onChange={props.handleChange}
-                          value={props.values.poNumber}
+                          value={props.values.po_no}
                         />
-                        {props.touched.poNumber && props.errors.poNumber ? (
+                        {props.touched.po_no && props.errors.po_no ? (
                           <div className="text-md text-primary font-semibold">
-                            {props.errors.poNumber}
+                            {props.errors.po_no}
                           </div>
                         ) : null}
 
                         <Input
                           size="sm"
                           label="PO Date"
-                          name="poDate"
+                          name="po_date"
                           variant="bordered"
                           className="col-span-6"
                           type="date"
                           placeholder="dd/mm/yyyy"
                           isRequired
                           onChange={props.handleChange}
-                          value={props.values.poDate}
+                          value={props.values.po_date}
                         />
-                        {props.touched.poDate && props.errors.poDate ? (
+                        {props.touched.po_date && props.errors.po_date ? (
                           <div className="text-md text-primary font-semibold">
-                            {props.errors.poDate}
+                            {props.errors.po_date}
                           </div>
                         ) : null}
 
                         <Select
                           isRequired
                           size="sm"
-                          label="Supplier"
+                          label="vendor"
                           variant="bordered"
                           className="col-span-12"
-                          name="supplier"
+                          name="vendor"
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                         >
-                          {supplierList.map((e) => (
+                          {vendorList.map((e) => (
                             <SelectItem key={e.value} value={e.value}>
                               {e.label}
                             </SelectItem>
                           ))}
                         </Select>
-                        {props.touched.supplier && props.errors.supplier ? (
+                        {props.touched.vendor && props.errors.vendor ? (
                           <div className="text-md text-primary font-semibold">
-                            {props.errors.supplier}
+                            {props.errors.vendor}
                           </div>
                         ) : null}
                       </div>
 
-                      <FieldArray name="cards">
+                      <FieldArray name="items">
                         {({ insert, remove, push }) => (
                           <>
                             <div className="grid grid-cols-12 mt-3">
@@ -219,10 +245,10 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                                 className="secondary"
                                 onClick={() =>
                                   push({
-                                    cardType: "",
-                                    qty: 0,
-                                    expDate: "",
-                                    expLatter: false,
+                                    prod_profile: "",
+                                    quantity: 0,
+                                    expire_date: "",
+                                    // expLatter: false,
                                   })
                                 }
                               >
@@ -231,8 +257,8 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                             </div>
 
                             <div className="max-h-64 overflow-auto">
-                              {props.values.cards.length > 0 &&
-                                props.values.cards.map((card, index) => (
+                              {props.values.items.length > 0 &&
+                                props.values.items.map((item, index) => (
                                   <div
                                     key={index}
                                     className="grid grid-cols-12 mb-2"
@@ -241,23 +267,30 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                                       <div className="col-span-3">
                                         <select
                                           aria-label="Card Type"
-                                          name={`cards.${index}.cardType`}
+                                          name={`items.${index}.prod_profile`}
                                           required
                                           className="border-slate-300 hover:border-slate-500 border-solid border-2 w-full p-3 rounded-lg"
-                                          value={card.cardType}
+                                          value={item.prod_profile}
                                           onChange={props.handleChange}
                                         >
                                           <option value="" disabled>
                                             Select Card Type
                                           </option>
-                                          {cardType?.map((e) => (
-                                            <option
-                                              key={e.value}
-                                              value={e.value}
-                                            >
-                                              {e.label}
+                                          {Array.isArray(options) &&
+                                          options.length > 0 ? (
+                                            options.map((option) => (
+                                              <option
+                                                key={option.id}
+                                                value={option.id}
+                                              >
+                                                {option.product_desc}
+                                              </option>
+                                            ))
+                                          ) : (
+                                            <option value="" disabled>
+                                              No options available
                                             </option>
-                                          ))}
+                                          )}
                                         </select>
                                       </div>
 
@@ -266,12 +299,12 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                                         size="sm"
                                         type="number"
                                         label="Quantity"
-                                        name={`cards.${index}.qty`}
+                                        name={`items.${index}.quantity`}
                                         variant="bordered"
                                         placeholder="0"
                                         required
                                         onChange={props.handleChange}
-                                        value={card.qty}
+                                        value={item.quantity}
                                       />
 
                                       <Input
@@ -282,19 +315,19 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                                         className="col-span-3"
                                         type="date"
                                         placeholder="dd/mm/yyyy"
-                                        name={`cards.${index}.expDate`}
+                                        name={`items.${index}.expire_date`}
                                         onChange={props.handleChange}
-                                        value={card.expDate}
+                                        value={item.expire_date}
                                       />
 
-                                      <Checkbox
-                                        name={`cards.${index}.expLatter`}
+                                      {/* <Checkbox
+                                        name={`items.${index}.expLatter`}
                                         radius="sm"
-                                        isSelected={card.expLatter}
+                                        isSelected={item.expLatter}
                                         onChange={props.handleChange}
                                       >
                                         Exp Latter
-                                      </Checkbox>
+                                      </Checkbox> */}
                                     </div>
 
                                     <div className="flex justify-center items-center">

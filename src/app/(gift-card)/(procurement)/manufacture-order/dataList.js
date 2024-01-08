@@ -24,15 +24,15 @@ export const criteriaList = [
   { label: "PO NUMBER", value: "po_number" },
 ];
 
-export const supplierList = [
-  { label: "ID030 - Carefour", value: "ID030 - Carefour" },
+export const vendorList = [
+  { label: "ID030 - Carefour", value: "2069376000" },
   { label: "ID020 - Transmart", value: "ID020 - Transmart" },
   { label: "ID010 - Trans Snow", value: "ID010 - Trans Snow" },
 ];
 
-export const cardType = [
+export const prod_profile = [
   { label: "Choose Card..", value: "" },
-  { label: "Voucher 500.000", value: "500000" },
-  { label: "Voucher 200.000", value: "200000" },
-  { label: "Voucher 100.000", value: "100000" },
+  { label: "Voucher 500.000", value: "13692619070" },
+  { label: "Voucher 200.000", value: "13692293727" },
+  // { label: "Voucher 100.000", value: "100000" },
 ];
