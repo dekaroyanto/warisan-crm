@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { API, URL } from "@/API/api";
 import { SetColorStatus, ICONS } from "@/utils";
-
 import { columns, statusList, criteriaList } from "./dataList";
 
 import Image from "next/image";
@@ -15,6 +13,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
+import { toast } from "react-toastify";
 import { toastSuccess } from "@/components/ToastAlert";
 
 import DataTable from "@/components/dataTable";
@@ -27,6 +26,7 @@ import ModalViewProductProfile from "./ModalViewProductProfile";
 import ModalStatusProductProfile from "./ModalStatusProductProfile";
 import ModalUpdateProduct from "./ModalUpdateProduct";
 import ModalSafetyStock from "./ModalSafetyStock";
+import ModalDeleteProduct from "./ModalDeleteProduct";
 
 import jsPDF from "jspdf";
 
@@ -61,19 +61,16 @@ export default function ProductProfile() {
   const [openModalView, setOpenModalView] = useState(false);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [openModalStatus, setOpenModalStatus] = useState(false);
-  const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalSafetyStock, setOpenModalSafetyStock] = useState(false);
   const [openModalDeactivate, setOpenModalDeactivate] = useState(false);
   const [openModalActivate, setOpenModalActivate] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
 
   const [id, setId] = useState("");
   const [view, setView] = useState([]);
 
   const handleOpenModal = async (modalType) => {
     switch (modalType) {
-      case "delete":
-        setOpenModalDelete(true);
-        break;
       case "stock":
         setOpenModalSafetyStock((value) => !value);
         break;
@@ -111,33 +108,11 @@ export default function ProductProfile() {
     setOpenModalUpdate(true);
   }, []);
 
-  // Handle Actions
-  const handleDelete = async (id) => {
-    try {
-      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/destroy`;
-      const response = await fetch(apiUrl, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id,
-        }),
-      });
-      const result = await response.json();
-
-      if (response.success) {
-        toast.success("Product data updated successfully!");
-        setOpenModalDelete(false);
-        setId("");
-      } else {
-        console.error("Failed to delete product profile");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    filterSearch();
-  };
+  //Modal Delete Product
+  const handleOpenModalDelete = useCallback((id) => {
+    setId(id);
+    setOpenModalDelete(true);
+  }, []);
 
   const setActionButton = (e) => {
     const isDeactivated = e.status == "DEACTIVATED" && true;
@@ -222,8 +197,7 @@ export default function ProductProfile() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("delete");
-                setId(e.id);
+                handleOpenModalDelete(e.id);
               }}
             >
               <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
@@ -450,8 +424,9 @@ export default function ProductProfile() {
         onClose={() => {
           setOpenModalUpdate(false);
           setId("");
-          filterSearch();
+          // filterSearch();
         }}
+        onSuccess={filterSearch}
         id={id}
       />
 
@@ -497,24 +472,17 @@ export default function ProductProfile() {
         id={id}
       />
 
-      {/* Modal Delete */}
-      <ModalAction
+      {/* Activate Product */}
+      <ModalDeleteProduct
         isOpen={openModalDelete}
+        onOpenChange={setOpenModalDelete}
         onClose={() => {
           setOpenModalDelete(false);
           setId("");
         }}
-        title="Delete This Product Profile ?"
-        handleAction={() => handleDelete(id)}
+        id={id}
+        onDeleteSuccess={filterSearch}
       />
-
-      {/* Modal Active */}
-      {/* <ModalAction
-        isOpen={openModalActivate}
-        onClose={() => handleOpenModal("active")}
-        title="Active This Product Profile ?"
-        handleAction={() => handleActive(id)}
-      /> */}
     </div>
   );
 }

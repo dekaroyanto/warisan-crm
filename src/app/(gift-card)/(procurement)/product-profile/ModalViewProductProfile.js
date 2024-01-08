@@ -35,8 +35,6 @@ const ModalViewProductProfile = ({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // Add any additional headers if needed
-            // "Authorization": "Bearer YOUR_ACCESS_TOKEN",
           },
           body: JSON.stringify({ product_code: productCode }),
         };

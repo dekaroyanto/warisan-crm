@@ -17,6 +17,7 @@ export default function setColorStatus(e) {
     e == "CREATED" ||
     e == "FOR APPROVAL" ||
     e == "FIRST APPROVAL" ||
+    e == "FOR_APPROVAL" ||
     e == "SECOND APPROVAL" ||
     e == "PARTIAL" ||
     e == "RECEIVING" ||

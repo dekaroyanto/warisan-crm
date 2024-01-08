@@ -8,6 +8,9 @@ import React, {
 } from "react";
 import { SetColorStatus, ICONS } from "@/utils";
 
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
 import {
   Tooltip,
   Button,
@@ -74,6 +77,25 @@ export default function ManufacturOrder() {
     setSuplier([]);
     setIsDataTableVisible(false);
   }, []);
+
+  const handlePrintPDF = () => {
+    const pdf = new jsPDF();
+    pdf.text("Manufacture Order", 20, 20);
+
+    // Generate PDF content based on the DataTable data
+    const rows = [];
+    data.forEach((row, index) => {
+      const rowData = Object.values(row).map((value) => String(value));
+      rows.push(rowData);
+    });
+
+    pdf.autoTable({
+      head: [columns.map((column) => column.label)],
+      body: rows,
+    });
+
+    pdf.save("manufacture_order.pdf");
+  };
 
   // open Modal
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
@@ -252,7 +274,7 @@ export default function ManufacturOrder() {
         [criteria]: searchForm,
         status: status,
         suplier: suplier,
-        poDate: poDate,
+        po_date: poDate,
       });
 
       const apiUrl = `http://10.21.9.212:1945/crmreborn/mo/getMoAll?${params.toString()}`;
@@ -308,13 +330,14 @@ export default function ManufacturOrder() {
                 innerWrapper: "max-w-max",
                 listboxWrapper: "",
               }}
-              onSelectionChange={setCriteria}
+              // onSelectionChange={setCriteria}
               selectedKeys={criteria}
+              onChange={handleCriteriaChange}
             >
-              <SelectItem key="mo" value="MO">
+              <SelectItem key="mo_number" value="mo_number">
                 MO Number
               </SelectItem>
-              <SelectItem key="po" value="PO">
+              <SelectItem key="po_number" value="po_number">
                 PO Number
               </SelectItem>
             </Select>
@@ -422,6 +445,15 @@ export default function ManufacturOrder() {
           </div>
         </div>
       </div>
+
+      <Button
+        color="primary"
+        radius="sm"
+        className="mb-5 font-semibold mr-4"
+        onClick={handlePrintPDF}
+      >
+        Print PDF
+      </Button>
 
       {/* Button Create*/}
       <div className="w-full flex justify-end">

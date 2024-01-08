@@ -19,7 +19,14 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { faceValue } from "./dataList";
 
-const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
+const ModalUpdateProduct = ({
+  isOpen,
+  onOpenChange,
+  onClose,
+  size,
+  id,
+  onSuccess,
+}) => {
   const [productData, setProductData] = useState(null);
   const formik = useFormik({
     initialValues: {
@@ -54,7 +61,7 @@ const ModalUpdateProduct = ({ isOpen, onOpenChange, onClose, size, id }) => {
         console.log("Update Response:", response);
 
         toast.success("Product data updated successfully!");
-
+        onSuccess();
         onClose();
       } catch (error) {
         console.error("Error updating product data:", error);
