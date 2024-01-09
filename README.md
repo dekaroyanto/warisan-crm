@@ -30,7 +30,7 @@ LOYALTY CARD
 ```bash
 PROCUREMENT
 ✅ Product Profile: create, search, update
-✅ Manufacture Order
+✅ Manufacture Order: search, create
 
 INVENTORY
 ✅ Burn Gift Card
