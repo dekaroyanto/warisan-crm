@@ -143,12 +143,6 @@ export default function ManufacturOrder() {
 
     return (
       <div className="relative flex items-center gap-2">
-        {/* <Tooltip content="View" closeDelay={0}>
-          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <Image src={ICONS.ViewIcon} alt="icon" width={28} />
-          </span>
-        </Tooltip> */}
-
         {isDraft ? (
           <Tooltip content="Update" closeDelay={0}>
             <span
@@ -498,6 +492,7 @@ export default function ManufacturOrder() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
+        onSuccess={filterSearch}
         size="4xl"
       />
 

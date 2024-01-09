@@ -14,6 +14,7 @@ export default function setColorStatus(e) {
     color = "bg-[#007A61]";
   } else if (
     e == "SUBMITTED" ||
+    e == "FOR_APPROVAL" ||
     e == "CREATED" ||
     e == "FOR APPROVAL" ||
     e == "FIRST APPROVAL" ||

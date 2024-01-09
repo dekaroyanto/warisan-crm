@@ -17,7 +17,7 @@ import { SetColorStatus } from "@/utils";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useFormik } from "formik";
-import { supplierList } from "./dataList";
+import { vendorList } from "./dataList";
 
 const ModalUpdateManufacture = ({
   isOpen,
@@ -200,7 +200,7 @@ const ModalUpdateManufacture = ({
                     onChange={formik.handleChange}
                     defaultSelectedKeys={formik.values.vendor}
                   >
-                    {supplierList.map((option) => (
+                    {vendorList.map((option) => (
                       <SelectItem
                         key={option.value}
                         value={option.value}

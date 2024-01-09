@@ -20,7 +20,9 @@ import * as Yup from "yup";
 import Image from "next/image";
 import DeleteIcon from "@/assets/icons/trash-icon.svg";
 
-import { toastSuccess } from "@/components/ToastAlert";
+import { SetColorStatus } from "@/utils";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const initialValues = {
   mo_no: "123",
@@ -41,7 +43,13 @@ const initialValues = {
 
 import { vendorList, prod_profile } from "./dataList";
 
-export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
+export default function ModalCreateGiftCard({
+  isOpen,
+  onOpenChange,
+  size,
+  onClose,
+  onSuccess,
+}) {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
@@ -64,29 +72,34 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       // Map the form values to match the desired structure
-      const payload = {
-        mo_no: values.mo_no,
-        po_no: values.po_no,
-        mo_date: values.mo_date,
-        po_date: values.po_date,
-        vendor: values.vendor,
-        status: values.submitType === "submit" ? "SUBMIT" : "DRAFT",
-        items: values.items.map((item) => ({
-          prod_profile: item.prod_profile,
-          quantity: item.quantity.toString(),
-          expire_date: item.expire_date,
-        })),
-      };
+      // const payload = {
+      //   mo_no: values.mo_no,
+      //   po_no: values.po_no,
+      //   mo_date: values.mo_date,
+      //   po_date: values.po_date,
+      //   vendor: values.vendor,
+      //   status: values.submitType === "submit" ? "SUBMIT" : "DRAFT",
+      //   items: values.items.map((item) => ({
+      //     prod_profile: item.prod_profile,
+      //     quantity: item.quantity.toString(),
+      //     expire_date: item.expire_date,
+      //   })),
+      // };
+      const status = values.submitType === "submit" ? "FOR_APPROVAL" : "DRAFT";
+
+      // Set status ke dalam nilai yang akan dikirim
+      values.status = status;
 
       // Send the mapped payload to the API
       const response = await axios.post(
         "http://10.21.9.212:1945/crmreborn/mo/create",
-        payload
+        values
       );
 
       resetForm();
       toast.success("Gift Card Success Created");
       console.log("Data berhasil dikirim:", response.data);
+      onSuccess();
       onClose();
     } catch (error) {
       console.error("Error saat mengirim data:", error);
@@ -102,6 +115,7 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size={size}
+        onClose={onClose}
         backdrop="blur"
         classNames={{
           body: "py-6",
@@ -204,7 +218,7 @@ export default function ModalCreateGiftCard({ isOpen, onOpenChange, size }) {
                         <Select
                           isRequired
                           size="sm"
-                          label="vendor"
+                          label="Supplier"
                           variant="bordered"
                           className="col-span-12"
                           name="vendor"

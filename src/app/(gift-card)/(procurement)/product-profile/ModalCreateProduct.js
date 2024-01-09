@@ -34,32 +34,33 @@ export default function ModalCreateProduct({
   onOpenChange,
   size,
   onClose,
+  onSuccess,
 }) {
-  const getGenerateId = () => {
-    const d = new Date();
-    const year = d.getFullYear();
-    let month = d.getMonth();
-    let date = d.getDate();
+  // const getGenerateId = () => {
+  //   const d = new Date();
+  //   const year = d.getFullYear();
+  //   let month = d.getMonth();
+  //   let date = d.getDate();
 
-    if (month < 10) {
-      month = "0" + month;
-    }
+  //   if (month < 10) {
+  //     month = "0" + month;
+  //   }
 
-    if (date < 10) {
-      date = "0" + date;
-    }
+  //   if (date < 10) {
+  //     date = "0" + date;
+  //   }
 
-    let x = Math.floor(Math.random() * 100 + 1);
+  //   let x = Math.floor(Math.random() * 100 + 1);
 
-    if (x < 10) {
-      x = "0" + x;
-    }
+  //   if (x < 10) {
+  //     x = "0" + x;
+  //   }
 
-    return `${year}${month}${date}${x}`;
-  };
+  //   return `${year}${month}${date}${x}`;
+  // };
 
   const initialValues = {
-    id: getGenerateId(),
+    // id: getGenerateId(),
     product_code: "",
     product_desc: "",
     face_value: "",
@@ -87,6 +88,7 @@ export default function ModalCreateProduct({
       resetForm();
       toast.success("Gift Card Success Created");
       console.log("Data berhasil dikirim:", response.data);
+      onSuccess();
       onClose();
     } catch (error) {
       console.error("Error saat mengirim data:", error);

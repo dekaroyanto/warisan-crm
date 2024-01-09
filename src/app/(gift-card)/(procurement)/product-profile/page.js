@@ -403,6 +403,7 @@ export default function ProductProfile() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
+        onSuccess={filterSearch}
         size="4xl"
       />
 
