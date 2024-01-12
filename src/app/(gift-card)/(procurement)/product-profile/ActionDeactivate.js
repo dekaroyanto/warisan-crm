@@ -15,7 +15,7 @@ import { SetColorStatus } from "@/utils";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ActionDeactivate = ({ isOpen, onOpenChange, onClose, id }) => {
+const ActionDeactivate = ({ isOpen, onOpenChange, onClose, id, onSuccess }) => {
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -66,7 +66,7 @@ const ActionDeactivate = ({ isOpen, onOpenChange, onClose, id }) => {
         body: JSON.stringify({
           id,
           // status: status === "APPROVED" ? 0 : 2,
-          action: status === "APPROVED" ? "APPROVED" : "REJECTED",
+          action: status === "APPROVED" ? "APPROVED" : "DEACTIVATED",
         }),
       });
       const result = await response.json();
@@ -75,10 +75,11 @@ const ActionDeactivate = ({ isOpen, onOpenChange, onClose, id }) => {
       if (status === "APPROVED") {
         // Notify success for APPROVED
         toast.success("Product has been approved successfully!");
-      } else if (status === "REJECTED") {
-        // Notify success for REJECTED
-        toast.error("Product has been rejected.");
+      } else if (status === "DEACTIVATED") {
+        // Notify success for DEACTIVATED
+        toast.error("Product has been deactivated.");
       }
+      onSuccess();
       onClose();
     } catch (error) {
       console.error("Error updating status:", error);
@@ -106,7 +107,7 @@ const ActionDeactivate = ({ isOpen, onOpenChange, onClose, id }) => {
           <ModalFooter>
             <Button
               color="primary"
-              onClick={() => handleStatusChange("REJECTED")}
+              onClick={() => handleStatusChange("DEACTIVATED")}
               disabled={loading}
             >
               {loading ? "Rejecting..." : "Deactivate"}

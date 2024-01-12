@@ -64,10 +64,10 @@ export default function ModalCreateProduct({
     product_code: "",
     product_desc: "",
     face_value: "",
-    card_fee: 0,
-    max_amount: 0,
-    effective_months: 0,
-    unit_cost: 0,
+    // card_fee: 0,
+    // max_amount: 0,
+    // effective_months: 0,
+    // unit_cost: 0,
     business_unit: [
       {
         value: "",

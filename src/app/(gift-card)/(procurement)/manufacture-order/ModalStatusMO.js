@@ -10,48 +10,45 @@ import {
   Spinner,
   Input,
 } from "@nextui-org/react";
-import { API } from "@/API/api";
 import { SetColorStatus } from "@/utils";
 import { toast } from "react-toastify";
+import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 
-const ModalStatusProductProfile = ({
+const ModalStatusManufacture = ({
   isOpen,
   onOpenChange,
   onClose,
   id,
   onSuccess,
 }) => {
-  const [productData, setProductData] = useState(null);
+  const [manufactureData, setManufactureData] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("Fetching product data...");
-        const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/edit?id=${id}`;
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id,
-          }),
-        });
-        const result = await response.json();
+        console.log("Fetching manufacture data...");
+        const apiUrl = `http://10.21.9.212:1945/crmreborn/mo/edit?id=${id}`;
+        const response = await axios.post(apiUrl, { id });
+
+        const result = response.data;
 
         console.log("API Response:", result);
 
-        if (result.result && result.result.items.length > 0) {
-          const product = result.result.items[0];
-          setProductData({
-            ...product,
-            status: SetColorStatus(product.status),
+        if (result.result && result.result.gc_ord.length > 0) {
+          const manufacture = result.result.gc_ord[0];
+          setManufactureData({
+            ...manufacture,
+            status: SetColorStatus(manufacture.status),
+          });
+          formik.setValues({
+            ...manufacture,
+            status: SetColorStatus(manufacture.status),
           });
         }
       } catch (error) {
-        console.error("Error fetching product data:", error);
+        console.error("Error fetching manufacture data:", error);
       }
     };
 
@@ -63,7 +60,7 @@ const ModalStatusProductProfile = ({
   const handleStatusChange = async (status) => {
     try {
       setLoading(true);
-      const apiUrl = `http://10.21.9.212:1945/crmreborn/pp/actionStatus`;
+      const apiUrl = `http://10.21.9.212:1945/crmreborn/mo/actionStatus`;
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -80,10 +77,10 @@ const ModalStatusProductProfile = ({
       console.log("Status Update Response:", result);
       if (status === "APPROVED") {
         // Notify success for APPROVED
-        toast.success("Product has been approved successfully!");
+        toast.success("MO has been approved successfully!");
       } else if (status === "REJECTED") {
         // Notify success for REJECTED
-        toast.info("Product has been rejected.");
+        toast.error("MO has been rejected.");
       }
       onSuccess();
       onClose();
@@ -111,7 +108,7 @@ const ModalStatusProductProfile = ({
             Update Status
           </ModalHeader>
           <ModalBody>
-            {productData ? (
+            {manufactureData ? (
               <div className="w-full grid grid-cols-12 gap-4">
                 <div className="col-span-6 cursor-not-allowed">
                   <Input
@@ -119,9 +116,9 @@ const ModalStatusProductProfile = ({
                     size="sm"
                     type="number"
                     label="ID"
-                    name="product_code"
+                    name="manufacture_code"
                     variant="bordered"
-                    value={productData.id}
+                    value={manufactureData.id}
                   />
                 </div>
                 <div className="col-span-6 cursor-not-allowed">
@@ -129,10 +126,10 @@ const ModalStatusProductProfile = ({
                     isReadOnly
                     size="sm"
                     type="number"
-                    label="Product Code"
-                    name="product_code"
+                    label="MO Number"
+                    name="mo_no"
                     variant="bordered"
-                    value={productData.product_code}
+                    value={manufactureData.mo_no}
                   />
                 </div>
 
@@ -140,10 +137,10 @@ const ModalStatusProductProfile = ({
                   <Input
                     isReadOnly
                     size="sm"
-                    label="Product Desc"
-                    name="product_desc"
+                    label="MO Date"
+                    name="mo_date"
                     variant="bordered"
-                    value={productData.product_desc}
+                    value={manufactureData.mo_date}
                   />
                 </div>
 
@@ -151,10 +148,10 @@ const ModalStatusProductProfile = ({
                   <Input
                     isReadOnly
                     size="sm"
-                    label="Face Value"
-                    name="face_value"
+                    label="PO Number"
+                    name="po_no"
                     variant="bordered"
-                    value={productData.face_value}
+                    value={manufactureData.po_no}
                   />
                 </div>
 
@@ -162,12 +159,33 @@ const ModalStatusProductProfile = ({
                   <Input
                     isReadOnly
                     size="sm"
-                    type="number"
-                    label="Card Fee"
-                    name="card_fee"
+                    label="PO Date"
+                    name="po_date"
                     variant="bordered"
                     placeholder="1"
-                    value={productData.card_fee}
+                    value={manufactureData.po_date}
+                  />
+                </div>
+                <div className="col-span-6 cursor-not-allowed">
+                  <Input
+                    isReadOnly
+                    size="sm"
+                    label="Supplier"
+                    name="suplier"
+                    variant="bordered"
+                    placeholder="1"
+                    value={manufactureData.suplier}
+                  />
+                </div>
+                <div className="col-span-6 cursor-not-allowed">
+                  <Input
+                    isReadOnly
+                    size="sm"
+                    label="Status"
+                    name="status"
+                    variant="bordered"
+                    placeholder="1"
+                    value={manufactureData.status}
                   />
                 </div>
               </div>
@@ -185,10 +203,10 @@ const ModalStatusProductProfile = ({
             </Button>
             <Button
               color="primary"
-              onClick={() => handleStatusChange("REJECTED")}
+              onClick={() => handleStatusChange("DRAFT")}
               disabled={loading}
             >
-              {loading ? "Rejecting..." : "Reject"}
+              {loading ? "Rejecting..." : "Draft"}
             </Button>
             <Button auto onClick={onClose}>
               Close
@@ -200,4 +218,4 @@ const ModalStatusProductProfile = ({
   );
 };
 
-export default ModalStatusProductProfile;
+export default ModalStatusManufacture;

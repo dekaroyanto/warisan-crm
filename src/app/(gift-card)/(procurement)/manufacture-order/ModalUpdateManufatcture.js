@@ -25,6 +25,7 @@ const ModalUpdateManufacture = ({
   onClose,
   size,
   id,
+  onSuccess,
 }) => {
   const [manufactureData, setManufactureData] = useState(null);
   const formik = useFormik({
@@ -40,7 +41,8 @@ const ModalUpdateManufacture = ({
     onSubmit: async (values, { setSubmitting }) => {
       try {
         const updateUrl = `http://10.21.9.212:1945/crmreborn/mo/update`;
-        const status = values.submitType === "submit" ? 2 : 3;
+        const status =
+          values.submitType === "submit" ? "FOR_APPROVAL" : "DRAFT";
         const updateData = {
           id: values.id,
           mo_no: values.mo_no,
@@ -56,7 +58,7 @@ const ModalUpdateManufacture = ({
         console.log("Update Response:", response);
 
         toast.success("Product data updated successfully!");
-
+        onSuccess();
         onClose();
       } catch (error) {
         console.error("Error updating manufacture data:", error);
@@ -159,6 +161,7 @@ const ModalUpdateManufacture = ({
                 <div className="col-span-6">
                   <Input
                     size="sm"
+                    type="date"
                     label="MO Date"
                     name="mo_date"
                     variant="bordered"
@@ -182,6 +185,7 @@ const ModalUpdateManufacture = ({
                 <div className="col-span-6">
                   <Input
                     size="sm"
+                    type="date"
                     label="PO Date"
                     name="po_date"
                     variant="bordered"

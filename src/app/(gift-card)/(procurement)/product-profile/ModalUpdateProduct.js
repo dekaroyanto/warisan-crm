@@ -120,12 +120,17 @@ const ModalUpdateProduct = ({
   }, [isOpen, id]);
 
   useEffect(() => {
-    // Set the default value for "Face Value" dropdown after fetching data
     if (productData) {
       formik.setValues((prevValues) => ({
         ...prevValues,
-        face_value: productData.face_value, // Assuming the API response has a "face_value" field
+        face_value: productData.face_value,
       }));
+    }
+  }, [productData]);
+
+  useEffect(() => {
+    if (productData) {
+      formik.setFieldValue("face_value", productData.face_value);
     }
   }, [productData]);
 
@@ -180,7 +185,7 @@ const ModalUpdateProduct = ({
                     variant="bordered"
                     value={formik.values.face_value}
                     onChange={formik.handleChange}
-                    defaultSelectedKeys={formik.values.face_value}
+                    selectedKeys={[formik.values.face_value]}
                   >
                     {faceValue.map((option) => (
                       <SelectItem

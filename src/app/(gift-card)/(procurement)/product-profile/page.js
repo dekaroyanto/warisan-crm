@@ -84,7 +84,7 @@ export default function ProductProfile() {
     setOpenModalView(true);
   }, []);
 
-  //Modal Update Status
+  //Modal Process
   const handleOpenModalStatus = useCallback((id) => {
     setId(id);
     setOpenModalStatus(true);
@@ -93,10 +93,10 @@ export default function ProductProfile() {
   //Modal Activate Product
   const handleOpenModalActivate = useCallback((id) => {
     setId(id);
-    setOpenModalStatus(true);
+    setOpenModalActivate(true);
   }, []);
 
-  //Modal Activate Product
+  //Modal Dectivate Product
   const handleOpenModalDeactivate = useCallback((id) => {
     setId(id);
     setOpenModalDeactivate(true);
@@ -431,6 +431,7 @@ export default function ProductProfile() {
         id={id}
       />
 
+      {/* Modal Process */}
       <ModalStatusProductProfile
         isOpen={openModalStatus}
         onOpenChange={setOpenModalStatus}
@@ -438,6 +439,7 @@ export default function ProductProfile() {
           setOpenModalStatus(false);
           setId("");
         }}
+        onSuccess={filterSearch}
         id={id}
       />
 
@@ -456,8 +458,8 @@ export default function ProductProfile() {
         onClose={() => {
           setOpenModalActivate(false);
           setId("");
-          filterSearch();
         }}
+        onSucess={filterSearch}
         id={id}
       />
 
@@ -468,8 +470,8 @@ export default function ProductProfile() {
         onClose={() => {
           setOpenModalDeactivate(false);
           setId("");
-          filterSearch();
         }}
+        onSuccess={filterSearch}
         id={id}
       />
 

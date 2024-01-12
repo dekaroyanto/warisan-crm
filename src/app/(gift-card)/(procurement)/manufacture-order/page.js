@@ -32,10 +32,12 @@ import DataTable from "@/components/dataTable";
 import ModalAction from "@/components/modal/modalAction";
 import ModalPrint from "@/components/modal/modalPrint";
 
-import ModalUpdateManufacture from "./ModalUpdateManufatcture";
-import ModalGenerateGC from "./ModalGenerateGC";
-
 import ModalCreateGiftCard from "./ModalCreateGiftCard";
+import ModalUpdateManufacture from "./ModalUpdateManufatcture";
+import ModalStatusManufacture from "./ModalStatusMO";
+import ModalDeleteMo from "./ModalDeleteMo";
+
+import ModalGenerateGC from "./ModalGenerateGC";
 import ModalReceiveGiftCard from "./ModalReceiveGiftCard";
 import { users, statusList, columns } from "./dataList";
 
@@ -52,6 +54,11 @@ export default function ManufacturOrder() {
   const [suplier, setSuplier] = useState("");
   const [poDate, setPODate] = useState("");
   const [searchForm, setSearchForm] = useState("");
+
+  const getStatusLabel = (status) => {
+    const statusObject = statusList.find((s) => s.value === status);
+    return statusObject ? statusObject.label : status;
+  };
 
   const handleCriteriaChange = (e) => {
     setCriteria([e.target.value]);
@@ -99,11 +106,8 @@ export default function ManufacturOrder() {
 
   // open Modal
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
+  const [openModalStatus, setOpenModalStatus] = useState(false);
   const [openModalGenerateGC, setOpenModalGenerateGC] = useState(false);
-  const [openModalProcess, setOpenModalProcess] = useState(false);
-  const [openModalPrint, setOpenModalPrint] = useState(false);
-  const [openModalPrintEncrypt, setOpenModalPrintEncrypt] = useState(false);
-  const [openModalReceive, setOpenModalReceive] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
 
   const [id, setId] = useState("");
@@ -115,28 +119,29 @@ export default function ManufacturOrder() {
     setOpenModalUpdate(true);
   }, []);
 
+  //Modal Process
+  const handleOpenModalStatus = useCallback((id) => {
+    setId(id);
+    setOpenModalStatus(true);
+  }, []);
+
   //Modal GenerateGC
   const handleOpenModalGenerateGC = useCallback((id) => {
     setId(id);
     setOpenModalGenerateGC(true);
   }, []);
 
-  // Handle Actions
-  const handleDelete = async (e) => {
-    try {
-      toastSuccess({ title: `Manufactur Order ID ${e} has Deleted` });
-      handleOpenModal("delete");
-      setId("");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //Modal Delete MO
+  const handleOpenModalDelete = useCallback((id) => {
+    setId(id);
+    setOpenModalDelete(true);
+  }, []);
 
   const setActionButton = (e) => {
     const isApproved = e.status == "APPROVED" && true;
     const isBarcoding = e.status == "BARCODING" && true;
     const isDraft = e.status == "DRAFT" && true;
-    const isSubmitted = e.status == "FOR APPROVAL" && true;
+    const isSubmitted = e.status == "FOR_APPROVAL" && true;
     const isFull = e.status == "FULL" && true;
     const isGenerated = e.status == "GENERATED" && true;
     const isPartial = e.status == "PARTIAL" && true;
@@ -182,8 +187,7 @@ export default function ManufacturOrder() {
             <span
               className="text-lg text-default-400 cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("process");
-                setView(e);
+                handleOpenModalStatus(e.id);
               }}
             >
               <Image src={ICONS.ProcessIcon} alt="icon" width={28} />
@@ -246,8 +250,7 @@ export default function ManufacturOrder() {
             <span
               className="text-lg text-danger cursor-pointer active:opacity-50"
               onClick={() => {
-                handleOpenModal("delete");
-                setId(e.id);
+                handleOpenModalDelete(e.id);
               }}
             >
               <Image src={ICONS.DeleteIcon} alt="icon" width={28} />
@@ -279,10 +282,11 @@ export default function ManufacturOrder() {
       setData(
         result?.result?.items?.map((e) => ({
           ...e,
-          status: SetColorStatus(e.status),
+          status: SetColorStatus(getStatusLabel(e.status)),
           action: setActionButton(e),
         })) || []
       );
+
       setIsDataTableVisible(true);
     } catch (error) {
       console.error("Error fetching filtered data:", error);
@@ -472,8 +476,21 @@ export default function ManufacturOrder() {
         onClose={() => {
           setOpenModalUpdate(false);
           setId("");
-          filterSearch();
+          // filterSearch();
         }}
+        onSuccess={filterSearch}
+        id={id}
+      />
+
+      {/* Modal Process */}
+      <ModalStatusManufacture
+        isOpen={openModalStatus}
+        onOpenChange={setOpenModalStatus}
+        onClose={() => {
+          setOpenModalStatus(false);
+          setId("");
+        }}
+        onSuccess={filterSearch}
         id={id}
       />
 
@@ -537,11 +554,15 @@ export default function ManufacturOrder() {
       /> */}
 
       {/* Modal Delete */}
-      <ModalAction
+      <ModalDeleteMo
         isOpen={openModalDelete}
-        onClose={() => handleOpenModal("delete")}
-        title="Delete This Manufactur Order ?"
-        handleAction={() => handleDelete(id)}
+        onOpenChange={setOpenModalDelete}
+        onClose={() => {
+          setOpenModalDelete(false);
+          setId("");
+        }}
+        id={id}
+        onDeleteSuccess={filterSearch}
       />
     </div>
   );

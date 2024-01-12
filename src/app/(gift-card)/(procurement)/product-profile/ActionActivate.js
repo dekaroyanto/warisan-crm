@@ -15,7 +15,7 @@ import { SetColorStatus } from "@/utils";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ActionActivate = ({ isOpen, onOpenChange, onClose, id }) => {
+const ActionActivate = ({ isOpen, onOpenChange, onClose, id, onSucess }) => {
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -74,11 +74,12 @@ const ActionActivate = ({ isOpen, onOpenChange, onClose, id }) => {
       console.log("Status Update Response:", result);
       if (status === "APPROVED") {
         // Notify success for APPROVED
-        toast.success("Product has been approved successfully!");
+        toast.success("Product has been activated");
       } else if (status === "REJECTED") {
         // Notify success for REJECTED
         toast.error("Product has been rejected.");
       }
+      onSucess();
       onClose();
     } catch (error) {
       console.error("Error updating status:", error);
