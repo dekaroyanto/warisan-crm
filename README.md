@@ -1,6 +1,9 @@
 ## ❗️ UPDATE PATCH ❗️
 
 ## 🔥 deka-dev 🔥
+```bash
+Change branch to deka-dev. Enjoy dan tetap menyala abangkuhh!!! 🔥🔥🔥
+```
 
 ## 🚀 Program Setup 🚀
 
