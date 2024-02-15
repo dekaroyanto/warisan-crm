@@ -283,7 +283,7 @@ export default function ProductProfile() {
   return (
     <div className="md:container mx-auto py-2 pb-10">
       <h1 className="text-5xl font-thin text-title mb-6 mt-4">
-        Product Profile
+        Product Profile Cek
       </h1>
 
       {/* search Section */}
