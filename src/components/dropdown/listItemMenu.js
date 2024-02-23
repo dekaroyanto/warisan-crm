@@ -118,7 +118,7 @@ export const listItem = [
                },
                {
                   title: "Upload Member",
-                  href: "",
+                  href: "/upload-member",
                },
                {
                   title: "Member Monitor",
@@ -126,7 +126,7 @@ export const listItem = [
                },
                {
                   title: "Customer Complaints",
-                  href: "",
+                  href: "/customer-complaints",
                },
                {
                   title: "Point Adjustment",
